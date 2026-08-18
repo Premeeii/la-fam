@@ -112,7 +112,13 @@ public class AuthService {
                 refreshTokenRepository.save(token);
             });
     }
-        
+
+    public UserResponse getMyProfile(String email){
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return UserResponse.fromEntity(user);
+    }
+
 
     private AuthResponse generateAuthResponse(User user) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
@@ -135,6 +141,7 @@ public class AuthService {
         );
     }
 
-    
+
+
 
 }

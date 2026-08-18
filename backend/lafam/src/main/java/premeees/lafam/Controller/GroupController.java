@@ -53,4 +53,5 @@ public class GroupController {
         groupService.softDeleteGroup(groupId, userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
+
 }
