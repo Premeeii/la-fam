@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import premeees.lafam.Entity.GroupMember;
 
 public interface GroupMemberRepository extends JpaRepository<GroupMember, UUID> {
-    Optional<GroupMember> findByUserId(UUID userId);
+    List<GroupMember> findByUserId(UUID userId);
     List<GroupMember> findAllByUserId(UUID userId);
+    List<GroupMember> findAllByUserIdAndGroupDeletedAtIsNull(UUID userId);
+    Optional<GroupMember> findByGroupIdAndUserId(UUID groupId, UUID userId);
 }

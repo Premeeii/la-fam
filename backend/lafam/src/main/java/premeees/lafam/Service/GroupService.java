@@ -17,6 +17,7 @@ import premeees.lafam.Repository.GroupRepository;
 import premeees.lafam.Repository.InviteTokenRepository;
 import premeees.lafam.Repository.UserRepository;
 import premeees.lafam.dto.request.CreateGroupRequest;
+import premeees.lafam.dto.response.GroupMemberResponse;
 import premeees.lafam.dto.response.GroupResponse;
 
 @Service
@@ -59,16 +60,38 @@ public class GroupService {
     }
 
     @Transactional(readOnly = true)
-    public List<GroupResponse> getUserGroups(String email) {
+    public List<GroupMemberResponse> getUserGroups(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        List<GroupMember> memberships = groupMemberRepository.findAllByUserId(user.getId());
+        List<GroupMember> memberships = groupMemberRepository.findAllByUserIdAndGroupDeletedAtIsNull(user.getId());
 
         return memberships.stream()
-                .map(member -> GroupResponse.fromEntity(member.getGroup()))
+                .map(GroupMemberResponse::fromEntity)
                 .toList();
     }
 
-    
+    @Transactional
+    public void softDeleteGroup(UUID groupId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+
+        if (group.getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group is already deleted");
+        }
+
+        // Only OWNER can delete a group
+        GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
+
+        if (!"OWNER".equals(member.getRole())) {
+            throw new IllegalArgumentException("Only the group owner can delete this group");
+        }
+
+        group.setDeletedAt(OffsetDateTime.now());
+        groupRepository.save(group);
+    }
 }
