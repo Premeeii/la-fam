@@ -19,6 +19,7 @@ import premeees.lafam.Repository.UserRepository;
 import premeees.lafam.dto.request.CreateGroupRequest;
 import premeees.lafam.dto.response.GroupMemberResponse;
 import premeees.lafam.dto.response.GroupResponse;
+import premeees.lafam.dto.response.InviteTokenResponse;
 
 @Service
 public class GroupService {
@@ -49,15 +50,10 @@ public class GroupService {
         GroupMember member = new GroupMember(group, user, "OWNER");
         groupMemberRepository.save(member);
 
-        // 3. Generate an invite token for the group
-        String token = UUID.randomUUID().toString();
-        OffsetDateTime expiresAt = OffsetDateTime.now().plusDays(7);
-
-        InviteToken inviteToken = new InviteToken(group, token, user, "MEMBER", expiresAt);
-        inviteTokenRepository.save(inviteToken);
-
         return GroupResponse.fromEntity(group);
     }
+
+    
 
     @Transactional(readOnly = true)
     public List<GroupMemberResponse> getUserGroups(String email) {
@@ -93,5 +89,76 @@ public class GroupService {
 
         group.setDeletedAt(OffsetDateTime.now());
         groupRepository.save(group);
+    }
+
+    @Transactional
+    public GroupMemberResponse joinGroupByToken(String token, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        // 1. Find the invite token
+        InviteToken inviteToken = inviteTokenRepository.findByToken(token)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid invite token"));
+
+        // 2. Check if token is already used
+        if (inviteToken.getUsedAt() != null) {
+            throw new IllegalArgumentException("Invite token has already been used");
+        }
+
+        // 3. Check if token is expired
+        if (inviteToken.getExpiresAt().isBefore(OffsetDateTime.now())) {
+            throw new IllegalArgumentException("Invite token has expired");
+        }
+
+        // 4. Check if group is not deleted
+        Group group = inviteToken.getGroup();
+        if (group.getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group has been deleted");
+        }
+
+        // 5. Check if user is already a member
+        if (groupMemberRepository.findByGroupIdAndUserId(group.getId(), user.getId()).isPresent()) {
+            throw new IllegalArgumentException("You are already a member of this group");
+        }
+
+        // 6. Add user to group_members with the role from the invite token
+        GroupMember member = new GroupMember(group, user, inviteToken.getRole());
+        groupMemberRepository.save(member);
+
+        // 7. Mark invite token as used
+        inviteToken.setUsedAt(OffsetDateTime.now());
+        inviteToken.setUsedBy(user);
+        inviteTokenRepository.save(inviteToken);
+
+        return GroupMemberResponse.fromEntity(member);
+    }
+
+    @Transactional
+    public InviteTokenResponse generateInviteToken(UUID groupId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+
+        if (group.getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group has been deleted");
+        }
+
+        // Only OWNER can generate invite tokens
+        GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
+
+        if (!"OWNER".equals(member.getRole())) {
+            throw new IllegalArgumentException("Only the group owner can generate invite tokens");
+        }
+
+        String token = UUID.randomUUID().toString();
+        OffsetDateTime expiresAt = OffsetDateTime.now().plusDays(7);
+
+        InviteToken inviteToken = new InviteToken(group, token, user, "MEMBER", expiresAt);
+        inviteTokenRepository.save(inviteToken);
+
+        return InviteTokenResponse.fromEntity(inviteToken);
     }
 }

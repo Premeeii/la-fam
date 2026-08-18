@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -20,6 +21,7 @@ import premeees.lafam.Service.GroupService;
 import premeees.lafam.dto.request.CreateGroupRequest;
 import premeees.lafam.dto.response.GroupMemberResponse;
 import premeees.lafam.dto.response.GroupResponse;
+import premeees.lafam.dto.response.InviteTokenResponse;
 
 @RestController
 @RequestMapping("/api/groups")
@@ -52,6 +54,22 @@ public class GroupController {
             @AuthenticationPrincipal UserDetails userDetails) {
         groupService.softDeleteGroup(groupId, userDetails.getUsername());
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/join")
+    public ResponseEntity<GroupMemberResponse> joinGroup(
+            @RequestParam String token,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        GroupMemberResponse response = groupService.joinGroupByToken(token, userDetails.getUsername());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{groupId}/invites")
+    public ResponseEntity<InviteTokenResponse> generateInviteToken(
+            @PathVariable UUID groupId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        InviteTokenResponse response = groupService.generateInviteToken(groupId, userDetails.getUsername());
+        return ResponseEntity.ok(response);
     }
 
 }
