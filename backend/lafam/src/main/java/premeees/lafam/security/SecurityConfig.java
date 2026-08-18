@@ -22,13 +22,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    JwtAuthenticationFitlter jwtAuthenticationFitlter;
+    JwtAuthenticationFilter jwtAuthenticationFilter;
     UserDetailsService userDetailsService;
     RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-    public SecurityConfig(JwtAuthenticationFitlter jwtAuthenticationFitlter, UserDetailsService userDetailsService,
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsService userDetailsService,
             RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
-        this.jwtAuthenticationFitlter = jwtAuthenticationFitlter;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsService = userDetailsService;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
     }
@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     )
                     .authenticationProvider(authenticationProvider())
-                    .addFilterBefore(jwtAuthenticationFitlter, UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
                     
         return http.build();
     }

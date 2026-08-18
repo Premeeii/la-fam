@@ -9,11 +9,11 @@ import premeees.lafam.Entity.User;
 import premeees.lafam.Repository.UserRepository;
 
 @Service
-public class CustomeUserDetailsService implements UserDetailsService {
+public class CustomerUserDetailsService implements UserDetailsService {
     
     private final UserRepository userRepository;
 
-    public CustomeUserDetailsService(UserRepository userRepository) {
+    public CustomerUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
