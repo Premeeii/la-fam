@@ -38,3 +38,6 @@ build/
 
 # http requests
 auth.http
+
+# Agent skill
+AGENTS.md
