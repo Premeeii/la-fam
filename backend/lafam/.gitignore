@@ -7,6 +7,7 @@ target/
 ###spring config###
 src/main/resources/application.properties
 .env
+flyway.conf
 
 ### STS ###
 .apt_generated
@@ -41,3 +42,4 @@ auth.http
 
 # Agent skill
 AGENTS.md
+
