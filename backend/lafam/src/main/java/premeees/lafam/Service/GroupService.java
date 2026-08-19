@@ -67,6 +67,18 @@ public class GroupService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<GroupMemberResponse> getGroupMembers(UUID groupId) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+
+        List<GroupMember> members = groupMemberRepository.findAllByGroupId(groupId);
+
+        return members.stream()
+                .map(GroupMemberResponse::fromEntity)
+                .toList();
+    }
+
     @Transactional
     public void softDeleteGroup(UUID groupId, String email) {
         User user = userRepository.findByEmail(email)
