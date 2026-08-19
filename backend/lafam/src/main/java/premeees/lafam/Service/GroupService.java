@@ -53,8 +53,6 @@ public class GroupService {
         return GroupResponse.fromEntity(group);
     }
 
-    
-
     @Transactional(readOnly = true)
     public List<GroupMemberResponse> getUserGroups(String email) {
         User user = userRepository.findByEmail(email)
@@ -68,9 +66,19 @@ public class GroupService {
     }
 
     @Transactional(readOnly = true)
-    public List<GroupMemberResponse> getGroupMembers(UUID groupId) {
+    public List<GroupMemberResponse> getGroupMembers(UUID groupId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
+
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+
+        if (group.getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group has been deleted");
+        }
 
         List<GroupMember> members = groupMemberRepository.findAllByGroupId(groupId);
 

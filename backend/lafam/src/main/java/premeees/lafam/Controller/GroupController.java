@@ -76,7 +76,7 @@ public class GroupController {
     public ResponseEntity<List<GroupMemberResponse>> getGroupMembers(
             @PathVariable UUID groupId,
             @AuthenticationPrincipal UserDetails userDetails) {
-        List<GroupMemberResponse> members = groupService.getGroupMembers(groupId);
+        List<GroupMemberResponse> members = groupService.getGroupMembers(groupId, userDetails.getUsername());
         return ResponseEntity.ok(members);
     }
 
