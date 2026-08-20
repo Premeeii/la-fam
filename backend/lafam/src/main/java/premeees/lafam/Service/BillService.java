@@ -52,11 +52,11 @@ public class BillService {
             throw new IllegalArgumentException("Group has been deleted");
         }
 
-        // ตรวจสอบว่า user เป็นสมาชิกของ group
+        // check a user is member of this group
         groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
 
-        // ตรวจสอบว่า category มีอยู่จริง
+        // check a bill category
         BillCategory category = billCategoryRepository.findById(request.getBillCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Bill category not found"));
 
@@ -78,7 +78,7 @@ public class BillService {
             throw new IllegalArgumentException("Group has been deleted");
         }
 
-        // ตรวจสอบว่า user เป็นสมาชิกของ group
+        // check a user is member of this group
         groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
 
@@ -101,19 +101,19 @@ public class BillService {
             throw new IllegalArgumentException("Group has been deleted");
         }
 
-        // ตรวจสอบว่า user เป็นสมาชิกของ group
+        // check a user is member of this group
         groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
 
         Bill bill = billRepository.findById(billId)
                 .orElseThrow(() -> new IllegalArgumentException("Bill not found"));
 
-        // ตรวจสอบว่า bill อยู่ใน group นี้จริง
+        // check a bill is in this group
         if (!bill.getGroup().getId().equals(groupId)) {
             throw new IllegalArgumentException("Bill does not belong to this group");
         }
 
-        // อัปเดตเฉพาะ field ที่ส่งมา (partial update)
+        // update a bill
         if (request.getBillCategoryId() != null) {
             BillCategory category = billCategoryRepository.findById(request.getBillCategoryId())
                     .orElseThrow(() -> new IllegalArgumentException("Bill category not found"));
@@ -149,14 +149,14 @@ public class BillService {
             throw new IllegalArgumentException("Group has been deleted");
         }
 
-        // ตรวจสอบว่า user เป็นสมาชิกของ group
+        // check a user is member of this group
         groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
 
         Bill bill = billRepository.findById(billId)
                 .orElseThrow(() -> new IllegalArgumentException("Bill not found"));
 
-        // ตรวจสอบว่า bill อยู่ใน group นี้จริง
+        // check a bill is in this group
         if (!bill.getGroup().getId().equals(groupId)) {
             throw new IllegalArgumentException("Bill does not belong to this group");
         }
