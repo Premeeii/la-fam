@@ -16,21 +16,24 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    private final CorsConfigurationSource corsConfigurationSource;
     JwtAuthenticationFilter jwtAuthenticationFilter;
     UserDetailsService userDetailsService;
     RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsService userDetailsService,
-            RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
+            RestAuthenticationEntryPoint restAuthenticationEntryPoint, CorsConfigurationSource corsConfigurationSource) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsService = userDetailsService;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
+        this.corsConfigurationSource = corsConfigurationSource;
     }
 
     @Bean
@@ -54,7 +57,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     )
                     .authenticationProvider(authenticationProvider())
-                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                    .cors(cors -> cors.configurationSource(corsConfigurationSource));        
                     
         return http.build();
     }
