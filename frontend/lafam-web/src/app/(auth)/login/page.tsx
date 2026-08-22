@@ -1,106 +1,109 @@
 'use client';
-
-import { FormEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { apiClient } from '@/lib/api/client';
+import { useState } from 'react';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema, type LoginFormValues } from '@/lib/schemas/auth';
+import { useLogin } from '@/lib/hooks/useAuth';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
-  const router = useRouter();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setError('');
-    setLoading(true);
-
-    try {
-      await apiClient.post('/api/auth/login', {
-        email,
-        password,
-      });
-
-      // Login สำเร็จ
-      router.push('/groups');
-    } catch (error: any) {
-      if (error.response?.status === 401) {
-        setError('Email หรือ Password ไม่ถูกต้อง');
-      } else {
-        setError('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const form = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
+  const loginMutation = useLogin();
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
-        <h1 className="mb-2 text-center text-2xl font-bold">Login</h1>
+    <>
+      <p className="mb-6 text-2xl font-semibold tracking-tight text-gray-900">
+        Nice to meet you!
+      </p>
 
-        <p className="mb-6 text-center text-sm text-gray-500">
-          Sign in to your account
-        </p>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email */}
-          <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium">
-              Email
-            </label>
-
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-              className="w-full rounded-md border px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Password */}
-          <div>
-            <label
-              htmlFor="password"
-              className="mb-1 block text-sm font-medium"
-            >
-              Password
-            </label>
-
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              className="w-full rounded-md border px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Error */}
-          {error && (
-            <p className="rounded-md bg-red-50 p-3 text-sm text-red-600">
-              {error}
+      <form
+        onSubmit={form.handleSubmit((data) => loginMutation.mutate(data))}
+        className="flex flex-col gap-4"
+      >
+        <div>
+          <Label
+            htmlFor="email"
+            className="text-xs font-semibold text-gray-700"
+          >
+            Email
+          </Label>
+          <Input
+            id="email"
+            type="email"
+            className="mt-1 h-11 border-gray-200 bg-gray-50 placeholder:text-gray-400 focus-visible:ring-blue-100"
+            placeholder="Email"
+            {...form.register('email')}
+          />
+          {form.formState.errors.email && (
+            <p className="mt-1 text-xs text-red-500">
+              {form.formState.errors.email.message}
             </p>
           )}
+        </div>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-md bg-blue-600 py-2 text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+        <div>
+          <Label
+            htmlFor="password"
+            className="text-xs font-semibold text-gray-700"
           >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-      </div>
-    </main>
+            Password
+          </Label>
+          <div className="relative mt-1">
+            <Input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              className="h-11 border-gray-200 bg-gray-50 pr-10 placeholder:text-gray-400 focus-visible:ring-blue-100"
+              placeholder="Enter password"
+              {...form.register('password')}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+          {form.formState.errors.password && (
+            <p className="mt-1 text-xs text-red-500">
+              {form.formState.errors.password.message}
+            </p>
+          )}
+        </div>
+
+        {/* Forgot Password */}
+        <div className="mt-1 mb-2 flex items-center justify-end">
+          <a
+            href="#"
+            className="text-xs font-medium text-blue-600 hover:underline"
+          >
+            Forgot password?
+          </a>
+        </div>
+
+        <Button
+          type="submit"
+          className="h-11 rounded-lg bg-blue-600 font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
+          disabled={loginMutation.isPending}
+        >
+          {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
+        </Button>
+      </form>
+
+      <p className="mt-6 text-center text-sm text-gray-500">
+        Don't have an account?{' '}
+        <Link
+          href="/register"
+          className="font-semibold text-blue-600 hover:underline"
+        >
+          Sign up now
+        </Link>
+      </p>
+    </>
   );
 }
