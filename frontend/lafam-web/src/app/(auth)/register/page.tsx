@@ -17,7 +17,7 @@ export default function RegisterPage() {
 
   return (
     <>
-      <h1 className="mb-1 text-2xl font-semibold text-gray-900 tracking-tight mb-5">Sign up to Get Started</h1>
+      <h1 className="mb-5 text-2xl font-semibold text-gray-900 tracking-tight">Sign up to Get Started</h1>
 
       <form onSubmit={form.handleSubmit((data) => registerMutation.mutate(data))} className="flex flex-col gap-4">
         <div>
