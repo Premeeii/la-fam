@@ -26,12 +26,12 @@ export default function AuthLayout({
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
 
           {/* Logo */}
-          <div className="mb-6 flex items-center gap-3">
+          <div className="mb-15 flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-tr from-amber-300 via-red-400 to-indigo-500 text-lg font-bold text-white shadow-sm">
               <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-yellow-300 via-pink-400 to-indigo-400 opacity-90 blur-[1px]" />
             </div>
 
-            <span className="text-xl font-bold tracking-tight text-gray-900">
+            <span className="text-xl font-semibold tracking-tight text-gray-900">
               La'FAM
             </span>
           </div>
