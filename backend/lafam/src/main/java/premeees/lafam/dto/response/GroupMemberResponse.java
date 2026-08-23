@@ -11,12 +11,16 @@ public class GroupMemberResponse {
     private UUID groupId;
     private String role;
     private OffsetDateTime joinedAt;
+    private String groupName;
+    private String groupAvatarUrl;
 
-    public GroupMemberResponse(UUID userId, UUID groupId, String role, OffsetDateTime joinedAt) {
+    public GroupMemberResponse(UUID userId, UUID groupId, String role, OffsetDateTime joinedAt, String groupName, String groupAvatarUrl) {
         this.userId = userId;
         this.groupId = groupId;
         this.role = role;
         this.joinedAt = joinedAt;
+        this.groupName = groupName;
+        this.groupAvatarUrl = groupAvatarUrl;
     }
 
     public static GroupMemberResponse fromEntity(GroupMember member) {
@@ -24,7 +28,9 @@ public class GroupMemberResponse {
             member.getUser().getId(),
             member.getGroup().getId(),
             member.getRole(),
-            member.getJoinedAt()
+            member.getJoinedAt(),
+            member.getGroup().getName(),
+            member.getGroup().getGroupAvatarUrl()
         );
     }
 
@@ -58,5 +64,21 @@ public class GroupMemberResponse {
 
     public void setJoinedAt(OffsetDateTime joinedAt) {
         this.joinedAt = joinedAt;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getGroupAvatarUrl() {
+        return groupAvatarUrl;
+    }
+
+    public void setGroupAvatarUrl(String groupAvatarUrl) {
+        this.groupAvatarUrl = groupAvatarUrl;
     }
 }

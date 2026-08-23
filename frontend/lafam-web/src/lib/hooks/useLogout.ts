@@ -9,9 +9,13 @@ export function useLogout() {
     const queryClient = useQueryClient();
     
     return useMutation({
-        mutationFn: () => apiClient.post('/api/auth/logout'),
+        mutationFn: () => {
+            const refreshToken = Cookies.get('refresh_token') || '';
+            return apiClient.post('/api/auth/logout', { refreshToken });
+        },
         onSuccess: () => {
             Cookies.remove('access_token');
+            Cookies.remove('refresh_token');
             useCurrentGroup.getState().setGroupId('');
             queryClient.clear();
             router.push('/login');
@@ -19,6 +23,7 @@ export function useLogout() {
         onError: () => {
             // Even if the backend fails, we should clear the local state to force logout
             Cookies.remove('access_token');
+            Cookies.remove('refresh_token');
             useCurrentGroup.getState().setGroupId('');
             queryClient.clear();
             router.push('/login');

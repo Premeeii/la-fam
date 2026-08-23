@@ -325,6 +325,8 @@ export interface components {
             role?: string;
             /** Format: date-time */
             joinedAt?: string;
+            groupName?: string;
+            groupAvatarUrl?: string;
         };
         RegisterRequest: {
             /** Format: email */

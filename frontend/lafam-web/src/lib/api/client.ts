@@ -20,7 +20,8 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401 && !error.config._retry) {
       error.config._retry = true;
       try {
-        const refreshResponse = await apiClient.post('/api/auth/refresh');
+        const refreshToken = Cookies.get('refresh_token');
+        const refreshResponse = await apiClient.post('/api/auth/refresh', { refreshToken });
         if (refreshResponse.data?.accessToken) {
             Cookies.set('access_token', refreshResponse.data.accessToken, { expires: 1 });
         }

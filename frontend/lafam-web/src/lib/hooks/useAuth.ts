@@ -15,6 +15,9 @@ export function useLogin() {
             if (data?.accessToken) {
                 Cookies.set('access_token', data.accessToken, { expires: 1 });
             }
+            if (data?.refreshToken) {
+                Cookies.set('refresh_token', data.refreshToken, { expires: 7 });
+            }
             const pendingToken = sessionStorage.getItem(PENDING_INVITE_KEY);
             if (pendingToken) {
                 try {
