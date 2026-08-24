@@ -1,1 +1,1 @@
-export default function Page() { return null; }
+export default function JoinPage() { return null; }

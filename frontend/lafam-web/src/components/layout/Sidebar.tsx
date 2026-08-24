@@ -21,7 +21,7 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 shrink-0 border-r border-gray-100 bg-white min-h-[calc(100vh-4rem)] p-4 flex flex-col gap-2 hidden lg:flex">
+    <aside className="w-48 shrink-0 border-r border-gray-100 bg-white min-h-[calc(100vh-4rem)] p-4 flex-col gap-2 hidden lg:flex">
       {navItems.map((item) => {
         const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/settings'); // mock setting
         return (
