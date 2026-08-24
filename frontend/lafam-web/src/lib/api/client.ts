@@ -30,17 +30,14 @@ apiClient.interceptors.response.use(
       //check if token is expired
       error.config._retry = true;
       try {
-        const refreshToken = Cookies.get('refresh_token'); //get refresh token
-        const refreshResponse = await apiClient.post('/api/auth/refresh', {
-          refreshToken,
-        }); //refresh token
-        const { accessToken, refreshToken: nextRefreshToken } = refreshResponse.data ?? {};
-        if (!accessToken || !nextRefreshToken) {
-          throw new Error('Refresh response is missing tokens');
+        const refreshResponse = await apiClient.post('/api/auth/refresh');
+        const { accessToken } = refreshResponse.data ?? {}; //fetch access token from refresh token
+        if (!accessToken) {
+          throw new Error('Refresh response is missing an access token');
         }
 
         Cookies.set('access_token', accessToken, { expires: 1 });
-        Cookies.set('refresh_token', nextRefreshToken, { expires: 7 });
+        Cookies.remove('refresh_token'); // remove the legacy JavaScript-readable cookie
         return apiClient(error.config); //retry the request with new token
       } catch {
         Cookies.remove('access_token'); //remove access token when refresh token failed

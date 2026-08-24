@@ -1,5 +1,7 @@
 package premeees.lafam.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class AuthResponse {
 
     private String accessToken;
@@ -24,6 +26,7 @@ public class AuthResponse {
         this.accessToken = accessToken;
     }
 
+    @JsonIgnore
     public String getRefreshToken() {
         return refreshToken;
     }
