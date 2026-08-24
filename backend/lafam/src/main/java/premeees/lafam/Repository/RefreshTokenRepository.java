@@ -13,11 +13,11 @@ import premeees.lafam.Entity.User;
 
 public interface RefreshTokenRepository extends JpaRepository <RefreshToken, UUID> {
 
-    Optional<RefreshToken> findByToken(String token);
+    Optional<RefreshToken> findByTokenHash(String tokenHash);
     
     @Modifying
-    @Query("UPDATE RefreshToken rt SET rt.isRevoked = true WHERE rt.token = :token")
-    void revokeAllByToken(@Param("token") String token);
+    @Query("UPDATE RefreshToken rt SET rt.isRevoked = true WHERE rt.tokenHash = :tokenHash")
+    void revokeAllByTokenHash(@Param("tokenHash") String tokenHash);
 
     @Modifying
     @Query("UPDATE RefreshToken rt SET rt.isRevoked = true WHERE rt.user = :user")

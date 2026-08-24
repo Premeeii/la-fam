@@ -28,8 +28,8 @@ public class RefreshToken {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "token", nullable = false, unique = true, length = 500)
-    private String token;
+    @Column(name = "token_hash", nullable = false, unique = true, length = 64)
+    private String tokenHash;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -44,9 +44,9 @@ public class RefreshToken {
     public RefreshToken() {
     }
 
-    public RefreshToken(User user, String token, OffsetDateTime expiresAt) {
+    public RefreshToken(User user, String tokenHash, OffsetDateTime expiresAt) {
         this.user = user;
-        this.token = token;
+        this.tokenHash = tokenHash;
         this.expiresAt = expiresAt;
         this.isRevoked = false;
     }
@@ -75,12 +75,12 @@ public class RefreshToken {
         this.user = user;
     }
 
-    public String getToken() {
-        return token;
+    public String getTokenHash() {
+        return tokenHash;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setTokenHash(String tokenHash) {
+        this.tokenHash = tokenHash;
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -107,4 +107,3 @@ public class RefreshToken {
         this.isRevoked = isRevoked;
     }
 }
-

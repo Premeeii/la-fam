@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Value;
 import premeees.lafam.Repository.RefreshTokenRepository;
@@ -26,6 +30,8 @@ import premeees.lafam.Entity.User;
 
 @Service
 public class AuthService {
+
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -86,8 +92,9 @@ public class AuthService {
     @Transactional
     public AuthResponse refreshToken(RefreshTokenRequest request){
         String requestToken = request.getRefreshToken();
+        String tokenHash = hashRefreshToken(requestToken);
 
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(requestToken)
+        RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(tokenHash)
             .orElseThrow(() -> new IllegalArgumentException("Refresh token not found"));
 
         if (!refreshToken.isValid()) {
@@ -106,7 +113,7 @@ public class AuthService {
 
     @Transactional
     public void logout(RefreshTokenRequest request){
-        refreshTokenRepository.findByToken(request.getRefreshToken())
+        refreshTokenRepository.findByTokenHash(hashRefreshToken(request.getRefreshToken()))
             .ifPresent(token -> {
                 token.setIsRevoked(true);
                 refreshTokenRepository.save(token);
@@ -118,11 +125,11 @@ public class AuthService {
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
 
         String accessToken = jwtService.generateAccessToken(userDetails);
-        String refreshTokenValue = jwtService.generateRefreshToken(userDetails);
+        String refreshTokenValue = generateOpaqueRefreshToken();
 
         RefreshToken refreshToken = new RefreshToken(
             user,
-            refreshTokenValue,
+            hashRefreshToken(refreshTokenValue),
             OffsetDateTime.now().plusSeconds(refreshTokenExpiration / 1000)
         );
 
@@ -133,6 +140,21 @@ public class AuthService {
             refreshTokenValue,
             UserResponse.fromEntity(user)
         );
+    }
+
+    private String generateOpaqueRefreshToken() {
+        byte[] tokenBytes = new byte[32];
+        SECURE_RANDOM.nextBytes(tokenBytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
+    }
+
+    private String hashRefreshToken(String token) {
+        try {
+            byte[] hash = MessageDigest.getInstance("SHA-256").digest(token.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return java.util.HexFormat.of().formatHex(hash);
+        } catch (NoSuchAlgorithmException exception) {
+            throw new IllegalStateException("SHA-256 is not available", exception);
+        }
     }
 
 
