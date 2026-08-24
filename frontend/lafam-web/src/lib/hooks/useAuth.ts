@@ -11,12 +11,12 @@ export function useLogin() {
     const router = useRouter();
     return useMutation({
         mutationFn: (data: LoginFormValues) => login(data),
-        onSuccess: async (data: any) => {
+        onSuccess: async (data: any) => { // when login success
             if (data?.accessToken) {
-                Cookies.set('access_token', data.accessToken, { expires: 1 });
+                Cookies.set('access_token', data.accessToken, { expires: 1 }); //set access token in js-cookie
             }
             if (data?.refreshToken) {
-                Cookies.set('refresh_token', data.refreshToken, { expires: 7 });
+                Cookies.set('refresh_token', data.refreshToken, { expires: 7 }); //set refresh token in js-cookie
             }
             const pendingToken = sessionStorage.getItem(PENDING_INVITE_KEY);
             if (pendingToken) {
