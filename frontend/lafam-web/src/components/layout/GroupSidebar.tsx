@@ -14,7 +14,7 @@ import {
 import { cn } from '@/lib/utils';
 import { useGroup } from '@/lib/hooks/useGroup';
 import { useCurrentGroup } from '@/lib/stores/currentGroup';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { AvatarImage } from '@/components/ui/avatar';
 
 export function GroupSidebar() {
   const pathname = usePathname();

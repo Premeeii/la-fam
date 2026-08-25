@@ -20,6 +20,8 @@ import { useLogout } from '@/lib/hooks/useLogout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
+import { CreateGroupDialog } from './CreateGroupDialog';
+import { Plus } from 'lucide-react';
 
 function getInitials(name?: string) {
   if (!name) return 'U';
@@ -101,10 +103,7 @@ export function Navbar() {
           <button className="text-gray-400 hover:text-gray-600 transition-colors">
             <Settings className="h-5 w-5" />
           </button>
-          <Button className="hidden sm:flex h-10 gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 shadow-sm">
-            <Star className="h-4 w-4 fill-white" />
-            Create Group
-          </Button>
+          <CreateGroupDialog/>   
           <UserMenu displayName={user?.displayName ?? 'My Account'} avatarUrl={user?.avatarUrl} />
         </div>
       </div>
