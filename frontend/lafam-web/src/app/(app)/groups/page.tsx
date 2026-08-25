@@ -58,12 +58,6 @@ export default function GroupPage() {
             </Card>
           ))}
 
-          <button className="flex min-h-40 flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-gray-50/50 text-gray-400 transition-all hover:border-blue-200 hover:bg-gray-50 hover:text-blue-500">
-            <div className="flex items-center gap-2 font-medium">
-              <Plus className="h-5 w-5" />
-              <span>Create New Group</span>
-            </div>
-          </button>
         </div>
       )}
     </div>
