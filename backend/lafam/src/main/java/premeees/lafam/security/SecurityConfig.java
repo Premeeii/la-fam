@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(restAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/groups/invites/*/preview").permitAll()
                         .requestMatchers("/api/auth/**",
                                 "/api/health",
                                 "/actuator/health",

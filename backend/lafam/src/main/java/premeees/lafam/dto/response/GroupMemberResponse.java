@@ -13,14 +13,18 @@ public class GroupMemberResponse {
     private OffsetDateTime joinedAt;
     private String groupName;
     private String groupAvatarUrl;
+    private String displayName;
+    private String userAvatarUrl;
 
-    public GroupMemberResponse(UUID userId, UUID groupId, String role, OffsetDateTime joinedAt, String groupName, String groupAvatarUrl) {
+    public GroupMemberResponse(UUID userId, UUID groupId, String role, OffsetDateTime joinedAt, String groupName, String groupAvatarUrl, String displayName, String userAvatarUrl) {
         this.userId = userId;
         this.groupId = groupId;
         this.role = role;
         this.joinedAt = joinedAt;
         this.groupName = groupName;
         this.groupAvatarUrl = groupAvatarUrl;
+        this.displayName = displayName;
+        this.userAvatarUrl = userAvatarUrl;
     }
 
     public static GroupMemberResponse fromEntity(GroupMember member) {
@@ -30,7 +34,9 @@ public class GroupMemberResponse {
             member.getRole(),
             member.getJoinedAt(),
             member.getGroup().getName(),
-            member.getGroup().getGroupAvatarUrl()
+            member.getGroup().getGroupAvatarUrl(),
+            member.getUser().getDisplayName(),
+            member.getUser().getAvatarUrl()
         );
     }
 
@@ -80,5 +86,21 @@ public class GroupMemberResponse {
 
     public void setGroupAvatarUrl(String groupAvatarUrl) {
         this.groupAvatarUrl = groupAvatarUrl;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getUserAvatarUrl() {
+        return userAvatarUrl;
+    }
+
+    public void setUserAvatarUrl(String userAvatarUrl) {
+        this.userAvatarUrl = userAvatarUrl;
     }
 }

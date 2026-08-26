@@ -19,9 +19,13 @@ export function useLogin() {
             const pendingToken = sessionStorage.getItem(PENDING_INVITE_KEY);
             if (pendingToken) {
                 try {
-                    await joinGroup(pendingToken);
+                    const res = await joinGroup(pendingToken);
                     sessionStorage.removeItem(PENDING_INVITE_KEY);
                     toast.success('เข้าร่วมกลุ่มสำเร็จ');
+                    if (res?.data?.groupId) {
+                        router.push(`/groups/${res.data.groupId}/dashboard`);
+                        return;
+                    }
                 }catch{
                     toast.error('Link เชิญไม่ถูกต้องหรือถูกใช้ไปแล้ว');
                 }

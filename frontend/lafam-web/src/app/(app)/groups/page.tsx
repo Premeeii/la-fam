@@ -45,8 +45,8 @@ export default function GroupPage() {
 
               <div className="mt-auto flex items-center justify-between border-t border-gray-50 bg-white px-6 py-4">
                 <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <Users className="h-4 w-4" />
-                  <span>Members</span>
+                  {/* <Users className="h-4 w-4" />
+                  <span>Members</span> */}
                 </div>
                 <Link
                   href={`/groups/${group.groupId}`}

@@ -77,7 +77,7 @@ export function Navbar() {
   const { data: user } = useCurrentUser();
   
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-[#FAF9F6] lg:bg-white shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white lg:bg-white shadow-sm">
       <div className="flex h-16 items-center justify-between px-6 lg:px-12">
         {/* Left: Logo */}
         <div className="flex items-center gap-2">

@@ -22,6 +22,7 @@ import premeees.lafam.dto.request.CreateGroupRequest;
 import premeees.lafam.dto.response.GroupMemberResponse;
 import premeees.lafam.dto.response.GroupResponse;
 import premeees.lafam.dto.response.InviteTokenResponse;
+import premeees.lafam.dto.response.InviteTokenPreviewResponse;
 
 @RestController
 @RequestMapping("/api/groups")
@@ -80,4 +81,10 @@ public class GroupController {
         return ResponseEntity.ok(members);
     }
 
+    @GetMapping("/invites/{token}/preview")
+    public ResponseEntity<InviteTokenPreviewResponse> previewInviteToken(
+            @PathVariable String token) {
+        InviteTokenPreviewResponse response = groupService.previewInviteToken(token);
+        return ResponseEntity.ok(response);
+    }
 }

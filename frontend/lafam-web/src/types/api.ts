@@ -266,6 +266,13 @@ export interface components {
             /** Format: date-time */
             expiresAt?: string;
         };
+        InviteTokenPreviewResponse: {
+            groupName?: string;
+            groupAvatarUrl?: string;
+            inviterName?: string;
+            inviterAvatarUrl?: string;
+            role?: string;
+        };
         CreateEventRequest: {
             title: string;
             description?: string;
@@ -327,6 +334,8 @@ export interface components {
             joinedAt?: string;
             groupName?: string;
             groupAvatarUrl?: string;
+            displayName?: string;
+            userAvatarUrl?: string;
         };
         RegisterRequest: {
             /** Format: email */

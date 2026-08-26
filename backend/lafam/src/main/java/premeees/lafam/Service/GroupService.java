@@ -20,6 +20,7 @@ import premeees.lafam.dto.request.CreateGroupRequest;
 import premeees.lafam.dto.response.GroupMemberResponse;
 import premeees.lafam.dto.response.GroupResponse;
 import premeees.lafam.dto.response.InviteTokenResponse;
+import premeees.lafam.dto.response.InviteTokenPreviewResponse;
 
 @Service
 public class GroupService {
@@ -180,5 +181,25 @@ public class GroupService {
         inviteTokenRepository.save(inviteToken);
 
         return InviteTokenResponse.fromEntity(inviteToken);
+    }
+
+    @Transactional(readOnly = true)
+    public InviteTokenPreviewResponse previewInviteToken(String token) {
+        InviteToken inviteToken = inviteTokenRepository.findByToken(token)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid invite token"));
+
+        if (inviteToken.getUsedAt() != null) {
+            throw new IllegalArgumentException("Invite token has already been used");
+        }
+
+        if (inviteToken.getExpiresAt().isBefore(OffsetDateTime.now())) {
+            throw new IllegalArgumentException("Invite token has expired");
+        }
+
+        if (inviteToken.getGroup().getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group has been deleted");
+        }
+
+        return InviteTokenPreviewResponse.fromEntity(inviteToken);
     }
 }
