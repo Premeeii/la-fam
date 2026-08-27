@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../api/client";
 import type { components } from "@/types/api";
 
-type UserResponse = components['schemas']['UserResponse'];
+type UserResponse = components['schemas']['UserResponse']; //data that query response
 
 export function useCurrentUser() {
     return useQuery<UserResponse>({

@@ -1,0 +1,57 @@
+          /* Custom FullCalendar Overrides for Tailwind look */
+          .custom-calendar-wrapper .fc {
+              --fc-border-color: #f3f4f6;
+              /* Tailwind gray-100 */
+              --fc-daygrid-event-dot-width: 8px;
+              --fc-event-text-color: #fff;
+              --fc-today-bg-color: #eff6ff;
+              /* Tailwind blue-50 */
+              font-family: inherit;
+              height: 100%;
+              min-height: 700px;
+          }
+
+          .custom-calendar-wrapper .fc .fc-toolbar.fc-header-toolbar {
+              display: none;
+              /* Hide default header */
+          }
+
+          .custom-calendar-wrapper .fc-theme-standard th {
+              border-top: none;
+              border-left: none;
+              border-right: none;
+              padding: 12px 0;
+              font-weight: 500;
+              color: #6b7280;
+              /* Tailwind gray-500 */
+              text-transform: capitalize;
+          }
+
+          .custom-calendar-wrapper .fc-theme-standard td,
+          .custom-calendar-wrapper .fc-theme-standard th {
+              border-color: #f3f4f6;
+          }
+
+          .custom-calendar-wrapper .fc-daygrid-day-number {
+              padding: 12px;
+              font-weight: 500;
+              color: #374151;
+              /* Tailwind gray-700 */
+          }
+
+          .custom-calendar-wrapper .fc-daygrid-day-top {
+              flex-direction: row;
+          }
+
+          .custom-calendar-wrapper .fc-event {
+              border-radius: 4px;
+              padding: 2px 4px;
+              margin: 1px 4px;
+              font-size: 0.75rem;
+              border: none;
+              cursor: pointer;
+          }
+
+          .custom-calendar-wrapper .fc-daygrid-event-harness {
+              margin-top: 2px;
+          }
