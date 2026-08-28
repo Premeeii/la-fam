@@ -7,14 +7,13 @@ export default function AuthLayout({
 }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-[#FFFFFF] lg:flex-row lg:bg-white">
-
       {/* Left side: Image */}
       <div className="relative hidden w-full lg:block lg:h-screen lg:w-1/2 xl:w-[60%]">
         <Image
           src="/cover.webp"
           alt="La'FAM Cover"
           fill
-          
+
           priority
           className="object-cover"
         />
@@ -22,9 +21,7 @@ export default function AuthLayout({
 
       {/* Right side: Form */}
       <div className="flex w-full flex-col justify-between bg-[#FFFFFF] px-6 py-8 lg:w-1/2 lg:bg-white lg:px-16 lg:py-12 xl:w-[40%]">
-
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
-
           {/* Logo */}
           <div className="mb-15 flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-tr from-amber-300 via-red-400 to-indigo-500 text-lg font-bold text-white shadow-sm">

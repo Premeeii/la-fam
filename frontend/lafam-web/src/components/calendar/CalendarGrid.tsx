@@ -48,16 +48,8 @@ export function CalendarGrid({
 
   const mappedEvents = mapEventsToCalendarEvents(events);
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-1 items-center justify-center text-gray-500">
-        Loading events...
-      </div>
-    );
-  }
-
   return (
-    <div className="custom-calendar-wrapper flex-1 overflow-auto p-0">
+    <div className="custom-calendar-wrapper relative flex-1 overflow-auto p-0">
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, interactionPlugin]}
@@ -66,7 +58,16 @@ export function CalendarGrid({
         headerToolbar={false}
         dayMaxEvents={3}
         firstDay={1}
-        height="100%"
+        height="150%"
+
+        eventContent={(arg) => {
+          return (
+            <div className="flex w-full items-center overflow-hidden text-ellipsis whitespace-nowrap px-1.5 py-0.5 text-xs text-black">
+              
+              <span className="truncate font-medium">{arg.event.title}{arg.timeText}</span>
+            </div>
+          );
+        }}
 
         dateClick={(arg) => {
           onDateClick(arg.date);
@@ -89,6 +90,11 @@ export function CalendarGrid({
           );
         }}
       />
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/50">
+          Loading events...
+        </div>
+      )}
     </div>
   );
 }

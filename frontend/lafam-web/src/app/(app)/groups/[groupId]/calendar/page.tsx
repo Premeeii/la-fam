@@ -64,7 +64,7 @@ export default function CalendarPage({
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
-      {/* Custom Header matching the mockup */}
+      {/* Calendar Header */}
       <CalendarHeader
         currentDate={currentDate}
         onPrev={handlePrev}
@@ -82,6 +82,7 @@ export default function CalendarPage({
         onCurrentDateChange={setCurrentDate}
       />
 
+      {/* Add / Edit Event Dialog */}
       <EventDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}

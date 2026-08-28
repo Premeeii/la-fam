@@ -18,7 +18,11 @@ export default function UsersPage({
   params: Promise<{ groupId: string }>;
 }) {
   const resolvedParams = use(params);
-  const { data: members, isLoading, error } = useGroupMembers(resolvedParams.groupId);
+  const {
+    data: members,
+    isLoading,
+    error,
+  } = useGroupMembers(resolvedParams.groupId);
 
   return (
     <div className="flex flex-col gap-6">
@@ -35,20 +39,24 @@ export default function UsersPage({
           {members?.map((member) => (
             <Card
               key={member.userId}
-              className="flex flex-col items-center justify-center p-8 h-80 text-center rounded-xl border-gray-200 shadow-sm transition-shadow hover:shadow-md bg-white"
+              className="flex h-80 flex-col items-center justify-center rounded-xl border-gray-200 bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md"
             >
-              <Avatar className="h-24 w-24 mb-4 shadow-sm border border-gray-100">
+              <Avatar className="mb-4 h-24 w-24 border border-gray-100 shadow-sm">
                 {member.userAvatarUrl && (
-                  <AvatarImage src={member.userAvatarUrl} alt={member.displayName || 'User'} className="object-cover" />
+                  <AvatarImage
+                    src={member.userAvatarUrl}
+                    alt={member.displayName || 'User'}
+                    className="object-cover"
+                  />
                 )}
-                <AvatarFallback className="text-2xl font-bold bg-blue-50 text-blue-600">
+                <AvatarFallback className="bg-blue-50 text-2xl font-bold text-blue-600">
                   {getInitials(member.displayName)}
                 </AvatarFallback>
               </Avatar>
-              <h3 className="text-lg font-bold text-gray-900 leading-tight">
+              <h3 className="text-lg leading-tight font-bold text-gray-900">
                 {member.displayName}
               </h3>
-              <p className="text-sm font-medium text-gray-400 mt-1 capitalize">
+              <p className="mt-1 text-sm font-medium text-gray-400 capitalize">
                 {member.role?.toLowerCase() || 'Member'}
               </p>
             </Card>

@@ -123,7 +123,7 @@ export function EventDialog({ //get props
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
-            <Input id="title" placeholder="Event Title" {...form.register('title')} />
+            <Input className='w-full h-10' id="title" placeholder="Event Title" {...form.register('title')} />
             {form.formState.errors.title && (
               <p className="text-xs text-red-500">{form.formState.errors.title.message}</p>
             )}
@@ -131,31 +131,29 @@ export function EventDialog({ //get props
           
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Input id="description" placeholder="Description (optional)" {...form.register('description')} />
+            <Input className='w-full h-10' id="description" placeholder="Description (optional)" {...form.register('description')} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="startDate">Start Date</Label>
-              <Input id="startDate" type="datetime-local" {...form.register('startDate')} />
+              <Input className='w-full h-10' id="startDate" type="datetime-local" {...form.register('startDate')} />
               {form.formState.errors.startDate && (
                 <p className="text-xs text-red-500">{form.formState.errors.startDate.message}</p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="endDate">End Date</Label>
-              <Input id="endDate" type="datetime-local" {...form.register('endDate')} />
+              <Input className='w-full h-10' id="endDate" type="datetime-local" {...form.register('endDate')} />
               {form.formState.errors.endDate && (
                 <p className="text-xs text-red-500">{form.formState.errors.endDate.message}</p>
               )}
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 flex items-center gap-3">
             <Label htmlFor="color">Color</Label>
-            <div className="flex items-center gap-2">
-              <Input id="color" type="color" className="w-15 h-10 p-1" {...form.register('color')} />
-            </div>
+              <Input id="color" type="color" className="w-15 h-10 p-1 border-none bg-transparent" {...form.register('color')} />
           </div>
 
           <DialogFooter className="pt-4 flex justify-between sm:justify-between items-center w-full">
