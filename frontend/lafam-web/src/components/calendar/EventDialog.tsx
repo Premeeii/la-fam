@@ -22,11 +22,11 @@ interface EventDialogProps {
   onClose: () => void;
   groupId: string;
   mode: 'create' | 'edit';
-  initialData?: EventResponse;
-  selectedDate?: Date;
+  initialData?: EventResponse; //old event when edit
+  selectedDate?: Date; //date when click in calendar
 }
 
-export function EventDialog({
+export function EventDialog({ //get props
   isOpen,
   onClose,
   groupId,
@@ -34,10 +34,12 @@ export function EventDialog({
   initialData,
   selectedDate,
 }: EventDialogProps) {
+  //api hook from events.ts
   const createMutation = useCreateEvent(groupId);
   const updateMutation = useUpdateEvent(groupId);
   const deleteMutation = useDeleteEvent(groupId);
 
+  //date when click in calendar
   const defaultStartDate = selectedDate
     ? new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
     : new Date().toISOString().slice(0, 16);
@@ -46,20 +48,21 @@ export function EventDialog({
     ? new Date(selectedDate.getTime() + 60 * 60 * 1000 - selectedDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
     : new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16);
 
-  const form = useForm<EventFormValues>({
-    resolver: zodResolver(eventSchema),
-    defaultValues: {
+  //create event form with react hook form
+  const form = useForm<EventFormValues>({ 
+    resolver: zodResolver(eventSchema), //schema for validation
+    defaultValues: { //default values when open form
       title: '',
       description: '',
       startDate: defaultStartDate,
       endDate: defaultEndDate,
-      color: '#3b82f6', // default blue
+      color: '#3b82f6', 
     },
   });
 
-  useEffect(() => {
+  useEffect(() => { //when dialog open
     if (isOpen) {
-      if (mode === 'edit' && initialData) {
+      if (mode === 'edit' && initialData) { //when edit
         form.reset({
           title: initialData.title || '',
           description: initialData.description || '',
