@@ -24,9 +24,7 @@ export default function CalendarPage({
   // Dialog state
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState<'create' | 'edit'>('create');
-  const [selectedEvent, setSelectedEvent] = useState<
-    EventResponse | undefined
-  >();
+  const [selectedEvent, setSelectedEvent] = useState<EventResponse | undefined>();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
   const handlePrev = () => {

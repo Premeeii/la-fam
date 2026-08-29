@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { eventSchema, type EventFormValues } from '@/lib/schemas/event';
 import { useCreateEvent, useUpdateEvent, useDeleteEvent } from '@/lib/hooks/useEvents';
+import { useGroupMembers } from '@/lib/hooks/useGroup';
+import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 import { EventResponse } from '@/lib/api/events';
 import {
   Dialog,
@@ -38,6 +40,12 @@ export function EventDialog({ //get props
   const createMutation = useCreateEvent(groupId);
   const updateMutation = useUpdateEvent(groupId);
   const deleteMutation = useDeleteEvent(groupId);
+
+  const { data: members } = useGroupMembers(groupId); //fetch member from hook api
+  const creatorName = members?.find((m) => m.userId === initialData?.ownerId)?.displayName || 'Unknown User';
+  const { data: currentUser } = useCurrentUser(); //fetch current user from hook for identify owner event
+  // identify ability for user edit or delete you must to be own event
+  const canEdit = mode === 'create' || (mode === 'edit' && initialData?.ownerId === currentUser?.id); 
 
   //date when click in calendar
   const defaultStartDate = selectedDate
@@ -123,7 +131,7 @@ export function EventDialog({ //get props
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
-            <Input className='w-full h-10' id="title" placeholder="Event Title" {...form.register('title')} />
+            <Input className='w-full h-10' id="title" placeholder="Event Title" {...form.register('title')} disabled={!canEdit} />
             {form.formState.errors.title && (
               <p className="text-xs text-red-500">{form.formState.errors.title.message}</p>
             )}
@@ -131,33 +139,41 @@ export function EventDialog({ //get props
           
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Input className='w-full h-10' id="description" placeholder="Description (optional)" {...form.register('description')} />
+            <Input className='w-full h-10' id="description" placeholder="Description (optional)" {...form.register('description')} disabled={!canEdit} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="startDate">Start Date</Label>
-              <Input className='w-full h-10' id="startDate" type="datetime-local" {...form.register('startDate')} />
+              <Input className='w-full h-10' id="startDate" type="datetime-local" {...form.register('startDate')} disabled={!canEdit} />
               {form.formState.errors.startDate && (
                 <p className="text-xs text-red-500">{form.formState.errors.startDate.message}</p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="endDate">End Date</Label>
-              <Input className='w-full h-10' id="endDate" type="datetime-local" {...form.register('endDate')} />
+              <Input className='w-full h-10' id="endDate" type="datetime-local" {...form.register('endDate')} disabled={!canEdit} />
               {form.formState.errors.endDate && (
                 <p className="text-xs text-red-500">{form.formState.errors.endDate.message}</p>
               )}
             </div>
           </div>
 
-          <div className="space-y-2 flex items-center gap-3">
-            <Label htmlFor="color">Color</Label>
-              <Input id="color" type="color" className="w-15 h-10 p-1 border-none bg-transparent" {...form.register('color')} />
-          </div>
+          {canEdit && (
+            <div className="space-y-2 flex items-center gap-3">
+              <Label htmlFor="color">Color</Label>
+                <Input id="color" type="color" className="w-15 h-10 p-1 border-none bg-transparent" {...form.register('color')} />
+            </div>
+          )}
+
+          {mode === 'edit' && (
+            <div className="text-sm font-medium text-gray-500">
+              Created by: <span className="text-gray-900">{creatorName}</span>
+            </div>
+          )}
 
           <DialogFooter className="pt-4 flex justify-between sm:justify-between items-center w-full">
-            {mode === 'edit' ? (
+            {mode === 'edit' && canEdit ? (
               <Button type="button" variant="destructive" onClick={handleDelete} disabled={isPending}>
                 Delete
               </Button>
@@ -165,12 +181,20 @@ export function EventDialog({ //get props
                 <div /> // placeholder for flex space-between
             )}
             <div className="flex gap-2">
-                <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>
-                Cancel
-                </Button>
-                <Button type="submit" disabled={isPending} className="bg-blue-600 hover:bg-blue-700">
-                {mode === 'create' ? 'Save' : 'Update'}
-                </Button>
+                {canEdit ? (
+                  <>
+                    <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>
+                    Cancel
+                    </Button>
+                    <Button type="submit" disabled={isPending} className="bg-blue-600 hover:bg-blue-700">
+                    {mode === 'create' ? 'Save' : 'Update'}
+                    </Button>
+                  </>
+                ) : (
+                    <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>
+                    Close
+                    </Button>
+                )}
             </div>
           </DialogFooter>
         </form>

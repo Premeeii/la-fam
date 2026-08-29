@@ -64,7 +64,7 @@ export function CalendarGrid({
           return (
             <div className="flex w-full items-center overflow-hidden text-ellipsis whitespace-nowrap px-1.5 py-0.5 text-xs text-black">
               
-              <span className="truncate font-medium">{arg.event.title}{arg.timeText}</span>
+              <span className="truncate font-medium">{arg.event.title}</span>
             </div>
           );
         }}
