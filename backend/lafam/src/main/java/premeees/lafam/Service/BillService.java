@@ -192,4 +192,25 @@ public class BillService {
                 .map(BillResponse::fromEntity)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<BillResponse> getBillsByCategory(UUID groupId, UUID categoryId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+        if (group.getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group has been deleted");
+        }
+
+        // check a user is member of this group
+        groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
+
+        List<Bill> bills = billRepository.findAllByGroupIdAndBillCategoryId(groupId, categoryId);
+        return bills.stream()
+                .map(BillResponse::fromEntity)
+                .toList();
+    }
 }

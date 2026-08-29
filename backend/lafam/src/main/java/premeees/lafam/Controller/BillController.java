@@ -82,4 +82,13 @@ public class BillController {
         List<BillResponse> bills = billService.getBillsByGroupAndUserId(groupId, userDetails.getUsername());
         return ResponseEntity.ok(bills);
     }
+
+    @GetMapping("/groups/{groupId}/bills/category/{categoryId}")
+    public ResponseEntity<List<BillResponse>> getBillsByCategory(
+            @PathVariable UUID groupId,
+            @PathVariable UUID categoryId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        List<BillResponse> bills = billService.getBillsByCategory(groupId, categoryId, userDetails.getUsername());
+        return ResponseEntity.ok(bills);
+    }
 }
