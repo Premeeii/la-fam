@@ -18,7 +18,7 @@ public class EventResponse {
     private OffsetDateTime createdAt;
 
     public EventResponse(UUID id, UUID groupId, String title, String description, UUID ownerId,
-                         OffsetDateTime startDate, OffsetDateTime endDate, String color, OffsetDateTime createdAt) {
+            OffsetDateTime startDate, OffsetDateTime endDate, String color, OffsetDateTime createdAt) {
         this.id = id;
         this.groupId = groupId;
         this.title = title;
@@ -32,16 +32,15 @@ public class EventResponse {
 
     public static EventResponse fromEntity(Event event) {
         return new EventResponse(
-            event.getId(),
-            event.getGroup().getId(),
-            event.getTitle(),
-            event.getDescription(),
-            event.getOwner().getId(),
-            event.getStartDate(),
-            event.getEndDate(),
-            event.getColor(),
-            event.getCreatedAt()
-        );
+                event.getId(),
+                event.getGroup().getId(),
+                event.getTitle(),
+                event.getDescription(),
+                event.getOwner().getId(),
+                event.getStartDate(),
+                event.getEndDate(),
+                event.getColor(),
+                event.getCreatedAt());
     }
 
     public UUID getId() {

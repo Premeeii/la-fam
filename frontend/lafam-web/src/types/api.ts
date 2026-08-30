@@ -292,9 +292,9 @@ export interface components {
             /** Format: uuid */
             ownerId?: string;
             /** Format: date-time */
-            startDate?: string;
+            startDate: string;
             /** Format: date-time */
-            endDate?: string;
+            endDate: string;
             color?: string;
             /** Format: date-time */
             createdAt?: string;

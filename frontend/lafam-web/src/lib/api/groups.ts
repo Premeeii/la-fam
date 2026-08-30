@@ -4,6 +4,7 @@ import type { components } from '@/types/api';
 
 type InviteTokenPreviewResponse = components['schemas']['InviteTokenPreviewResponse'];
 type GroupMemberResponse = components['schemas']['GroupMemberResponse'];
+type InviteTokenResponse = components['schemas']['InviteTokenResponse'];
 
 export async function createGroup(data: AddGroupFormValues) {
     const response = await apiClient.post('/api/groups', data);
@@ -17,5 +18,10 @@ export async function previewInviteToken(token: string): Promise<InviteTokenPrev
 
 export async function joinGroup(token: string): Promise<GroupMemberResponse> {
     const response = await apiClient.post(`/api/groups/join?token=${token}`);
+    return response.data;
+}
+
+export async function generateInviteToken(groupId: string): Promise<InviteTokenResponse> {
+    const response = await apiClient.post(`/api/groups/${groupId}/invites`);
     return response.data;
 }

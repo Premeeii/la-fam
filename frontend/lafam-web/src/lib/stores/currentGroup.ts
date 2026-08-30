@@ -7,7 +7,7 @@ interface CurrentGroupState {
 }
 
 export const useCurrentGroup = create<CurrentGroupState>()(
-  persist(
+  persist( //set groupid in localstorage as current-group name
     (set) => ({
       groupId: null,
       setGroupId: (id) => set({ groupId: id }),
