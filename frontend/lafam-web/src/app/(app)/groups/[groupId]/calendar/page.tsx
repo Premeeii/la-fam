@@ -4,10 +4,7 @@ import { useRef, useState, use } from 'react';
 import './calendar.css';
 import FullCalendar from '@fullcalendar/react';
 import { EventDialog } from '@/components/calendar/EventDialog';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { EventResponse } from '@/lib/api/events';
-import { format } from 'date-fns';
 
 import { CalendarHeader } from '@/components/calendar/CalendarHeader';
 import { CalendarGrid } from '@/components/calendar/CalendarGrid';

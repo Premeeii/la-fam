@@ -44,15 +44,24 @@ export default function BillsPage({
     return allBills;
   }, [activeFilter, allBills, myBills, categoryBills]);
 
-  // Apply search filter
+  // Apply search filter & sort
   const filteredBills = useMemo(() => {
-    if (!searchQuery.trim()) return baseBills;
-    const q = searchQuery.toLowerCase();
-    return baseBills.filter(
-      (bill) =>
-        bill.title?.toLowerCase().includes(q) ||
-        bill.categoryName?.toLowerCase().includes(q)
-    );
+    let result = baseBills;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = baseBills.filter(
+        (bill) =>
+          bill.title?.toLowerCase().includes(q) ||
+          bill.categoryName?.toLowerCase().includes(q)
+      );
+    }
+    
+    // Sort from newest to oldest
+    return [...result].sort((a, b) => {
+      const dateA = new Date(a.createdAt || 0).getTime();
+      const dateB = new Date(b.createdAt || 0).getTime();
+      return dateB - dateA;
+    });
   }, [baseBills, searchQuery]);
 
   // Pagination

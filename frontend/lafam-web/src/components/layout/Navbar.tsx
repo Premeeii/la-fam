@@ -17,11 +17,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useLogout } from '@/lib/hooks/useLogout';
-import { Button } from '@/components/ui/button';
+
 import { Input } from '@/components/ui/input';
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 import { CreateGroupDialog } from './CreateGroupDialog';
-import { Plus } from 'lucide-react';
+
 
 function getInitials(name?: string) {
   if (!name) return 'U';

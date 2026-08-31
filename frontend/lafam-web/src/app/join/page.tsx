@@ -1,14 +1,9 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { previewInviteToken, joinGroup } from '@/lib/api/groups';
-import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { toast } from 'sonner';
 import Link from 'next/link';
 
 import { usePreviewJoinGroup } from '@/lib/hooks/useGroup';
