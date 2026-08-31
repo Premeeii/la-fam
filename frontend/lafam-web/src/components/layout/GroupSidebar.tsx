@@ -42,11 +42,11 @@ export function GroupSidebar() {
       href: currentGroupId ? `/groups/${currentGroupId}/bills` : '#',
       icon: Receipt,
     },
-    {
+    /*{
       name: 'Notes',
       href: currentGroupId ? `/groups/${currentGroupId}/notes` : '#',
       icon: FileText,
-    },
+    },*/
     {
       name: 'Setting',
       href: currentGroupId ? `/groups/${currentGroupId}/settings` : '#',

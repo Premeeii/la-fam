@@ -13,7 +13,6 @@ export default function AuthLayout({
           src="/cover.webp"
           alt="La'FAM Cover"
           fill
-
           priority
           className="object-cover"
         />

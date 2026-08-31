@@ -8,14 +8,14 @@ import { Button } from '@/components/ui/button';
 export function BillsContainer({ groupId }: { groupId: string }) {
   const { data: bills, isLoading: isBillsLoading } = useGroupBills(groupId);
 
-  // เรียงลำดับบิลล่าสุดขึ้นก่อน (อิงจากวันที่สร้าง) และตัดมาแค่ 2 บิล
+  // sort bills latest first
   const latestBills = useMemo(() => {
     if (!bills) return [];
     return [...bills]
       .sort((a, b) => {
         const dateA = new Date(a.createdAt || 0).getTime();
         const dateB = new Date(b.createdAt || 0).getTime();
-        return dateB - dateA; // เรียงจากใหม่ไปเก่า
+        return dateB - dateA; // sort by latest first
       })
       .slice(0, 2);
   }, [bills]);
@@ -34,18 +34,18 @@ export function BillsContainer({ groupId }: { groupId: string }) {
 
       <div className="flex flex-1 flex-col gap-3">
         {isBillsLoading ? (
-          // Skeleton สำหรับตอนกำลังโหลด
+          // Skeleton for loading state
           <>
             <div className="h-24 w-full animate-pulse rounded-xl bg-gray-100"></div>
             <div className="h-24 w-full animate-pulse rounded-xl bg-gray-100"></div>
           </>
         ) : latestBills.length === 0 ? (
-          // แสดงข้อความเมื่อไม่มีบิล
+          // show message when no bills
           <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-gray-50 p-6 text-gray-400">
             <p className="text-sm">No bills added yet.</p>
           </div>
         ) : (
-          // นำข้อมูลมาเรนเดอร์เป็นการ์ดใบเล็ก fetch bills with category name
+          // render bills data in small cards
           latestBills.map((bill) => (
             <div
               key={bill.id}

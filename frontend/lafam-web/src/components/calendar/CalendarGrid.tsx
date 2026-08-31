@@ -16,7 +16,7 @@ interface CalendarGridProps {
   onCurrentDateChange: (date: Date) => void;
 }
 
-function mapEventsToCalendarEvents(events: EventResponse[]) {
+function mapEventsToCalendarEvents(events: EventResponse[]) { //map backend response straight to fullCalendar
   return events.map((event) => ({
     id: event.id,
     title: event.title,
@@ -24,7 +24,7 @@ function mapEventsToCalendarEvents(events: EventResponse[]) {
     end: event.endDate,
     backgroundColor: event.color || '#3b82f6',
     borderColor: 'transparent',
-    extendedProps: event,
+    extendedProps: event, //take full response in fullCalendar
   }));
 }
 
@@ -35,18 +35,18 @@ export function CalendarGrid({
   onEventClick,
   onCurrentDateChange,
 }: CalendarGridProps) {
-  const [dateRange, setDateRange] = useState({
-    from: '',
-    to: '',
+  const [dateRange, setDateRange] = useState({ //start date like August 2026
+    from: '', //from = 2026-07-1
+    to: '', //from = 2026-07-31
   });
 
-  const { data: events = [], isLoading } = useGroupEvents(
+  const { data: events = [], isLoading } = useGroupEvents( //fetch array event from backend
     groupId,
     dateRange.from,
     dateRange.to
   );
 
-  const mappedEvents = mapEventsToCalendarEvents(events);
+  const mappedEvents = mapEventsToCalendarEvents(events); //converts backend response format into fullcalendar format
 
   return (
     <div className="custom-calendar-wrapper relative flex-1 overflow-auto p-0">
@@ -63,7 +63,6 @@ export function CalendarGrid({
         eventContent={(arg) => {
           return (
             <div className="flex w-full items-center overflow-hidden text-ellipsis whitespace-nowrap px-1.5 py-0.5 text-xs text-black">
-              
               <span className="truncate font-medium">{arg.event.title}</span>
             </div>
           );

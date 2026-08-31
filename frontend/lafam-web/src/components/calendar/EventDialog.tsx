@@ -52,11 +52,12 @@ export function EventDialog({ //get props
     ? new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
     : new Date().toISOString().slice(0, 16);
 
+  //date end 1 hour after start
   const defaultEndDate = selectedDate
     ? new Date(selectedDate.getTime() + 60 * 60 * 1000 - selectedDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
     : new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16);
 
-  //create event form with react hook form
+  //create event hook form for event 
   const form = useForm<EventFormValues>({ 
     resolver: zodResolver(eventSchema), //schema for validation
     defaultValues: { //default values when open form
@@ -78,7 +79,7 @@ export function EventDialog({ //get props
           endDate: initialData.endDate ? new Date(initialData.endDate).toISOString().slice(0, 16) : defaultEndDate,
           color: initialData.color || '#3b82f6',
         });
-      } else {
+      } else { //when create
         form.reset({
           title: '',
           description: '',
