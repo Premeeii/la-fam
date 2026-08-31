@@ -4,6 +4,7 @@ import { use } from 'react';
 import { useGroup } from '@/lib/hooks/useGroup';
 import { InviteMemberPopover } from '@/components/groups/InviteMemberPopover';
 import { UpcomingEvents } from '@/components/dashboard/UpcomingEvents';
+import { BillsContainer } from '@/components/dashboard/BillsContainer';
 
 export default function DashboardPage({
   params,
@@ -41,6 +42,7 @@ export default function DashboardPage({
         
         <div className="flex flex-col">
           {/* Placeholder for Column 2: Bills, Group Member */}
+          <BillsContainer groupId={resolvedParams.groupId} />
         </div>
       </div>
     </div>
