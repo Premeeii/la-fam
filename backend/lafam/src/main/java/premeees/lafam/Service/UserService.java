@@ -71,10 +71,14 @@ public class UserService {
         
         //delete oldAvatarUrl out of R2 if has it
         String oldAvatarUrl = user.getAvatarUrl();
-        //"<https://pub-xxx.r2.dev/avatars/abc.webp>" → "avatars/abc.webp"
         if (oldAvatarUrl != null && !oldAvatarUrl.isBlank()) {
             try{
                 String oldKey = oldAvatarUrl.substring(oldAvatarUrl.lastIndexOf("avatar/"));
+                // remove timestamp query param if exists
+                if (oldKey.contains("?")) {
+                    oldKey = oldKey.substring(0, oldKey.indexOf("?"));
+                }
+                
                 //if old key and new key are same don't need to delete
                 //because PUT already overwrite the same file(like re-upload .png file)
                 if (!oldKey.equals(objectKey)) {
@@ -84,8 +88,8 @@ public class UserService {
                 System.out.println("Failed to delete old avatar: " + e.getMessage());
             }
         }
-        //create new public Url in DB
-        String newAvatarUrl = r2StorageService.buildPublicUrl(objectKey);
+        //create new public Url in DB with timestamp to bust browser cache
+        String newAvatarUrl = r2StorageService.buildPublicUrl(objectKey) + "?t=" + System.currentTimeMillis();
         user.setAvatarUrl(newAvatarUrl);
         userRepository.save(user);
         return UserResponse.fromEntity(user);

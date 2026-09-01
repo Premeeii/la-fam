@@ -1,15 +1,20 @@
 'use client';
-
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 import { useAvatarUpload } from '@/lib/hooks/useAvatar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Camera } from 'lucide-react';
+import { apiClient } from '@/lib/api/client';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 export default function ProfilePage() {
-  const { data: user } = useCurrentUser();
+  const { data: user, isLoading } = useCurrentUser();
   const uploadMutation = useAvatarUpload();
+  const queryClient = useQueryClient();
 
   // เก็บ preview URL สำหรับแสดงรูปที่เลือกไว้ก่อนอัปโหลด
   const [preview, setPreview] = useState<string | null>(null);
@@ -19,10 +24,31 @@ export default function ProfilePage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  /**
-   * เมื่อผู้ใช้เลือกไฟล์:
-   * แค่สร้าง preview แล้วเก็บ file ไว้ — ยังไม่อัปโหลด
-   */
+  // Profile form state
+  const [displayName, setDisplayName] = useState('');
+  const [bio, setBio] = useState('');
+  // ซิงค์ค่าจาก user data เมื่อโหลดเสร็จ
+  useEffect(() => {
+    if (user) {
+      setDisplayName(user.displayName || '');
+      setBio(user.bio || '');
+    }
+  }, [user]);
+  // Mutation สำหรับอัปเดต displayName และ bio
+  const updateProfileMutation = useMutation({
+    mutationFn: async (data: { displayName?: string; bio?: string }) => {
+      const res = await apiClient.patch('/api/users/me', data);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+      toast.success('บันทึกข้อมูลโปรไฟล์สำเร็จ');
+    },
+    onError: () => {
+      toast.error('บันทึกไม่สำเร็จ กรุณาลองใหม่');
+    },
+  });
+  // เมื่อเลือกไฟล์: แค่สร้าง preview ยังไม่อัปโหลด
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -35,58 +61,71 @@ export default function ProfilePage() {
     setSelectedFile(file);
   };
 
-  /**
-   * เมื่อกด Save: เริ่มอัปโหลดจริง
-   */
-  const handleSave = () => {
-    if (!selectedFile) return;
+  // เมื่อกด Save: อัปโหลด avatar (ถ้ามี) + อัปเดต profile
+  const handleSave = async () => {
+    // อัปโหลด avatar ถ้ามีไฟล์ที่เลือกไว้
+    if (selectedFile) {
+      uploadMutation.mutate(
+        { file: selectedFile },
+        {
+          onSuccess: () => {
+            if (preview) URL.revokeObjectURL(preview);
+            setPreview(null);
+            setSelectedFile(null);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+          },
+        }
+      );
+    }
 
-    uploadMutation.mutate({ file: selectedFile }, {
-      onSuccess: () => {
-        // อัปโหลดสำเร็จ → ล้าง preview กับ file ออก
-        if (preview) URL.revokeObjectURL(preview);
-        setPreview(null);
-        setSelectedFile(null);
-      },
-      onError: () => {
-        // อัปโหลดไม่สำเร็จ → ยังเก็บ preview ไว้ให้กด Save ลองใหม่ได้
-      },
+   // อัปเดต displayName + bio
+    updateProfileMutation.mutate({
+      displayName: displayName.trim() || undefined,
+      bio: bio.trim() || undefined,
     });
   };
 
-  /**
-   * เมื่อกด Cancel: ยกเลิกการเลือกรูป กลับไปแสดงรูปเดิม
-   */
-  const handleCancel = () => {
-    if (preview) URL.revokeObjectURL(preview);
-    setPreview(null);
-    setSelectedFile(null);
-    // reset input เพื่อให้เลือกไฟล์เดิมซ้ำได้
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
-
+  const isPending = uploadMutation.isPending || updateProfileMutation.isPending;
   const initials = user?.displayName?.charAt(0).toUpperCase() || 'U';
 
-  return (
-    <div className="flex flex-col items-center gap-4">
-      {/* Avatar พร้อมปุ่มกดเพื่อเลือกไฟล์ */}
-      <div className="relative">
-        <Avatar className="h-24 w-24">
-          <AvatarImage src={preview || user?.avatarUrl || undefined} />
-          <AvatarFallback className="bg-gray-200 text-gray-600 text-2xl">
-            {initials}
-          </AvatarFallback>
-        </Avatar>
+  if (isLoading) {
+    return (
+      <div className="mx-auto w-full max-w-2xl p-6">
+        <div className="h-8 w-48 animate-pulse rounded bg-gray-200" />
+        <div className="mt-6 h-32 w-full animate-pulse rounded-xl bg-gray-200" />
+      </div>
+    );
+  }
 
-        {/* ปุ่มกล้องเล็กๆ มุมล่างขวาของ Avatar */}
-        <button
-          type="button"
-          onClick={() => fileInputRef.current?.click()}
-          disabled={uploadMutation.isPending}
-          className="absolute bottom-0 right-0 rounded-full bg-blue-600 p-1.5 text-white shadow-md hover:bg-blue-700 disabled:opacity-50"
-        >
-          <Camera className="h-4 w-4" />
-        </button>
+  return (
+   <div className="mx-auto w-full max-w-2xl p-6">
+      {/* Header */}
+      <h1 className="text-2xl font-bold text-gray-900">Profile & Visibility</h1>
+
+       {/* Banner + Avatar */}
+      <div className="relative mt-6">
+        {/* Banner */}
+        <div className="h-32 w-full rounded-xl bg-gray-200" />
+        {/* Avatar — ซ้อนอยู่กลาง banner ด้านล่าง */}
+        <div className="absolute -bottom-14 left-1/2 -translate-x-1/2">
+          <div className="relative">
+            <Avatar className="h-28 w-28 border-4 border-white shadow-md">
+              <AvatarImage src={preview || user?.avatarUrl || undefined} />
+              <AvatarFallback className="bg-gray-300 text-3xl text-gray-600">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            {/* ปุ่มกล้อง — กดแล้วเปิดเลือกไฟล์ */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isPending}
+              className="absolute bottom-1 right-1 rounded-full bg-blue-600 p-1.5 text-white shadow-md hover:bg-blue-700 disabled:opacity-50"
+            >
+              <Camera className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Input file ที่ซ่อนไว้ */}
@@ -98,25 +137,53 @@ export default function ProfilePage() {
         onChange={handleFileChange}
       />
 
-      {/* ปุ่ม Save / Cancel — แสดงเฉพาะเมื่อมีรูปที่เลือกไว้ */}
-      {selectedFile && (
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={handleCancel}
-            disabled={uploadMutation.isPending}
-          >
-            Cancel
-          </Button>
+ {/* About Section */}
+      <div className="mt-20">
+        <h2 className="text-xl font-bold text-gray-900">About</h2>
+        <p className="mt-1 text-sm text-gray-500">
+          Required fields are marked with an asterisk<span className="text-red-500">*</span>
+        </p>
+         <div className="mt-6 flex flex-col gap-5">
+          {/* Display Name */}
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="displayName" className="text-sm font-medium text-gray-700">
+              Display name<span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="displayName"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              placeholder="Your display name"
+              className="h-11 rounded-lg border-gray-200 bg-gray-50 px-4"
+              required
+            />
+          </div>
+          {/* Bio */}
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="bio" className="text-sm font-medium text-gray-700">
+              Bio
+            </Label>
+            <textarea
+              id="bio"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="Tell something about yourself"
+              rows={4}
+              className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+       {/* Save Button */}
+        <div className="mt-6 flex justify-end">
           <Button
             onClick={handleSave}
-            disabled={uploadMutation.isPending}
-            className="bg-blue-600 hover:bg-blue-700"
+           disabled={isPending || !displayName.trim()}
+            className="bg-blue-600 px-6 hover:bg-blue-700"
           >
-            {uploadMutation.isPending ? 'กำลังอัปโหลด...' : 'Save'}
+            {isPending ? 'Saving...' : 'Save'}
           </Button>
         </div>
-      )}
+        </div>
     </div>
   );
 }
