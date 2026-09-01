@@ -64,6 +64,7 @@ public class UserService {
     }
 
     //use for confirm and delete old avatarUrl
+    @Transactional
     public UserResponse confirmAvatarUpload(String email, String objectKey) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -74,9 +75,13 @@ public class UserService {
         if (oldAvatarUrl != null && !oldAvatarUrl.isBlank()) {
             try{
                 String oldKey = oldAvatarUrl.substring(oldAvatarUrl.lastIndexOf("avatar/"));
-                r2StorageService.deleteObject(oldKey);
+                //if old key and new key are same don't need to delete
+                //because PUT already overwrite the same file(like re-upload .png file)
+                if (!oldKey.equals(objectKey)) {
+                    r2StorageService.deleteObject(oldKey);
+                }
             }catch(Exception e) {
-
+                System.out.println("Failed to delete old avatar: " + e.getMessage());
             }
         }
         //create new public Url in DB

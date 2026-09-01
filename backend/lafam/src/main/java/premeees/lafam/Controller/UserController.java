@@ -54,7 +54,7 @@ public class UserController {
         return ResponseEntity.ok(request);
     }
 
-    @PostMapping("/me/avatar/confirm")
+    @PatchMapping("/me/avatar/confirm")
     public ResponseEntity<UserResponse> confirmAvatarUpload(
         @Valid @RequestBody ConfirmAvatarRequest request,
         @AuthenticationPrincipal UserDetails userDetails
