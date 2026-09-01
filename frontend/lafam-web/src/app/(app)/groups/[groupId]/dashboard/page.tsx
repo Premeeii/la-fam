@@ -7,6 +7,7 @@ import { UpcomingEvents } from '@/components/dashboard/UpcomingEvents';
 import { BillsContainer } from '@/components/dashboard/BillsContainer';
 import { Users } from 'lucide-react';
 import { UsersContainer } from '@/components/dashboard/UsersContainer';
+import { UpcomingWeek } from '@/components/dashboard/UpcomingWeek';
 
 export default function DashboardPage({
   params,
@@ -29,7 +30,7 @@ export default function DashboardPage({
             Welcome Home, {isLoading ? '...' : currentGroup?.groupName || 'Unknown Group'}
           </h1>
           <span className="text-sm font-normal text-gray-500">
-            What's happening today, {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}.
+            What's will happening, {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}.
           </span>
         </div>
         <div className="pt-1">
@@ -38,8 +39,9 @@ export default function DashboardPage({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
-        <div className="lg:col-span-2 flex flex-col">
+        <div className="lg:col-span-2 flex flex-col gap-8">
           <UpcomingEvents groupId={resolvedParams.groupId} />
+          <UpcomingWeek groupId={resolvedParams.groupId} />
         </div>
         
         <div className="flex flex-col">

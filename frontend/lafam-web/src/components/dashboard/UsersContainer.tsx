@@ -2,6 +2,9 @@
 
 import { useGroupMembers } from "@/lib/hooks/useGroup"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { useMemo } from "react"
+import { Button } from "../ui/button"
+import Link from "next/link"
 
 interface UsersContainerProps {
   groupId: string
@@ -10,6 +13,13 @@ interface UsersContainerProps {
 export function UsersContainer({ groupId }: UsersContainerProps) {
   const { data: members, isLoading } = useGroupMembers(groupId);
 
+  const latestMembers = useMemo(() => {
+    return members?.sort((a, b) => {
+      const dateA = new Date(a.joinedAt || 0);
+      const dateB = new Date(b.joinedAt || 0);
+      return dateB.getTime() - dateA.getTime();
+    }).slice(0, 4);
+  }, [members]);
 
   if (isLoading) {
     return (
@@ -25,7 +35,7 @@ export function UsersContainer({ groupId }: UsersContainerProps) {
     <div className="flex w-full flex-col mt-6 rounded-[20px] border border-gray-200 bg-white p-6 shadow-sm">
       <h2 className="mb-5 text-xl font-semibold text-gray-800">Members</h2>
       <div className="flex flex-col gap-4">
-        {members?.map((member) => (
+        {latestMembers?.map((member) => (
           <div
             key={member.userId}
             className="flex items-center gap-4 p-3"
@@ -38,11 +48,20 @@ export function UsersContainer({ groupId }: UsersContainerProps) {
           </Avatar>
           <div className="flex flex-col">
             <h3 className="font-medium text-gray-900">{member.displayName}</h3>
-            <p className="text-sm text-gray-500">{member.displayName}</p>
           </div>
         </div>
       ))}
     </div>
+    <div className="mt-5">
+        <Link href={`/groups/${groupId}/bills`} className="w-full">
+          <Button
+            variant="outline"
+            className="h-10 w-full rounded-lg border-gray-200 font-medium text-gray-700 hover:bg-gray-50"
+          >
+            View All Members
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }
