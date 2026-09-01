@@ -5,13 +5,17 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import premeees.lafam.Service.UserService;
 import premeees.lafam.dto.request.UpdateProfileRequest;
+import premeees.lafam.dto.response.AvatarUploadResponse;
+import premeees.lafam.dto.request.ConfirmAvatarRequest;
 import premeees.lafam.dto.response.UserResponse;
 
 @RestController
@@ -35,6 +39,28 @@ public class UserController {
             @Valid @RequestBody UpdateProfileRequest request,
             @AuthenticationPrincipal UserDetails userDetails) {
         UserResponse response = userService.updateMyProfile(userDetails.getUsername(), request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/me/avatar/upload-url")
+    public ResponseEntity<AvatarUploadResponse> requestAvatarUploadUrl(
+        @RequestParam String contentType,
+        @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        if(!contentType.startsWith("image/")) {
+            return ResponseEntity.badRequest().build();
+        }
+        AvatarUploadResponse request = userService.requestAvatarUpload(userDetails.getUsername(), contentType);
+        return ResponseEntity.ok(request);
+    }
+
+    @PostMapping("/me/avatar/confirm")
+    public ResponseEntity<UserResponse> confirmAvatarUpload(
+        @Valid @RequestBody ConfirmAvatarRequest request,
+        @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        UserResponse response = userService.confirmAvatarUpload(
+                userDetails.getUsername(), request.getObjectKey());
         return ResponseEntity.ok(response);
     }
 }
