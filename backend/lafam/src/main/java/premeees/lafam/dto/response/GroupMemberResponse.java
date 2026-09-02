@@ -14,9 +14,10 @@ public class GroupMemberResponse {
     private String groupName;
     private String groupAvatarUrl;
     private String displayName;
+    private String bio;
     private String userAvatarUrl;
 
-    public GroupMemberResponse(UUID userId, UUID groupId, String role, OffsetDateTime joinedAt, String groupName, String groupAvatarUrl, String displayName, String userAvatarUrl) {
+    public GroupMemberResponse(UUID userId, UUID groupId, String role, OffsetDateTime joinedAt, String groupName, String groupAvatarUrl, String displayName, String userAvatarUrl, String bio) {
         this.userId = userId;
         this.groupId = groupId;
         this.role = role;
@@ -25,6 +26,7 @@ public class GroupMemberResponse {
         this.groupAvatarUrl = groupAvatarUrl;
         this.displayName = displayName;
         this.userAvatarUrl = userAvatarUrl;
+        this.bio = bio;
     }
 
     public static GroupMemberResponse fromEntity(GroupMember member) {
@@ -36,7 +38,8 @@ public class GroupMemberResponse {
             member.getGroup().getName(),
             member.getGroup().getGroupAvatarUrl(),
             member.getUser().getDisplayName(),
-            member.getUser().getAvatarUrl()
+            member.getUser().getAvatarUrl(),
+            member.getUser().getBio()
         );
     }
 
@@ -103,4 +106,13 @@ public class GroupMemberResponse {
     public void setUserAvatarUrl(String userAvatarUrl) {
         this.userAvatarUrl = userAvatarUrl;
     }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+    
 }

@@ -56,6 +56,11 @@ export default function UsersPage({
               <h3 className="text-lg leading-tight font-bold text-gray-900">
                 {member.displayName}
               </h3>
+              <h4 className="mt-1 text-sm leading-tight font-medium text-gray-600">
+                {member.bio && member.bio.length > 20
+                  ? `${member.bio.substring(0, 20)}...`
+                  : member.bio}
+              </h4>
               <p className="mt-1 text-sm font-medium text-gray-400 capitalize">
                 {member.role?.toLowerCase() || 'Member'}
               </p>

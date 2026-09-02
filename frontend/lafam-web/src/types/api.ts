@@ -336,6 +336,7 @@ export interface components {
             groupAvatarUrl?: string;
             displayName?: string;
             userAvatarUrl?: string;
+            bio?: string;
         };
         RegisterRequest: {
             /** Format: email */

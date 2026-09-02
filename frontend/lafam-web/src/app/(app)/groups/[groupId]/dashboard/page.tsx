@@ -5,7 +5,6 @@ import { useGroup } from '@/lib/hooks/useGroup';
 import { InviteMemberPopover } from '@/components/groups/InviteMemberPopover';
 import { UpcomingEvents } from '@/components/dashboard/UpcomingEvents';
 import { BillsContainer } from '@/components/dashboard/BillsContainer';
-import { Users } from 'lucide-react';
 import { UsersContainer } from '@/components/dashboard/UsersContainer';
 import { UpcomingWeek } from '@/components/dashboard/UpcomingWeek';
 
