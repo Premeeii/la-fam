@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+
 import { Search, Settings, User, LogOut, Menu } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -17,7 +18,9 @@ import { Input } from '@/components/ui/input';
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 import { CreateGroupDialog } from './CreateGroupDialog';
 import { GroupNav } from './GroupNav';
+import { SearchGroupBar } from './SearchGroupBar';
 import { usePathname } from 'next/navigation';
+
 
 function getInitials(name?: string) {
   if (!name) return 'U';
@@ -93,17 +96,7 @@ export function Navbar() {
         </div>
 
         {/* Center: Search */}
-        <div className="hidden flex-1 items-center justify-center px-6 md:flex">
-          <div className="relative w-full max-w-lg">
-            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <Input
-              type="text"
-              placeholder="Search ..."
-              className="h-10 w-full rounded-lg border-gray-200 bg-white pr-4 pl-10 text-sm shadow-sm placeholder:text-gray-400 focus-visible:ring-blue-100"
-            />
-          </div>
-        </div>
-
+        <SearchGroupBar/>
         {/* Right: Actions */}
         <div className="flex items-center gap-4">
           <button className="text-gray-400 transition-colors hover:text-gray-600">
