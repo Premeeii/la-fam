@@ -23,14 +23,20 @@ export default function DashboardPage({
   );
 
   return (
-    <div className="flex flex-col h-full w-full">
-      <div className="flex justify-between items-start mb-8">
+    <div className="flex h-full w-full flex-col">
+      <div className="mb-6 md:mb-8 flex items-start justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-gray-900 mb-1">
-            Welcome Home, {isLoading ? '...' : currentGroup?.groupName || 'Unknown Group'}
+          <h1 className="mb-1 text-2xl md:text-3xl font-semibold text-gray-900">
+            Welcome to{' '}
+            {isLoading ? '...' : currentGroup?.groupName || 'Unknown Group'}
           </h1>
           <span className="text-sm font-normal text-gray-500">
-            What's will happening, {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}.
+            What's will happening,{' '}
+            {new Date().toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+            })}
+            .
           </span>
         </div>
         <div className="pt-1">
@@ -38,12 +44,12 @@ export default function DashboardPage({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
-        <div className="lg:col-span-2 flex flex-col gap-8">
+      <div className="grid w-full grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3">
+        <div className="flex flex-col gap-6 md:gap-8 lg:col-span-2">
           <UpcomingEvents groupId={resolvedParams.groupId} />
           <UpcomingWeek groupId={resolvedParams.groupId} />
         </div>
-        
+
         <div className="flex flex-col">
           {/* Placeholder for Column 2: Bills, Group Member */}
           <BillsContainer groupId={resolvedParams.groupId} />

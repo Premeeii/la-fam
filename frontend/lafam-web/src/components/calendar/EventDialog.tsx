@@ -65,7 +65,7 @@ export function EventDialog({ //get props
       description: '',
       startDate: defaultStartDate,
       endDate: defaultEndDate,
-      color: '#3b82f6', 
+      color: '#3b82f6',
     },
   });
 

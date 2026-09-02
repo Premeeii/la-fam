@@ -6,12 +6,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Camera } from 'lucide-react';
+import { Camera, ChevronLeft } from 'lucide-react';
 import { apiClient } from '@/lib/api/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
+  const router = useRouter();
   const { data: user, isLoading } = useCurrentUser();
   const uploadMutation = useAvatarUpload();
   const queryClient = useQueryClient();
@@ -98,14 +100,27 @@ export default function ProfilePage() {
   }
 
   return (
-   <div className="mx-auto w-full max-w-2xl p-6">
+   <div className="mx-auto w-full max-w-2xl p-4 md:p-6">
       {/* Header */}
-      <h1 className="text-2xl font-bold text-gray-900">Profile & Visibility</h1>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => router.back()}
+          className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+          aria-label="Go back"
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </button>
+        <h1 className="text-2xl font-bold text-gray-900">Profile & Visibility</h1>
+      </div>
 
        {/* Banner + Avatar */}
       <div className="relative mt-6">
         {/* Banner */}
-        <div className="h-32 w-full rounded-xl bg-gray-200" />
+        <img
+          src="/profile_cover.webp"
+          alt="Profile Cover"
+          className="h-32 w-full rounded-xl object-cover"
+        />
         {/* Avatar — ซ้อนอยู่กลาง banner ด้านล่าง */}
         <div className="absolute -bottom-14 left-1/2 -translate-x-1/2">
           <div className="relative">
@@ -177,7 +192,7 @@ export default function ProfilePage() {
         <div className="mt-6 flex justify-end">
           <Button
             onClick={handleSave}
-           disabled={isPending || !displayName.trim()}
+            disabled={isPending || !displayName.trim()}
             className="bg-blue-600 px-6 hover:bg-blue-700"
           >
             {isPending ? 'Saving...' : 'Save'}

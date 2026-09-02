@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import premeees.lafam.Entity.Bill;
-import premeees.lafam.Entity.BillCategory;
 
 public interface BillRepository extends JpaRepository<Bill, UUID> {
     List<Bill> findAllByGroupId(UUID groupId);

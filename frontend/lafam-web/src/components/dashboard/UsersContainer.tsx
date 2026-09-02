@@ -53,7 +53,7 @@ export function UsersContainer({ groupId }: UsersContainerProps) {
       ))}
     </div>
     <div className="mt-5">
-        <Link href={`/groups/${groupId}/bills`} className="w-full">
+        <Link href={`/groups/${groupId}/users`} className="w-full">
           <Button
             variant="outline"
             className="h-10 w-full rounded-lg border-gray-200 font-medium text-gray-700 hover:bg-gray-50"

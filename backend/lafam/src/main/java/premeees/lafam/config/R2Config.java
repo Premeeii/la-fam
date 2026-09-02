@@ -32,6 +32,7 @@ public class R2Config {
         return StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey));
     }
 
+    //for request pre-sign url,download file from r2
     @Bean
     public S3Presigner s3Presigner() {
         return S3Presigner.builder()
@@ -41,6 +42,7 @@ public class R2Config {
             .build();
     }
 
+    //for upload file to r2
     @Bean
     public S3Client s3Client() {
         return S3Client.builder()
