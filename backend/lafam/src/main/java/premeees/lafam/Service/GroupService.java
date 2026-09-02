@@ -21,6 +21,7 @@ import premeees.lafam.dto.response.GroupMemberResponse;
 import premeees.lafam.dto.response.GroupResponse;
 import premeees.lafam.dto.response.InviteTokenResponse;
 import premeees.lafam.dto.response.InviteTokenPreviewResponse;
+import premeees.lafam.dto.request.UpdateGroupRequest;
 
 @Service
 public class GroupService {
@@ -50,6 +51,35 @@ public class GroupService {
         // 2. Add user as OWNER in group_members
         GroupMember member = new GroupMember(group, user, "OWNER");
         groupMemberRepository.save(member);
+
+        return GroupResponse.fromEntity(group);
+    }
+
+    @Transactional
+    public GroupResponse updateGroup(UUID groupId, UpdateGroupRequest request, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+
+        if (group.getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group has been deleted");
+        }
+
+        // Only OWNER can update group
+        GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
+
+        if (!"OWNER".equals(member.getRole())) {
+            throw new IllegalArgumentException("Only the group owner can update this group");
+        }
+
+        if (request.getName() != null && !request.getName().trim().isEmpty()) {
+            group.setName(request.getName().trim());
+        }
+        
+        groupRepository.save(group);
 
         return GroupResponse.fromEntity(group);
     }

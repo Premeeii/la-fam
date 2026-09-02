@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +41,15 @@ public class GroupController {
             @AuthenticationPrincipal UserDetails userDetails) {
         GroupResponse response = groupService.createGroup(request, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PutMapping("/{groupId}")
+    public ResponseEntity<GroupResponse> updateGroup(
+            @PathVariable UUID groupId,
+            @Valid @RequestBody premeees.lafam.dto.request.UpdateGroupRequest request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        GroupResponse response = groupService.updateGroup(groupId, request, userDetails.getUsername());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
