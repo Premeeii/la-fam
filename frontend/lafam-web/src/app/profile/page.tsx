@@ -6,22 +6,20 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Camera, ChevronLeft } from 'lucide-react';
+import { Camera } from 'lucide-react';
 import { apiClient } from '@/lib/api/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
-  const router = useRouter();
   const { data: user, isLoading } = useCurrentUser();
   const uploadMutation = useAvatarUpload();
   const queryClient = useQueryClient();
 
-  // เก็บ preview URL สำหรับแสดงรูปที่เลือกไว้ก่อนอัปโหลด
+  // store preview URL for display selected image before upload
   const [preview, setPreview] = useState<string | null>(null);
 
-  // เก็บ File object ไว้รอจนกว่าผู้ใช้จะกด Save
+  // store file object until user press save
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -29,14 +27,14 @@ export default function ProfilePage() {
   // Profile form state
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
-  // ซิงค์ค่าจาก user data เมื่อโหลดเสร็จ
+  // sync value from user data when loaded
   useEffect(() => {
     if (user) {
       setDisplayName(user.displayName || '');
       setBio(user.bio || '');
     }
   }, [user]);
-  // Mutation สำหรับอัปเดต displayName และ bio
+  // Mutation for update displayName and bio
   const updateProfileMutation = useMutation({
     mutationFn: async (data: { displayName?: string; bio?: string }) => {
       const res = await apiClient.patch('/api/users/me', data);
@@ -50,22 +48,22 @@ export default function ProfilePage() {
       toast.error('บันทึกไม่สำเร็จ กรุณาลองใหม่');
     },
   });
-  // เมื่อเลือกไฟล์: แค่สร้าง preview ยังไม่อัปโหลด
+  // when file is selected: create preview but not upload yet
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // ลบ preview เก่า (ถ้ามี) เพื่อกัน memory leak
+    // delete old preview (if any) to prevent memory leak
     if (preview) URL.revokeObjectURL(preview);
 
-    // สร้าง preview URL ใหม่ + เก็บ file ไว้รอ
+    // create new preview URL + store file
     setPreview(URL.createObjectURL(file));
     setSelectedFile(file);
   };
 
-  // เมื่อกด Save: อัปโหลด avatar (ถ้ามี) + อัปเดต profile
+  // when Save: upload avatar (if any) + update profile
   const handleSave = async () => {
-    // อัปโหลด avatar ถ้ามีไฟล์ที่เลือกไว้
+    // upload avatar (if any)
     if (selectedFile) {
       uploadMutation.mutate(
         { file: selectedFile },
@@ -76,11 +74,11 @@ export default function ProfilePage() {
             setSelectedFile(null);
             if (fileInputRef.current) fileInputRef.current.value = '';
           },
-        }
+        },
       );
     }
 
-   // อัปเดต displayName + bio
+    // update displayName + bio
     updateProfileMutation.mutate({
       displayName: displayName.trim() || undefined,
       bio: bio.trim() || undefined,
@@ -100,28 +98,20 @@ export default function ProfilePage() {
   }
 
   return (
-   <div className="mx-auto w-full max-w-2xl p-4 md:p-6">
+    <div className="mx-auto w-full max-w-2xl p-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={() => router.back()}
-          className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
-          aria-label="Go back"
-        >
-          <ChevronLeft className="h-6 w-6" />
-        </button>
-        <h1 className="text-2xl font-bold text-gray-900">Profile & Visibility</h1>
-      </div>
+      <h1 className="text-2xl font-bold text-gray-900">Profile & Visibility</h1>
 
-       {/* Banner + Avatar */}
+      {/* Banner + Avatar */}
       <div className="relative mt-6">
         {/* Banner */}
         <img
           src="/profile_cover.webp"
           alt="Profile Cover"
-          className="h-32 w-full rounded-xl object-cover"
+          className="h-48 w-full rounded-xl object-cover"
         />
-        {/* Avatar — ซ้อนอยู่กลาง banner ด้านล่าง */}
+        <div className="h-32 w-full rounded-xl bg-gray-200" />
+        {/* Avatar — above banner */}
         <div className="absolute -bottom-14 left-1/2 -translate-x-1/2">
           <div className="relative">
             <Avatar className="h-28 w-28 border-4 border-white shadow-md">
@@ -130,12 +120,12 @@ export default function ProfilePage() {
                 {initials}
               </AvatarFallback>
             </Avatar>
-            {/* ปุ่มกล้อง — กดแล้วเปิดเลือกไฟล์ */}
+            {/*Camera button - Open folder*/}
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={isPending}
-              className="absolute bottom-1 right-1 rounded-full bg-blue-600 p-1.5 text-white shadow-md hover:bg-blue-700 disabled:opacity-50"
+              className="absolute right-1 bottom-1 rounded-full bg-blue-600 p-1.5 text-white shadow-md hover:bg-blue-700 disabled:opacity-50"
             >
               <Camera className="h-4 w-4" />
             </button>
@@ -143,7 +133,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Input file ที่ซ่อนไว้ */}
+      {/* hidden input file */}
       <input
         ref={fileInputRef}
         type="file"
@@ -152,16 +142,20 @@ export default function ProfilePage() {
         onChange={handleFileChange}
       />
 
- {/* About Section */}
+      {/* About Section */}
       <div className="mt-20">
         <h2 className="text-xl font-bold text-gray-900">About</h2>
         <p className="mt-1 text-sm text-gray-500">
-          Required fields are marked with an asterisk<span className="text-red-500">*</span>
+          Required fields are marked with an asterisk
+          <span className="text-red-500">*</span>
         </p>
-         <div className="mt-6 flex flex-col gap-5">
+        <div className="mt-6 flex flex-col gap-5">
           {/* Display Name */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="displayName" className="text-sm font-medium text-gray-700">
+            <Label
+              htmlFor="displayName"
+              className="text-sm font-medium text-gray-700"
+            >
               Display name<span className="text-red-500">*</span>
             </Label>
             <Input
@@ -188,7 +182,7 @@ export default function ProfilePage() {
             />
           </div>
         </div>
-       {/* Save Button */}
+        {/* Save Button */}
         <div className="mt-6 flex justify-end">
           <Button
             onClick={handleSave}
@@ -198,7 +192,7 @@ export default function ProfilePage() {
             {isPending ? 'Saving...' : 'Save'}
           </Button>
         </div>
-        </div>
+      </div>
     </div>
   );
 }

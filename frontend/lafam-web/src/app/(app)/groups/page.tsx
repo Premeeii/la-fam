@@ -21,10 +21,10 @@ export default function GroupPage() {
           {groups?.map((group) => (
             <Card
               key={group.groupId}
-              className="flex flex-col overflow-hidden rounded-xl border-gray-100 shadow-sm transition-shadow hover:shadow-md"
+              className="flex flex-col overflow-hidden h-55 rounded-xl border-gray-100 shadow-sm transition-shadow hover:shadow-md"
             >
               <div className="flex flex-1 items-center gap-4 p-6">
-                <Avatar className="h-14 w-14 border border-gray-100 shadow-sm">
+                <Avatar className="h-20 w-20 border border-gray-100 shadow-sm">
                   {group.groupAvatarUrl && (
                     <AvatarImage
                       src={group.groupAvatarUrl}

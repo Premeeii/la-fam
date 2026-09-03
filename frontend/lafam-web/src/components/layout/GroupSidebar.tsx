@@ -14,7 +14,7 @@ import {
 import { cn } from '@/lib/utils';
 import { useGroup } from '@/lib/hooks/useGroup';
 import { useCurrentGroup } from '@/lib/stores/currentGroup';
-import { AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
 export function GroupSidebar() {
   const pathname = usePathname();
@@ -110,11 +110,13 @@ export function GroupSidebar() {
                       </div>
                     )}
                     {group.groupAvatarUrl && (
-                      <AvatarImage
-                        src={group.groupAvatarUrl}
-                        alt={group.groupName || 'Group'}
-                        className="rounded-xl object-cover"
-                      />
+                      <Avatar className="h-11 w-11 overflow-hidden rounded-xl">
+                        <AvatarImage
+                          src={group.groupAvatarUrl}
+                          alt={group.groupName || 'Group'}
+                          className="h-full w-full rounded-xl object-cover"
+                        />
+                      </Avatar>
                     )}
                   </div>
                 </Link>

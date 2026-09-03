@@ -17,11 +17,14 @@ import premeees.lafam.Repository.GroupRepository;
 import premeees.lafam.Repository.InviteTokenRepository;
 import premeees.lafam.Repository.UserRepository;
 import premeees.lafam.dto.request.CreateGroupRequest;
+import premeees.lafam.dto.response.AvatarUploadResponse;
 import premeees.lafam.dto.response.GroupMemberResponse;
 import premeees.lafam.dto.response.GroupResponse;
 import premeees.lafam.dto.response.InviteTokenResponse;
+import premeees.lafam.dto.response.UserResponse;
 import premeees.lafam.dto.response.InviteTokenPreviewResponse;
 import premeees.lafam.dto.request.UpdateGroupRequest;
+
 
 @Service
 public class GroupService {
@@ -30,13 +33,15 @@ public class GroupService {
     private final GroupMemberRepository groupMemberRepository;
     private final InviteTokenRepository inviteTokenRepository;
     private final UserRepository userRepository;
+    private final R2StorageService r2StorageService;
 
     public GroupService(GroupRepository groupRepository, GroupMemberRepository groupMemberRepository,
-            InviteTokenRepository inviteTokenRepository, UserRepository userRepository) {
+            InviteTokenRepository inviteTokenRepository, UserRepository userRepository, R2StorageService r2StorageService) {
         this.groupRepository = groupRepository;
         this.groupMemberRepository = groupMemberRepository;
         this.inviteTokenRepository = inviteTokenRepository;
         this.userRepository = userRepository;
+        this.r2StorageService = r2StorageService;
     }
 
     @Transactional
@@ -232,4 +237,86 @@ public class GroupService {
 
         return InviteTokenPreviewResponse.fromEntity(inviteToken);
     }
+
+        //use for request presigned url to upload picture
+    public AvatarUploadResponse requestGroupAvatarUpload(UUID groupId, String email, String contentType) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+
+        if (group.getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group has been deleted");
+        }
+
+        // Only OWNER can update group
+        GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
+
+        if (!"OWNER".equals(member.getRole())) {
+            throw new IllegalArgumentException("Only the group owner can update this group");
+        }
+        
+        //convert contentType to be extension like "image/webp" → "webp"
+        String extension = contentType.split("/")[1];
+
+        //create objectKey use for userId have a file name in one row
+        String objectKey = "GroupAvatar/" + user.getId() + "." + extension;
+
+        //Generate presigned URL
+        String uploadUrl = r2StorageService.generatePresignedUploadUrl(objectKey, contentType);
+
+        //Create publicUrl for show picture after upload
+        String publicUrl = r2StorageService.buildPublicUrl(objectKey);
+
+        return new AvatarUploadResponse(uploadUrl, publicUrl, objectKey);
+    }
+
+    @Transactional
+    public GroupResponse confirmGroupAvatarUpload(UUID groupId, String email, String objectKey) {
+         User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+
+        if (group.getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group has been deleted");
+        }
+
+        // Only OWNER can update group
+        GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
+
+        if (!"OWNER".equals(member.getRole())) {
+            throw new IllegalArgumentException("Only the group owner can update this group");
+        }
+
+        //delete oldAvatarUrl out of R2 if has it
+        String oldAvatarUrl = group.getGroupAvatarUrl();
+        if (oldAvatarUrl != null && !oldAvatarUrl.isBlank()) {
+            try{
+                String oldKey = oldAvatarUrl.substring(oldAvatarUrl.lastIndexOf("GroupAvatar/"));
+                // remove timestamp query param if exists
+                if (oldKey.contains("?")) {
+                    oldKey = oldKey.substring(0, oldKey.indexOf("?"));
+                }
+                
+                //if old key and new key are same don't need to delete
+                //because PUT already overwrite the same file(like re-upload .png file)
+                if (!oldKey.equals(objectKey)) {
+                    r2StorageService.deleteObject(oldKey);
+                }
+            }catch(Exception e) {
+                System.out.println("Failed to delete old avatar: " + e.getMessage());
+            }
+        }
+        //create new public Url in DB with timestamp to bust browser cache
+        String newAvatarUrl = r2StorageService.buildPublicUrl(objectKey) + "?t=" + System.currentTimeMillis();
+        group.setGroupAvatarUrl(newAvatarUrl);
+        groupRepository.save(group);
+        return GroupResponse.fromEntity(group);
+    }
+
 }

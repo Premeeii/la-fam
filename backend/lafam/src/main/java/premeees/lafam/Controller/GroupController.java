@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import premeees.lafam.Service.GroupService;
+import premeees.lafam.dto.request.ConfirmAvatarRequest;
 import premeees.lafam.dto.request.CreateGroupRequest;
+import premeees.lafam.dto.response.AvatarUploadResponse;
 import premeees.lafam.dto.response.GroupMemberResponse;
 import premeees.lafam.dto.response.GroupResponse;
 import premeees.lafam.dto.response.InviteTokenResponse;
+import premeees.lafam.dto.response.UserResponse;
 import premeees.lafam.dto.response.InviteTokenPreviewResponse;
 
 @RestController
@@ -95,6 +99,29 @@ public class GroupController {
     public ResponseEntity<InviteTokenPreviewResponse> previewInviteToken(
             @PathVariable String token) {
         InviteTokenPreviewResponse response = groupService.previewInviteToken(token);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{groupId}/avatar/upload-url")
+    public ResponseEntity<AvatarUploadResponse> requestGroupAvatarUploadUrl(
+            @PathVariable UUID groupId,
+            @RequestParam String contentType,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        if (!contentType.startsWith("image/")) {
+            return ResponseEntity.badRequest().build();
+        }
+        AvatarUploadResponse request = groupService.requestGroupAvatarUpload(groupId, userDetails.getUsername(),
+                contentType);
+        return ResponseEntity.ok(request);
+    }
+
+    @PatchMapping("/{groupId}/avatar/confirm")
+    public ResponseEntity<GroupResponse> confirmAvatarUpload(
+            @PathVariable UUID groupId,
+            @Valid @RequestBody ConfirmAvatarRequest request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        GroupResponse response = groupService.confirmGroupAvatarUpload(
+            groupId, userDetails.getUsername(), request.getObjectKey());
         return ResponseEntity.ok(response);
     }
 }
