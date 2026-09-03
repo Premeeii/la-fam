@@ -25,3 +25,8 @@ export async function generateInviteToken(groupId: string): Promise<InviteTokenR
     const response = await apiClient.post(`/api/groups/${groupId}/invites`);
     return response.data;
 }
+
+export async function deleteGroup(groupId: string) {
+    const response = await apiClient.delete(`/api/groups/${groupId}`);
+    return response.data;
+}

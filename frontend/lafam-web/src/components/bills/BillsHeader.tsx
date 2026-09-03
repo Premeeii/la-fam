@@ -66,15 +66,15 @@ export function BillsHeader({
               </Button>
             }
           />
-          <DropdownMenuContent align="end" sideOffset={8} className="w-48">
+          <DropdownMenuContent align="end" sideOffset={8} className="w-48 ">
             <DropdownMenuItem
-              className={activeFilter === 'own' ? 'font-semibold' : ''}
+              className={activeFilter === 'own' ? 'font-semibold py-2 cursor-pointer' : 'py-2 cursor-pointer'}
               onClick={() => onFilterChange('own')}
             >
               Own Bills
             </DropdownMenuItem>
             <DropdownMenuItem
-              className={activeFilter === 'all' ? 'font-semibold' : ''}
+              className={activeFilter === 'all' ? 'font-semibold py-2 cursor-pointer' : 'py-2 cursor-pointer'}
               onClick={() => onFilterChange('all')}
             >
               All
@@ -82,7 +82,7 @@ export function BillsHeader({
             {categories.map((cat) => (
               <DropdownMenuItem
                 key={cat.id}
-                className={activeFilter === cat.id ? 'font-semibold' : ''}
+                className={activeFilter === cat.id ? 'font-semibold py-2 cursor-pointer' : 'py-2 cursor-pointer'}
                 onClick={() => onFilterChange(cat.id!)}
               >
                 {cat.name}

@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Camera } from 'lucide-react';
-import { apiClient } from '@/lib/api/client';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { useGroup } from '@/lib/hooks/useGroup';
+import { useGroup, useUpdateGroup } from '@/lib/hooks/useGroup';
+import { DangerZoneSetting } from '@/components/groups/DangerZoneSetting';
+import { DeleteGroupDialog } from '@/components/groups/DeleteGroupDialog';
 
 export default function SettingsPage({
   params,
@@ -24,32 +24,16 @@ export default function SettingsPage({
     (g) => g.groupId === resolvedParams.groupId,
   );
 
+  const updateGroupMutation = useUpdateGroup(resolvedParams.groupId);
+
   const [groupName, setGroupName] = useState('');
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     if (currentGroup?.groupName) {
       setGroupName(currentGroup.groupName);
     }
   }, [currentGroup]);
-
-  const queryClient = useQueryClient();
-
-  const updateGroupMutatuon = useMutation({
-    mutationFn: async (data: { name: string }) => {
-      const response = await apiClient.put(
-        `api/groups/${resolvedParams.groupId}`,
-        data,
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      toast.success('Group name updated successfully!');
-      queryClient.invalidateQueries({ queryKey: ['groups'] });
-    },
-    onError: () => {
-      toast.error('Failed to update group name. Please try again.');
-    },
-  });
 
   return (
     <div className="mx-auto w-full max-w-2xl p-6">
@@ -78,7 +62,7 @@ export default function SettingsPage({
           <span className="text-red-500">*</span>
         </p>
         <div className="mt-6 flex flex-col gap-5">
-            <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <Label
               htmlFor="displayName"
               className="text-sm font-medium text-gray-700"
@@ -96,23 +80,33 @@ export default function SettingsPage({
             />
           </div>
         </div>
-        
+
         {currentGroup?.role === 'OWNER' && (
           <div className="mt-6 flex justify-end">
             <Button
               onClick={() => {
                 if (groupName.trim()) {
-                  updateGroupMutatuon.mutate({ name: groupName.trim() });
+                  updateGroupMutation.mutate({ name: groupName.trim() });
                 }
               }}
-              disabled={updateGroupMutatuon.isPending || !groupName.trim()}
-              className="rounded-lg bg-blue-600 px-6 py-2.5 font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+              disabled={updateGroupMutation.isPending || !groupName.trim()}
+              className="rounded-lg bg-blue-600 px-6 py-4.5 font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
             >
-              {updateGroupMutatuon.isPending ? 'Saving...' : 'Save'}
+              {updateGroupMutation.isPending ? 'Saving...' : 'Save'}
             </Button>
           </div>
         )}
       </div>
+      {currentGroup?.role === 'OWNER' && (
+        <DangerZoneSetting onDelete={() => setIsDeleteDialogOpen(true)} />
+      )}
+
+      <DeleteGroupDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        groupId={resolvedParams.groupId}
+        groupName={currentGroup?.groupName || ''}
+      />
     </div>
   );
 }
