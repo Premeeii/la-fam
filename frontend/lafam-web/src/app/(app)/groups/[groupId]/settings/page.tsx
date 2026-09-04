@@ -82,7 +82,7 @@ export default function SettingsPage({
         <img
           src="/profile_cover.webp"
           alt="Profile Cover"
-          className="h-48 w-full rounded-xl object-cover"
+          className="h-48 w-full rounded-t-xl object-cover"
         />
         <div className="absolute -bottom-14 left-1/2 -translate-x-1/2">
           <div className="relative">

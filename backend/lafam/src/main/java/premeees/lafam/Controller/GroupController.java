@@ -26,7 +26,6 @@ import premeees.lafam.dto.response.AvatarUploadResponse;
 import premeees.lafam.dto.response.GroupMemberResponse;
 import premeees.lafam.dto.response.GroupResponse;
 import premeees.lafam.dto.response.InviteTokenResponse;
-import premeees.lafam.dto.response.UserResponse;
 import premeees.lafam.dto.response.InviteTokenPreviewResponse;
 
 @RestController
@@ -68,6 +67,14 @@ public class GroupController {
             @PathVariable UUID groupId,
             @AuthenticationPrincipal UserDetails userDetails) {
         groupService.softDeleteGroup(groupId, userDetails.getUsername());
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{groupId}/leave")
+    public ResponseEntity<Void> leaveGroup(
+            @PathVariable UUID groupId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        groupService.softLeaveGroup(groupId, userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 

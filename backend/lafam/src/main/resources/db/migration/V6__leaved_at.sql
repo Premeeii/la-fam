@@ -1,0 +1,2 @@
+ALTER TABLE group_members
+ADD COLUMN leaved_at TIMESTAMP WITH TIME ZONE;

@@ -65,7 +65,7 @@ export function SearchGroupBar() {
                 <button
                   key={group.groupId}
                   onClick={() => handleSelectGroup(group.groupId || '')}
-                  className="w-full cursor-pointer px-8 py-5 text-left text-sm font-semibold transition-colors hover:bg-gray-50"
+                  className="w-full cursor-pointer px-8 py-5 text-left text-sm transition-colors hover:bg-gray-50"
                 >
                   {group.groupName}
                 </button>

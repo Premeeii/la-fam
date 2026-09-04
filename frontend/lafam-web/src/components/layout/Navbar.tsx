@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { useLogout } from '@/lib/hooks/useLogout';
-import { Input } from '@/components/ui/input';
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 import { CreateGroupDialog } from './CreateGroupDialog';
 import { GroupNav } from './GroupNav';

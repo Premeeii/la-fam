@@ -31,6 +31,9 @@ public class GroupMember {
     @Column(name = "joined_at", nullable = false, updatable = false)
     private OffsetDateTime joinedAt;
 
+    @Column(name = "leaved_at")
+    private OffsetDateTime leavedAt;
+
     public GroupMember() {}
 
     public GroupMember(Group group, User user, String role) {
@@ -78,4 +81,13 @@ public class GroupMember {
     public void setJoinedAt(OffsetDateTime joinedAt) {
         this.joinedAt = joinedAt;
     }
+
+    public OffsetDateTime getLeavedAt() {
+        return leavedAt;
+    }
+
+    public void setLeavedAt(OffsetDateTime leavedAt) {
+        this.leavedAt = leavedAt;
+    }
+
 }

@@ -9,7 +9,7 @@ export function GlobalSidebar() {
 
   const navItems = [
     {
-      name: 'Board',
+      name: 'Groups',
       href: '/groups',
       icon: LayoutGrid,
     },
