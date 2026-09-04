@@ -78,8 +78,8 @@ export function UpcomingEvents({ groupId }: { groupId: string }) {
                 <p className="text-sm text-gray-500">{event.description || 'No description'}</p>
               </div>
               <div className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded shadow-sm">
-                {/*its will error when identify types of startDate (it's string? Date?) its must required to be date type*/}
-                {formatTime(event.startDate)} 
+                {/*its will be required because of validation*/}
+                {formatTime(event.startDate!) } 
               </div>
             </div>
             

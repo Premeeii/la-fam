@@ -24,9 +24,11 @@ export function UpcomingWeek({ groupId }: { groupId: string }) {
       const date = addDays(weekStart, index);
       // Find events that happen on this day to show dots
       const dayEvents = events.filter(
-        (event) =>
-          new Date(event.startDate).getTime() <= date.getTime() + 24 * 60 * 60 * 1000 &&
-          new Date(event.endDate).getTime() >= date.getTime()
+        (event) => {
+          if (!event.startDate || !event.endDate) return false;
+          return new Date(event.startDate).getTime() <= date.getTime() + 24 * 60 * 60 * 1000 &&
+                 new Date(event.endDate).getTime() >= date.getTime();
+        }
       );
       
       return {

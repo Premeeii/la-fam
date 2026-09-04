@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Camera } from 'lucide-react';
-import { useGroup, useUpdateGroup } from '@/lib/hooks/useGroup';
+import { useGroup, useLeaveGroup, useUpdateGroup } from '@/lib/hooks/useGroup';
 import { DangerZoneSetting } from '@/components/groups/DangerZoneSetting';
 import { DeleteGroupDialog } from '@/components/groups/DeleteGroupDialog';
+import { LeaveGroupDialog } from '@/components/groups/LeaveGroupDialog';
 
 export default function SettingsPage({
   params,
@@ -19,6 +20,7 @@ export default function SettingsPage({
   const { data: groups } = useGroup();
   const uploadMutation = useGroupAvatarUpload(resolvedParams.groupId);
 
+
   const currentGroup = groups?.find(
     (g) => g.groupId === resolvedParams.groupId,
   );
@@ -27,6 +29,7 @@ export default function SettingsPage({
 
   const [groupName, setGroupName] = useState('');
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isLeaveGroupDialogOpen, setIsLeaveGroupDialogOpen] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -60,7 +63,6 @@ export default function SettingsPage({
         },
       );
     }
-
     // update groupName
     updateGroupMutation.mutate({
       name: groupName.trim(),
@@ -141,6 +143,18 @@ export default function SettingsPage({
               disabled={currentGroup?.role !== 'OWNER'}
             />
           </div>
+
+            {currentGroup?.role !== 'OWNER' && (
+              <div className="mt-6 flex justify-end">
+                <Button
+                  onClick={() => setIsLeaveGroupDialogOpen(true)}
+                  className="rounded-lg border border-red-400 bg-white px-6 py-4.5 font-semibold text-red-600 transition-colors hover:bg-red-50 hover:text-red-700 disabled:opacity-50"
+                >
+                Leave Group
+              </Button>
+              </div>
+            )}
+          
         </div>
 
         {currentGroup?.role === 'OWNER' && (
@@ -162,6 +176,13 @@ export default function SettingsPage({
       <DeleteGroupDialog
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
+        groupId={resolvedParams.groupId}
+        groupName={currentGroup?.groupName || ''}
+      />
+
+      <LeaveGroupDialog
+        isOpen={isLeaveGroupDialogOpen}
+        onClose={() => setIsLeaveGroupDialogOpen(false)}
         groupId={resolvedParams.groupId}
         groupName={currentGroup?.groupName || ''}
       />

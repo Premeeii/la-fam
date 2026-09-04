@@ -4,6 +4,7 @@ import type { components } from '@/types/api';
 import {
   createGroup,
   deleteGroup,
+  leaveGroup,
   joinGroup,
   previewInviteToken,
 } from '../api/groups';
@@ -106,6 +107,24 @@ export function useDeleteGroup() {
     },
     onError: () => {
       toast.error('Failed to delete group');
+    },
+  });
+}
+
+export function useLeaveGroup() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (groupId: string) => leaveGroup(groupId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['userGroups'] });
+      toast.success('leave group success');
+      router.push('/groups');
+    },
+    onError: (error: any) => {
+      const msg = error?.response?.data?.message || 'Failed to leave group';
+      toast.error(msg);
     },
   });
 }

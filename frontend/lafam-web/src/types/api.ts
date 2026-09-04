@@ -4,6 +4,38 @@
  */
 
 export interface paths {
+    "/api/groups/{groupId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["updateGroup"];
+        post?: never;
+        delete: operations["deleteGroup"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/me/avatar/upload-url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["requestAvatarUploadUrl"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups": {
         parameters: {
             query?: never;
@@ -62,6 +94,22 @@ export interface paths {
         get: operations["getGroupBills"];
         put?: never;
         post: operations["createBill"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/{groupId}/avatar/upload-url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["requestGroupAvatarUploadUrl"];
         delete?: never;
         options?: never;
         head?: never;
@@ -164,6 +212,22 @@ export interface paths {
         patch: operations["updateMyProfile"];
         trace?: never;
     };
+    "/api/users/me/avatar/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["confirmAvatarUpload"];
+        trace?: never;
+    };
     "/api/groups/{groupId}/events/{eventId}": {
         parameters: {
             query?: never;
@@ -196,6 +260,22 @@ export interface paths {
         patch: operations["updateBill"];
         trace?: never;
     };
+    "/api/groups/{groupId}/avatar/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["confirmAvatarUpload_1"];
+        trace?: never;
+    };
     "/api/groups/{groupId}/members": {
         parameters: {
             query?: never;
@@ -204,6 +284,54 @@ export interface paths {
             cookie?: never;
         };
         get: operations["getGroupMembers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/{groupId}/bills/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getMyBillsInGroup"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/{groupId}/bills/category/{categoryId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getBillsByCategory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/invites/{token}/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["previewInviteToken"];
         put?: never;
         post?: never;
         delete?: never;
@@ -228,7 +356,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/groups/{groupId}": {
+    "/api/groups/{groupId}/leave": {
         parameters: {
             query?: never;
             header?: never;
@@ -238,7 +366,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["deleteGroup"];
+        delete: operations["leaveGroup"];
         options?: never;
         head?: never;
         patch?: never;
@@ -248,7 +376,7 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        CreateGroupRequest: {
+        UpdateGroupRequest: {
             name: string;
         };
         GroupResponse: {
@@ -260,18 +388,19 @@ export interface components {
             /** Format: date-time */
             createdAt?: string;
         };
+        AvatarUploadResponse: {
+            uploadUrl?: string;
+            publicUrl?: string;
+            objectKey?: string;
+        };
+        CreateGroupRequest: {
+            name: string;
+        };
         InviteTokenResponse: {
             token?: string;
             role?: string;
             /** Format: date-time */
             expiresAt?: string;
-        };
-        InviteTokenPreviewResponse: {
-            groupName?: string;
-            groupAvatarUrl?: string;
-            inviterName?: string;
-            inviterAvatarUrl?: string;
-            role?: string;
         };
         CreateEventRequest: {
             title: string;
@@ -292,9 +421,9 @@ export interface components {
             /** Format: uuid */
             ownerId?: string;
             /** Format: date-time */
-            startDate: string;
+            startDate?: string;
             /** Format: date-time */
-            endDate: string;
+            endDate?: string;
             color?: string;
             /** Format: date-time */
             createdAt?: string;
@@ -335,8 +464,8 @@ export interface components {
             groupName?: string;
             groupAvatarUrl?: string;
             displayName?: string;
-            userAvatarUrl?: string;
             bio?: string;
+            userAvatarUrl?: string;
         };
         RegisterRequest: {
             /** Format: email */
@@ -346,7 +475,6 @@ export interface components {
         };
         AuthResponse: {
             accessToken?: string;
-            refreshToken?: string;
             tokenType?: string;
             user?: components["schemas"]["UserResponse"];
         };
@@ -360,9 +488,6 @@ export interface components {
             /** Format: date-time */
             created_at?: string;
         };
-        RefreshTokenRequest: {
-            refreshToken: string;
-        };
         LoginRequest: {
             /** Format: email */
             email: string;
@@ -371,6 +496,9 @@ export interface components {
         UpdateProfileRequest: {
             displayName?: string;
             bio?: string;
+        };
+        ConfirmAvatarRequest: {
+            objectKey: string;
         };
         UpdateEventRequest: {
             title?: string;
@@ -389,6 +517,13 @@ export interface components {
             /** Format: date */
             billMonth?: string;
         };
+        InviteTokenPreviewResponse: {
+            groupName?: string;
+            groupAvatarUrl?: string;
+            inviterName?: string;
+            inviterAvatarUrl?: string;
+            role?: string;
+        };
         BillCategoryResponse: {
             /** Format: uuid */
             id?: string;
@@ -403,6 +538,74 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    updateGroup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateGroupRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GroupResponse"];
+                };
+            };
+        };
+    };
+    deleteGroup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    requestAvatarUploadUrl: {
+        parameters: {
+            query: {
+                contentType: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AvatarUploadResponse"];
+                };
+            };
+        };
+    };
     getUserGroups: {
         parameters: {
             query?: never;
@@ -568,6 +771,30 @@ export interface operations {
             };
         };
     };
+    requestGroupAvatarUploadUrl: {
+        parameters: {
+            query: {
+                contentType: string;
+            };
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AvatarUploadResponse"];
+                };
+            };
+        };
+    };
     joinGroup: {
         parameters: {
             query: {
@@ -619,13 +846,11 @@ export interface operations {
             query?: never;
             header?: never;
             path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RefreshTokenRequest"];
+            cookie?: {
+                refresh_token?: string;
             };
         };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -643,13 +868,11 @@ export interface operations {
             query?: never;
             header?: never;
             path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RefreshTokenRequest"];
+            cookie?: {
+                refresh_token?: string;
             };
         };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -714,6 +937,30 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["UpdateProfileRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UserResponse"];
+                };
+            };
+        };
+    };
+    confirmAvatarUpload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConfirmAvatarRequest"];
             };
         };
         responses: {
@@ -847,6 +1094,32 @@ export interface operations {
             };
         };
     };
+    confirmAvatarUpload_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConfirmAvatarRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GroupResponse"];
+                };
+            };
+        };
+    };
     getGroupMembers: {
         parameters: {
             query?: never;
@@ -865,6 +1138,73 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["GroupMemberResponse"][];
+                };
+            };
+        };
+    };
+    getMyBillsInGroup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BillResponse"][];
+                };
+            };
+        };
+    };
+    getBillsByCategory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+                categoryId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BillResponse"][];
+                };
+            };
+        };
+    };
+    previewInviteToken: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InviteTokenPreviewResponse"];
                 };
             };
         };
@@ -889,7 +1229,7 @@ export interface operations {
             };
         };
     };
-    deleteGroup: {
+    leaveGroup: {
         parameters: {
             query?: never;
             header?: never;

@@ -42,6 +42,11 @@ export async function deleteGroup(groupId: string) {
   return response.data;
 }
 
+export async function leaveGroup(groupId: string) {
+  const response = await apiClient.delete(`/api/groups/${groupId}/leave`);
+  return response.data;
+}
+
 export async function requestGroupAvatarUploadUrl(
   groupId: string,
   contentType: string,
