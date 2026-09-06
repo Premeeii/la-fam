@@ -116,7 +116,7 @@ export default function BillsPage({
             <div className="h-24 w-full bg-gray-100 rounded-xl animate-pulse" />
           </>
         ) : paginatedBills.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 border border-dashed rounded-xl bg-gray-50 text-gray-400">
+          <div className="flex flex-col items-center justify-center p-12 rounded-xl  text-gray-400">
             <p>No bills found.</p>
           </div>
         ) : (

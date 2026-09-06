@@ -38,9 +38,11 @@ export default function DashboardPage({
             .
           </span>
         </div>
-        <div className="pt-1">
-          <InviteMemberPopover groupId={resolvedParams.groupId} />
-        </div>
+        {currentGroup?.role === 'OWNER' && (
+          <div className="pt-1">
+            <InviteMemberPopover groupId={resolvedParams.groupId} />
+          </div>
+        )}
       </div>
 
       <div className="grid w-full grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3">
