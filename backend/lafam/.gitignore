@@ -43,3 +43,4 @@ auth.http
 # Agent skill
 AGENTS.md
 
+.DS_Store
