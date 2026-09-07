@@ -79,7 +79,7 @@ export default function SettingsPage({
 
   return (
     <div className="mx-auto w-full max-w-2xl p-6">
-      <h1 className="text-2xl font-bold text-gray-900">Group Setting</h1>
+      <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 mb-6">Group Settings</h1>
       <div className="relative mt-6">
         <img
           src="/profile_cover.webp"
@@ -88,11 +88,11 @@ export default function SettingsPage({
         />
         <div className="absolute -bottom-14 left-1/2 -translate-x-1/2">
           <div className="relative">
-            <Avatar className="h-28 w-28 border-4 border-white shadow-md">
+            <Avatar className="h-28 w-28 border-4 border-white dark:border-background shadow-md">
               <AvatarImage
                 src={preview || currentGroup?.groupAvatarUrl || undefined}
               />
-              <AvatarFallback className="bg-gray-300 text-3xl text-gray-600">
+              <AvatarFallback className="bg-gray-300 dark:bg-gray-700 text-3xl text-gray-600 dark:text-gray-300">
                 {currentGroup?.groupName?.slice(0, 2).toUpperCase() || '?'}
               </AvatarFallback>
             </Avatar>
@@ -120,8 +120,8 @@ export default function SettingsPage({
       />
 
       <div className="mt-20">
-        <h2 className="text-xl font-bold text-gray-900">About</h2>
-        <p className="mt-1 text-sm text-gray-500">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">About</h2>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Required fields are marked with an asterisk
           <span className="text-red-500">*</span>
         </p>
@@ -129,7 +129,7 @@ export default function SettingsPage({
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="displayName"
-              className="text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               Group name<span className="text-red-500">*</span>
             </Label>
@@ -138,7 +138,7 @@ export default function SettingsPage({
               value={groupName}
               onChange={(e) => setGroupName(e.target.value)}
               placeholder="Your display name"
-              className="h-11 rounded-lg border-gray-200 bg-gray-50 px-4"
+              className="h-11 rounded-lg border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 text-gray-900 dark:text-gray-100"
               required
               disabled={currentGroup?.role !== 'OWNER'}
             />
@@ -148,7 +148,7 @@ export default function SettingsPage({
               <div className="mt-6 flex justify-end">
                 <Button
                   onClick={() => setIsLeaveGroupDialogOpen(true)}
-                  className="rounded-lg border border-red-400 bg-white px-6 py-4.5 font-semibold text-red-600 transition-colors hover:bg-red-50 hover:text-red-700 disabled:opacity-50"
+                  className="rounded-lg border border-red-400 dark:border-red-500 bg-white dark:bg-transparent px-6 py-4.5 font-semibold text-red-600 dark:text-red-500 transition-colors hover:bg-red-50 dark:hover:bg-red-900/30 disabled:opacity-50"
                 >
                 Leave Group
               </Button>

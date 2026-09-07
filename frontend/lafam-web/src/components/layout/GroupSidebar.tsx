@@ -76,10 +76,10 @@ export function GroupSidebar() {
   };
 
   return (
-    <aside className="hidden shrink-0 border-r border-gray-100 bg-white lg:flex">
+    <aside className="hidden shrink-0 border-r border-gray-100 dark:border-gray-700 dark:bg-background lg:flex lg:dark:bg-background lg:dark:border-gray-700">
       {/* 1st Column: Group Switcher */}
-      <div className="flex w-22 flex-col items-center gap-4 border-r border-gray-100 bg-gray-50/30 py-4">
-        <div className="my-1 h-px w-8 rounded-full bg-gray-200"></div>
+      <div className="flex w-22 flex-col items-center gap-4 border-r border-gray-100 dark:border-gray-700 bg-gray-50/30 dark:bg-gray-800/30 py-4 lg:dark:bg-background lg:dark:border-gray-700">
+        <div className="my-1 h-px w-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
         {!isLoading &&
           groups?.map((group, index) => {
             const isActive = currentGroupId === group.groupId;
@@ -94,7 +94,7 @@ export function GroupSidebar() {
                       'h-11 w-11 cursor-pointer rounded-xl transition-all',
                       isActive
                         ? 'scale-105 ring-2 ring-blue-500 ring-offset-2'
-                        : 'border border-gray-200 hover:border-gray-300 hover:shadow-sm',
+                        : 'border border-gray-200 hover:border-gray-300 hover:shadow-sm dark:border-gray-600 dark:hover:border-gray-500',
                     )}
                   >
                     {!group.groupAvatarUrl && (
@@ -102,7 +102,7 @@ export function GroupSidebar() {
                         className={cn(
                           'flex h-11 w-11 items-center justify-center rounded-xl text-sm font-semibold transition-all',
                           isActive
-                            ? 'scale-105 bg-white text-blue-600 shadow-sm ring-2 ring-blue-500 ring-offset-2'
+                            ? 'scale-105 bg-white dark:bg-gray-800 text-blue-600 shadow-sm ring-2 ring-blue-500 ring-offset-2'
                             : `${getBgColorClass(index)} text-gray-700`,
                         )}
                       >
@@ -110,7 +110,7 @@ export function GroupSidebar() {
                       </div>
                     )}
                     {group.groupAvatarUrl && (
-                      <Avatar className="h-11 w-11 overflow-hidden rounded-xl">
+                      <Avatar className="h-11 w-11 overflow-hidden rounded-xl after:hidden">
                         <AvatarImage
                           src={group.groupAvatarUrl}
                           alt={group.groupName || 'Group'}
@@ -142,14 +142,14 @@ export function GroupSidebar() {
                   'flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                   isActive
                     ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100',
                 )}
               >
                 <div className="flex items-center gap-3">
                   <item.icon
                     className={cn(
                       'h-4 w-4',
-                      isActive ? 'text-white' : 'text-gray-400',
+                      isActive ? 'text-white' : 'text-gray-400 dark:text-gray-500',
                     )}
                   />
                   {item.name}
@@ -157,14 +157,14 @@ export function GroupSidebar() {
                 <ChevronRight
                   className={cn(
                     'h-4 w-4',
-                    isActive ? 'text-white' : 'text-gray-300',
+                    isActive ? 'text-white' : 'text-gray-300 dark:text-gray-600',
                   )}
                 />
               </Link>
             );
           })
         ) : (
-          <div className="mt-6 rounded-xl p-4 text-center text-sm text-gray-400">
+          <div className="mt-6 rounded-xl p-4 text-center text-sm text-gray-400 dark:text-gray-500">
             Please select a group
           </div>
         )}

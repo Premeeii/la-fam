@@ -6,7 +6,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-[#FFFFFF] lg:flex-row lg:bg-white">
+    <div className="flex min-h-screen w-full flex-col bg-white dark:bg-zinc-950 lg:flex-row lg:bg-white lg:dark:bg-zinc-950">
       {/* Left side: Image */}
       <div className="relative hidden w-full lg:block lg:h-screen lg:w-1/2 xl:w-[60%]">
         <Image

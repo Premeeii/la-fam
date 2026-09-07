@@ -51,7 +51,7 @@ export function SearchGroupBar() {
         <Input
           type="text"
           placeholder="Search Group..."
-          className="h-10 w-full rounded-lg border-gray-200 bg-white pr-4 pl-10 text-sm shadow-sm placeholder:text-gray-400 focus-visible:ring-blue-100"
+          className="h-10 w-full rounded-lg border-gray-200 dark:border-gray-700 bg-white dark:bg-background pr-4 pl-10 text-sm shadow-sm placeholder:text-gray-400 focus-visible:ring-blue-100 dark:text-white"
           value={searchQuery}
           onChange={handleSearch}
           onFocus={() => {
@@ -59,13 +59,13 @@ export function SearchGroupBar() {
           }}
         />
         {isDropdownOpen && filteredGroups.length > 0 && (
-          <div className="absolute top-full left-0 z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+          <div className="absolute top-full left-0 z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-background shadow-sm">
             <div className="max-h-60 overflow-y-auto">
               {filteredGroups.map((group) => (
                 <button
                   key={group.groupId}
                   onClick={() => handleSelectGroup(group.groupId || '')}
-                  className="w-full cursor-pointer px-8 py-5 text-left text-sm transition-colors hover:bg-gray-50"
+                  className="w-full cursor-pointer px-8 py-5 text-left text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 dark:text-white"
                 >
                   {group.groupName}
                 </button>

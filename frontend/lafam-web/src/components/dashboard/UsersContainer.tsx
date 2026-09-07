@@ -24,16 +24,16 @@ export function UsersContainer({ groupId }: UsersContainerProps) {
   if (isLoading) {
     return (
       <div className="flex flex-col gap-4 mt-6">
-        <div className="h-12 w-full animate-pulse"></div>
-        <div className="h-12 w-full animate-pulse"></div>
-        <div className="h-12 w-full animate-pulse"></div>
+        <div className="h-12 w-full animate-pulse bg-gray-100 dark:bg-gray-700 rounded-md"></div>
+        <div className="h-12 w-full animate-pulse bg-gray-100 dark:bg-gray-700 rounded-md"></div>
+        <div className="h-12 w-full animate-pulse bg-gray-100 dark:bg-gray-700 rounded-md"></div>
       </div>
     );
   }
 
   return (
-    <div className="flex w-full flex-col mt-6 rounded-[20px] border border-gray-200 bg-white p-6 shadow-sm">
-      <h2 className="mb-5 text-xl font-semibold text-gray-800">Members</h2>
+    <div className="flex w-full flex-col mt-6 rounded-[20px] border border-gray-200 dark:border-gray-700 bg-white dark:bg-background p-6 shadow-sm">
+      <h2 className="mb-5 text-xl font-semibold text-gray-800 dark:text-gray-200">Members</h2>
       <div className="flex flex-col gap-4">
         {latestMembers?.map((member) => (
           <div
@@ -42,12 +42,12 @@ export function UsersContainer({ groupId }: UsersContainerProps) {
         >
           <Avatar className="h-12 w-12">
             <AvatarImage src={member.userAvatarUrl || ''} />
-            <AvatarFallback className="bg-gray-200 text-gray-600">
+            <AvatarFallback className="bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
               {member.displayName?.charAt(0).toUpperCase() || 'U'}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <h3 className="font-medium text-gray-900">{member.displayName}</h3>
+            <h3 className="font-medium text-gray-900 dark:text-gray-100">{member.displayName}</h3>
           </div>
         </div>
       ))}
@@ -56,7 +56,7 @@ export function UsersContainer({ groupId }: UsersContainerProps) {
         <Link href={`/groups/${groupId}/users`} className="w-full">
           <Button
             variant="outline"
-            className="h-10 w-full rounded-lg border-gray-200 font-medium text-gray-700 hover:bg-gray-50"
+            className="h-10 w-full rounded-lg border-gray-200 dark:border-gray-700 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             View All Members
           </Button>

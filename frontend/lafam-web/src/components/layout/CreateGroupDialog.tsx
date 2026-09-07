@@ -61,9 +61,9 @@ export function CreateGroupDialog() {
           </Button>
         }
       ></DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-md bg-white dark:bg-background border-0">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
+          <DialogTitle className="text-xl text-center text-gray-900 dark:text-gray-100 font-bold">
             Create New Group
           </DialogTitle>
           <DialogDescription className="mt-1 text-gray-500">
@@ -72,13 +72,13 @@ export function CreateGroupDialog() {
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
           <div className="flex flex-col gap-3">
-            <Label htmlFor="name" className="font-semibold text-gray-900">
+            <Label htmlFor="name" className="text-gray-700 dark:text-gray-300 font-medium">
               Group Name
             </Label>
             <Input
               id="name"
               placeholder="e.g., Aespa, Newjeans"
-              className="h-11 border-gray-200 bg-gray-50/50 focus-visible:ring-blue-600"
+              className="h-11 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
               {...register('name')}
             />
             {errors.name && (

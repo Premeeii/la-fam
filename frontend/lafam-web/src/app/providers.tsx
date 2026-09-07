@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/sonner';
+import { ThemeProvider } from 'next-themes';
 
 export function Providers({ children }: { children: React.ReactNode }) { //children meaning component/page put in layout.tsx
   const [queryClient] = useState(() => new QueryClient({
@@ -14,8 +15,10 @@ export function Providers({ children }: { children: React.ReactNode }) { //child
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <ThemeProvider attribute='class' defaultTheme='light' enableSystem disableTransitionOnChange>
+        {children}
       <Toaster richColors position="top-center" />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

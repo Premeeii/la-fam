@@ -20,17 +20,17 @@ export function CalendarHeader({
   onAddEvent,
 }: CalendarHeaderProps) {
   return (
-    <div className="flex items-start justify-between gap-2 border-b border-gray-100 p-4 sm:items-center sm:p-6">
-      <h1 className="w-24 min-w-0 shrink text-xl leading-tight font-semibold wrap-break-word text-gray-900 sm:w-auto sm:text-2xl">
+    <div className="flex items-start justify-between gap-2 border-b border-gray-100 dark:border-gray-700 p-4 sm:items-center sm:p-6">
+      <h1 className="w-24 min-w-0 shrink text-xl leading-tight font-semibold wrap-break-word text-gray-900 dark:text-gray-100 sm:w-auto sm:text-2xl">
         {format(currentDate, 'MMMM yyyy')}
       </h1>
 
       <div className="flex flex-wrap items-center justify-end gap-2 sm:flex-nowrap">
-        <div className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white p-1">
+        <div className="flex items-center gap-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-1">
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 text-gray-500 hover:text-gray-900"
+            className="h-8 w-8 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
             onClick={onPrev}
           >
             <ChevronLeft className="h-4 w-4" />
@@ -38,7 +38,7 @@ export function CalendarHeader({
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 px-2 text-xs font-medium text-gray-700 sm:px-3 sm:text-sm"
+            className="h-8 px-2 text-xs font-medium text-gray-700 dark:text-gray-300 sm:px-3 sm:text-sm"
             onClick={onToday}
           >
             Today
@@ -46,7 +46,7 @@ export function CalendarHeader({
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 text-gray-500 hover:text-gray-900"
+            className="h-8 w-8 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
             onClick={onNext}
           >
             <ChevronRight className="h-4 w-4" />

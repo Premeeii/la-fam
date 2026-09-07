@@ -21,7 +21,7 @@ export function GlobalSidebar() {
   ];
 
   return (
-    <aside className="w-48 shrink-0 border-r border-gray-100 bg-white min-h-[calc(100vh-4rem)] p-4 flex-col gap-2 hidden lg:flex">
+    <aside className="w-48 shrink-0 border-r border-gray-100 dark:border-gray-700 bg-white dark:bg-background min-h-[calc(100vh-4rem)] p-4 flex-col gap-2 hidden lg:flex lg:dark:bg-background lg:dark:border-gray-700">
       {navItems.map((item) => {
         const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/settings'); // mock setting
         return (
@@ -32,14 +32,14 @@ export function GlobalSidebar() {
               "flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium transition-colors",
               isActive
                 ? "bg-blue-600 text-white shadow-sm"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
             )}
           >
             <div className="flex items-center gap-3">
-              <item.icon className={cn("h-5 w-5", isActive ? "text-white" : "text-gray-400")} />
+              <item.icon className={cn("h-5 w-5", isActive ? "text-white" : "text-gray-400 dark:text-gray-500")} />
               {item.name}
             </div>
-            <ChevronRight className={cn("h-4 w-4", isActive ? "text-white" : "text-gray-300")} />
+            <ChevronRight className={cn("h-4 w-4", isActive ? "text-white" : "text-gray-300 dark:text-gray-600")} />
           </Link>
         );
       })}
