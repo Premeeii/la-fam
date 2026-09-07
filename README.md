@@ -48,7 +48,7 @@ Whether your group struggles to find a date to meet up due to conflicting schedu
 ### 3. Backend Setup
       spring:
         datasource:
-          url: jdbc:postgresql://localhost:5432/family_app_db
+          url: jdbc:postgresql://localhost:5432/{database_name}
           username: root
           password: rootpassword
         security:
