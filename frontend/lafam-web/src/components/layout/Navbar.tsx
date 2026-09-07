@@ -19,6 +19,7 @@ import { CreateGroupDialog } from './CreateGroupDialog';
 import { GroupNav } from './GroupNav';
 import { SearchGroupBar } from './SearchGroupBar';
 import { usePathname } from 'next/navigation';
+import { ThemeToggle } from './ThemeToggle';
 
 
 function getInitials(name?: string) {
@@ -40,7 +41,7 @@ export function UserMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
-        <Avatar className="h-9 w-9 border border-blue-100">
+        <Avatar className="h-9 w-9 border border-blue-100 dark:border-blue-900">
           {avatarUrl && (
             <AvatarImage src={avatarUrl} alt={displayName ?? 'User'} />
           )}
@@ -51,7 +52,7 @@ export function UserMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuGroup>
-          <DropdownMenuLabel className="truncate font-normal text-gray-500">
+          <DropdownMenuLabel className="truncate font-normal text-gray-500 dark:text-gray-400">
             {displayName ?? 'My Account'}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
@@ -64,7 +65,7 @@ export function UserMenu({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => logoutMutation.mutate()}
-          className="h-11 cursor-pointer text-red-500 focus:bg-red-50 focus:text-red-600"
+          className="h-11 cursor-pointer text-red-500 focus:bg-red-50 focus:text-red-600 dark:focus:bg-red-900/30"
         >
           <LogOut className="mr-2 h-4 w-4" /> Logout
         </DropdownMenuItem>
@@ -82,13 +83,13 @@ export function Navbar() {
   const isJoinPage = pathname === '/groups/join';
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white shadow-sm lg:bg-white">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-100 dark:border-gray-700 dark:bg-background shadow-sm lg:dark:bg-background lg:dark:border-gray-700">
       <div className="flex h-13 items-center justify-between px-4 md:px-6 lg:px-12">
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
           <Link
             href="/groups"
-            className="text-xl font-bold tracking-tight text-gray-900"
+            className="text-xl font-bold tracking-tight text-foreground "
           >
             La'FAM
           </Link>
@@ -98,7 +99,8 @@ export function Navbar() {
         <SearchGroupBar/>
         {/* Right: Actions */}
         <div className="flex items-center gap-4">
-          <button className="text-gray-400 transition-colors hover:text-gray-600">
+          <ThemeToggle/>
+          <button className="text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
             <Settings className="h-5 w-5" />
           </button>
           {isGroupSpecific && !isJoinPage && (

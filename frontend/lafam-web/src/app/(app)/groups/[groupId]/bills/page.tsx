@@ -96,7 +96,7 @@ export default function BillsPage({
 
   return (
     <div className="flex flex-col h-full w-full">
-      <h1 className="text-3xl font-semibold text-gray-900 mb-6">Bills</h1>
+      <h1 className="text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-6">Bills</h1>
 
       <BillsHeader
         categories={categories}
@@ -111,12 +111,12 @@ export default function BillsPage({
       <div className="flex flex-col gap-4 mt-6">
         {isLoadingAll ? (
           <>
-            <div className="h-24 w-full bg-gray-100 rounded-xl animate-pulse" />
-            <div className="h-24 w-full bg-gray-100 rounded-xl animate-pulse" />
-            <div className="h-24 w-full bg-gray-100 rounded-xl animate-pulse" />
+            <div className="h-24 w-full bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
+            <div className="h-24 w-full bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
+            <div className="h-24 w-full bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
           </>
         ) : paginatedBills.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 rounded-xl  text-gray-400">
+          <div className="flex flex-col items-center justify-center p-12 rounded-xl text-gray-400 dark:text-gray-500">
             <p>No bills found.</p>
           </div>
         ) : (

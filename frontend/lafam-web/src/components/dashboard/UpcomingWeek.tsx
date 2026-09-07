@@ -44,7 +44,7 @@ export function UpcomingWeek({ groupId }: { groupId: string }) {
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-900">Upcoming Week</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Upcoming Week</h2>
         <Link 
           href={`/groups/${groupId}/calendar`}
           className="text-sm font-semibold text-blue-600 hover:text-blue-700"
@@ -53,18 +53,18 @@ export function UpcomingWeek({ groupId }: { groupId: string }) {
         </Link>
       </div>
 
-      <div className="border border-gray-200 rounded-2xl bg-white p-4 sm:p-6 md:p-8 shadow-sm flex justify-between items-center overflow-x-auto custom-scrollbar">
+      <div className="border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-background p-4 sm:p-6 md:p-8 shadow-sm flex justify-between items-center overflow-x-auto custom-scrollbar">
         {weekDays.map((day, i) => (
           <div key={i} className="flex flex-col items-center justify-center gap-1 sm:gap-2 min-w-[32px] sm:min-w-[40px]">
-            <span className="text-[10px] sm:text-xs font-semibold text-gray-500">{day.dayName}</span>
+            <span className="text-[10px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400">{day.dayName}</span>
             <div 
               className={`flex flex-col items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg relative ${
                 day.isCurrentDay 
                   ? 'bg-blue-500 text-white shadow-sm' 
-                  : 'text-gray-900'
+                  : 'text-gray-900 dark:text-gray-100'
               }`}
             >
-              <span className={`text-sm sm:text-base font-semibold ${day.isCurrentDay ? 'text-white' : 'text-gray-900'}`}>
+              <span className={`text-sm sm:text-base font-semibold ${day.isCurrentDay ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}>
                 {day.dayNumber}
               </span>
               

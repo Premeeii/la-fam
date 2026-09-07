@@ -55,7 +55,7 @@ export function LeaveGroupDialog({
             Cancel
           </Button>
           <Button
-            className="text-red-600 w-20 h-10"
+            className="flex-1 h-11 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
             type="button"
             variant="outline"
             disabled={isPending}

@@ -26,19 +26,19 @@ export function BillCard({ bill, groupId, canEdit, onEdit }: BillCardProps) {
   };
 
   return (
-    <div className="flex items-stretch bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+    <div className="flex items-stretch bg-white dark:bg-background border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
       {/* Left section */}
-      <div className="flex-1 p-5 flex flex-col gap-1 border-r border-gray-100">
-        <span className="text-sm font-semibold text-gray-900">{bill.categoryName}</span>
-        <p className="text-sm text-gray-500">{bill.title}</p>
-        <span className="text-xl font-bold text-gray-900 mt-1">{formatAmount(bill.amount)} THB</span>
+      <div className="flex-1 p-5 flex flex-col gap-1 border-r border-gray-100 dark:border-gray-700">
+        <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{bill.categoryName}</span>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{bill.title}</p>
+        <span className="text-xl font-bold text-gray-900 dark:text-gray-100 mt-1">{formatAmount(bill.amount)} THB</span>
       </div>
 
       {/* Right section — fixed width */}
-      <div className="w-80 p-5 flex flex-col justify-between text-sm text-gray-500">
+      <div className="w-80 p-5 flex flex-col justify-between text-sm text-gray-500 dark:text-gray-400">
         <div className="flex justify-between items-start">
           <div>
-            <span className="font-medium text-gray-700">Date: </span>
+            <span className="font-medium text-gray-700 dark:text-gray-300">Date: </span>
             {formatDate(bill.billMonth)}
           </div>
           {canEdit && (
@@ -51,7 +51,7 @@ export function BillCard({ bill, groupId, canEdit, onEdit }: BillCardProps) {
           )}
         </div>
         <div>
-          <span className="font-medium text-gray-700">Create by: </span>
+          <span className="font-medium text-gray-700 dark:text-gray-300">Create by: </span>
           {creator?.displayName || 'Unknown'}
         </div>
       </div>

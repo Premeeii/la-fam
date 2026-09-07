@@ -10,14 +10,14 @@ interface DangerZoneSettingProps {
 export function DangerZoneSetting({ onDelete }: DangerZoneSettingProps) {
   return (
     <>
-      <div className="my-6 border-t" />
-      <div className="flex flex-col gap-2 rounded-xl border border-red-100 bg-red-50 p-4">
+      <div className="my-6 border-t border-gray-200 dark:border-gray-800" />
+      <div className="flex flex-col gap-2 rounded-xl border border-red-100 dark:border-red-900/50 bg-red-50 dark:bg-red-900/10 p-4">
         <div className="flex items-center gap-2">
-          <TriangleAlert className="text-red-600" size={24} />
-          <h2 className="mb-3 text-xl font-bold text-red-600">Danger Zone</h2>
+          <TriangleAlert className="text-red-600 dark:text-red-500" size={24} />
+          <h2 className="mb-3 text-xl font-bold text-red-600 dark:text-red-500">Danger Zone</h2>
         </div>
-        <h3 className="text-md font-medium text-gray-900">Delete this group</h3>
-        <p className="text-sm text-gray-500">
+        <h3 className="text-md font-medium text-gray-900 dark:text-gray-100">Delete this group</h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           Once you delete a group, there is no way to recover it.
         </p>
         <div className="flex justify-end">

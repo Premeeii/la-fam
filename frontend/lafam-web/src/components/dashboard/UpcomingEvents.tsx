@@ -48,15 +48,15 @@ export function UpcomingEvents({ groupId }: { groupId: string }) {
   if (isLoadingEvents) {
     return (
       <div className="flex flex-col space-y-4 w-full">
-        <div className="h-28 w-full bg-gray-100 rounded-xl animate-pulse"></div>
-        <div className="h-28 w-full bg-gray-100 rounded-xl animate-pulse"></div>
+        <div className="h-28 w-full bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse"></div>
+        <div className="h-28 w-full bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse"></div>
       </div>
     );
   }
 
   if (!upcomingEvents || upcomingEvents.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 border border-dashed rounded-xl bg-gray-50 text-gray-400">
+      <div className="flex flex-col items-center justify-center p-8 border border-dashed rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500">
         <p>No upcoming events.</p>
       </div>
     );
@@ -70,12 +70,12 @@ export function UpcomingEvents({ groupId }: { groupId: string }) {
         return (
           <div 
             key={event.id} 
-            className="flex flex-col justify-between p-4 bg-white border border-blue-500 rounded-xl shadow-sm relative"
+            className="flex flex-col justify-between p-4 bg-white dark:bg-gray-800 border border-blue-500 rounded-xl shadow-sm relative"
           >
             <div className="flex justify-between items-start mb-4">
               <div className="flex flex-col">
-                <h3 className="font-semibold text-gray-900">{event.title}</h3>
-                <p className="text-sm text-gray-500">{event.description || 'No description'}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100">{event.title}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{event.description || 'No description'}</p>
               </div>
               <div className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded shadow-sm">
                 {/*its will be required because of validation*/}
@@ -83,12 +83,12 @@ export function UpcomingEvents({ groupId }: { groupId: string }) {
               </div>
             </div>
             
-            <div className="border-t border-gray-100 pt-3">
+            <div className="border-t border-gray-100 dark:border-gray-700 pt-3">
               <div className="flex -space-x-2">
                 {owner && (
-                  <Avatar className="h-8 w-8 border-2 border-white">
+                  <Avatar className="h-8 w-8 border-2 border-white dark:border-gray-800">
                     <AvatarImage src={owner.userAvatarUrl || ''} />
-                    <AvatarFallback className="bg-gray-200 text-xs text-gray-600">
+                    <AvatarFallback className="bg-gray-200 dark:bg-gray-700 text-xs text-gray-600 dark:text-gray-300">
                       {owner.displayName?.charAt(0).toUpperCase() || 'U'}
                     </AvatarFallback>
                   </Avatar>

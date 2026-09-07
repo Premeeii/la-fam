@@ -42,16 +42,13 @@ export function DeleteGroupDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-md bg-white dark:bg-background border-0">
         <DialogHeader>
-          <DialogTitle className="font-semibold">
-            Confirm Delete Group
-          </DialogTitle>
+          <DialogTitle className="text-xl text-center text-gray-900 dark:text-gray-100 font-bold">Delete Group</DialogTitle>
         </DialogHeader>
         <div className="space-y-2">
           <Input
-            className="h-10 w-full"
-            id="confirm"
+            className="h-11 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-center font-medium text-gray-900 dark:text-gray-100"
             placeholder={`Type "${groupName}" to confirm`}
             value={confirmText}
             onChange={(e) => setConfirmText(e.target.value)}
@@ -59,8 +56,7 @@ export function DeleteGroupDialog({
         </div>
         <DialogFooter className="flex w-full items-center justify-end">
           <Button
-            className="text-red-600"
-            type="button"
+            className="flex-1 h-11 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
             variant="outline"
             disabled={isPending || confirmText !== groupName}
             onClick={handleDeleteClick}

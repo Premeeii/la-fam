@@ -110,7 +110,7 @@ export default function ProfilePage() {
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
-        <h1 className="text-2xl font-bold text-gray-900">Profile & Visibility</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">Your Profile</h1>
       </div>
 
       {/* Banner + Avatar */}
@@ -124,9 +124,9 @@ export default function ProfilePage() {
         {/* Avatar — above banner */}
         <div className="absolute -bottom-14 left-1/2 -translate-x-1/2">
           <div className="relative">
-            <Avatar className="h-28 w-28 border-4 border-white shadow-md">
+            <Avatar className="h-28 w-28 border-4 border-white dark:border-background shadow-md">
               <AvatarImage src={preview || user?.avatarUrl || undefined} />
-              <AvatarFallback className="bg-gray-300 text-3xl text-gray-600">
+              <AvatarFallback className="bg-gray-300 dark:bg-gray-700 text-3xl text-gray-600 dark:text-gray-300">
                 {initials}
               </AvatarFallback>
             </Avatar>
@@ -156,15 +156,15 @@ export default function ProfilePage() {
       <div className="mt-20">
         <h2 className="text-xl font-bold text-gray-900">About</h2>
         <p className="mt-1 text-sm text-gray-500">
-          Required fields are marked with an asterisk
-          <span className="text-red-500">*</span>
+            Required fields are marked with an asterisk
+            <span className="text-red-500">*</span>
         </p>
         <div className="mt-6 flex flex-col gap-5">
           {/* Display Name */}
           <div className="flex flex-col gap-2">
             <Label
               htmlFor="displayName"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Display name<span className="text-red-500">*</span>
             </Label>
@@ -173,13 +173,13 @@ export default function ProfilePage() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Your display name"
-              className="h-11 rounded-lg border-gray-200 bg-gray-50 px-4"
+              className="h-11 rounded-lg border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 text-gray-900 dark:text-gray-100"
               required
             />
           </div>
           {/* Bio */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="bio" className="text-sm font-medium text-gray-700">
+            <Label htmlFor="bio" className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Bio
             </Label>
             <textarea
@@ -188,7 +188,7 @@ export default function ProfilePage() {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Tell something about yourself"
               rows={4}
-              className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full resize-none rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>
