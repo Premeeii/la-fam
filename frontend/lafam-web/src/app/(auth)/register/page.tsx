@@ -24,7 +24,7 @@ export default function RegisterPage() {
           <Label htmlFor="displayName" className="text-xs font-semibold text-gray-700">Name</Label>
           <Input 
             id="displayName" 
-            className="h-11 mt-1 bg-gray-50 border-gray-200 focus-visible:ring-blue-100 placeholder:text-gray-400" 
+            className="h-11 mt-1 bg-gray-50 border-gray-200 text-black focus-visible:ring-blue-100 placeholder:text-gray-400" 
             placeholder="example..Robert Pattinson"
             {...form.register('displayName')} 
           />
@@ -38,7 +38,7 @@ export default function RegisterPage() {
           <Input 
             id="email" 
             type="email" 
-            className="h-11 mt-1 bg-gray-50 border-gray-200 focus-visible:ring-blue-100 placeholder:text-gray-400" 
+            className="h-11 mt-1 bg-gray-50 border-gray-200 text-black focus-visible:ring-blue-100 placeholder:text-gray-400" 
             placeholder="example @gmail.com"
             {...form.register('email')} 
           />
@@ -53,7 +53,7 @@ export default function RegisterPage() {
             <Input 
               id="password" 
               type={showPassword ? 'text' : 'password'} 
-              className="h-11 pr-10 bg-gray-50 border-gray-200 focus-visible:ring-blue-100 placeholder:text-gray-400" 
+              className="h-11 pr-10 bg-gray-50 border-gray-200 text-black focus-visible:ring-blue-100 placeholder:text-gray-400" 
               placeholder="Enter password"
               {...form.register('password')} 
             />

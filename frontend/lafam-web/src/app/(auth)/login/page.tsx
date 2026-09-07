@@ -35,7 +35,7 @@ export default function LoginPage() {
           <Input
             id="email"
             type="email"
-            className="mt-1 h-11 border-gray-200 bg-gray-50 placeholder:text-gray-400 focus-visible:ring-blue-100"
+            className="mt-1 h-11 text-black border-gray-200 bg-gray-50 placeholder:text-gray-400 focus-visible:ring-blue-100"
             placeholder="Email"
             {...form.register('email')}
           />
@@ -57,7 +57,7 @@ export default function LoginPage() {
             <Input
               id="password"
               type={showPassword ? 'text' : 'password'}
-              className="h-11 border-gray-200 bg-gray-50 pr-10 placeholder:text-gray-400 focus-visible:ring-blue-100"
+              className="h-11 border-gray-200 text-black bg-gray-50 pr-10 placeholder:text-gray-400 focus-visible:ring-blue-100"
               placeholder="Enter password"
               {...form.register('password')}
             />
