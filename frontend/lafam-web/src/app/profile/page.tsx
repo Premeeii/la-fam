@@ -154,8 +154,8 @@ export default function ProfilePage() {
 
       {/* About Section */}
       <div className="mt-20">
-        <h2 className="text-xl font-bold text-gray-900">About</h2>
-        <p className="mt-1 text-sm text-gray-500">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">About</h2>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Required fields are marked with an asterisk
             <span className="text-red-500">*</span>
         </p>
@@ -197,7 +197,7 @@ export default function ProfilePage() {
           <Button
             onClick={handleSave}
             disabled={isPending || !displayName.trim()}
-            className="bg-blue-600 px-6 hover:bg-blue-700"
+            className="bg-blue-600 px-6 hover:bg-blue-700 dark:text-gray-100"
           >
             {isPending ? 'Saving...' : 'Save'}
           </Button>

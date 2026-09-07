@@ -169,7 +169,7 @@ export function EventDialog({ //get props
 
           {mode === 'edit' && (
             <div className="text-sm font-medium text-gray-500">
-              Created by: <span className="text-gray-900">{creatorName}</span>
+              Created by: <span className="text-gray-900 dark:text-gray-100">{creatorName}</span>
             </div>
           )}
 
