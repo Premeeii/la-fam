@@ -34,8 +34,8 @@ export function InviteMemberPopover({ groupId }: { groupId: string }) {
       <PopoverTrigger render={<Button className="bg-blue-600 hover:bg-blue-700 text-white font-medium p-4"><Users className="h-4 w-4" />Invite Member</Button>}/>
       <PopoverContent className="w-[340px] p-5 rounded-2xl shadow-xl border-gray-200" align="end" sideOffset={12}>
         <div className="flex flex-col text-left">
-          <h3 className="text-sm font-medium text-gray-900 mb-1">Invite Link</h3>
-          <p className="text-xs text-gray-900 mb-4">The link can be used only once per user</p>
+          <h3 className="text-sm font-medium text-gray-900 mb-1 dark:text-white">Invite Link</h3>
+          <p className="text-xs text-gray-900 mb-4 dark:text-gray-100">The link can be used only once per user</p>
           <div className="flex w-full items-center space-x-2">
             <Input 
               readOnly 
