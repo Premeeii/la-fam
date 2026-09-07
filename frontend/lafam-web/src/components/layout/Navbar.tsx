@@ -100,9 +100,9 @@ export function Navbar() {
         {/* Right: Actions */}
         <div className="flex items-center gap-4">
           <ThemeToggle/>
-          <button className="text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
+          <Link href="/settings" className="text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
             <Settings className="h-5 w-5" />
-          </button>
+          </Link>
           {isGroupSpecific && !isJoinPage && (
             <GroupNav/>
           )}
