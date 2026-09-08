@@ -452,6 +452,8 @@ export interface components {
             createdAt?: string;
             /** Format: uuid */
             createdBy?: string;
+            /** Format: string */
+            creatorName?: string;
         };
         GroupMemberResponse: {
             /** Format: uuid */
