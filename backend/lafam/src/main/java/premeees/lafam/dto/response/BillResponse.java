@@ -18,9 +18,10 @@ public class BillResponse {
     private LocalDate billMonth;
     private OffsetDateTime createdAt;
     private UUID createdBy;
+    private String creatorName;
 
     public BillResponse(UUID id, UUID groupId, UUID billCategoryId, String categoryName, String title,
-                        BigDecimal amount, LocalDate billMonth, OffsetDateTime createdAt, UUID createdBy) {
+                        BigDecimal amount, LocalDate billMonth, OffsetDateTime createdAt, UUID createdBy, String creatorName) {
         this.id = id;
         this.groupId = groupId;
         this.billCategoryId = billCategoryId;
@@ -30,6 +31,8 @@ public class BillResponse {
         this.billMonth = billMonth;
         this.createdAt = createdAt;
         this.createdBy = createdBy;
+        this.creatorName = creatorName;
+        
     }
 
     public static BillResponse fromEntity(Bill bill) {
@@ -42,7 +45,8 @@ public class BillResponse {
             bill.getAmount(),
             bill.getBillMonth(),
             bill.getCreatedAt(),
-            bill.getCreatedBy().getId()
+            bill.getCreatedBy().getId(),
+            bill.getCreatedBy().getDisplayName()
         );
     }
 
@@ -116,5 +120,13 @@ public class BillResponse {
 
     public void setCreatedBy(UUID createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
 }

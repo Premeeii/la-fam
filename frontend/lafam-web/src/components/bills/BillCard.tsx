@@ -52,7 +52,7 @@ export function BillCard({ bill, groupId, canEdit, onEdit }: BillCardProps) {
         </div>
         <div>
           <span className="font-medium text-gray-700 dark:text-gray-300">Create by: </span>
-          {creator?.displayName || 'Unknown'}
+          {bill.creatorName || 'Unknown'}
         </div>
       </div>
     </div>

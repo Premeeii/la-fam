@@ -40,9 +40,6 @@ export function EventDialog({ //get props
   const createMutation = useCreateEvent(groupId);
   const updateMutation = useUpdateEvent(groupId);
   const deleteMutation = useDeleteEvent(groupId);
-
-  const { data: members } = useGroupMembers(groupId); //fetch member from hook api
-  const creatorName = members?.find((m) => m.userId === initialData?.ownerId)?.displayName || 'Unknown User';
   const { data: currentUser } = useCurrentUser(); //fetch current user from hook for identify owner event
   // identify ability for user edit or delete you must to be own event
   const canEdit = mode === 'create' || (mode === 'edit' && initialData?.ownerId === currentUser?.id); 
@@ -169,7 +166,7 @@ export function EventDialog({ //get props
 
           {mode === 'edit' && (
             <div className="text-sm font-medium text-gray-500">
-              Created by: <span className="text-gray-900 dark:text-gray-100">{creatorName}</span>
+              Created by: <span className="text-gray-900 dark:text-gray-100">{initialData?.ownerName}</span>
             </div>
           )}
 

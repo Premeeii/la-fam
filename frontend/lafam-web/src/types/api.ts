@@ -427,6 +427,7 @@ export interface components {
             color?: string;
             /** Format: date-time */
             createdAt?: string;
+            ownerName?: string;
         };
         CreateBillRequest: {
             /** Format: uuid */
@@ -452,6 +453,7 @@ export interface components {
             createdAt?: string;
             /** Format: uuid */
             createdBy?: string;
+            creatorName?: string;
         };
         GroupMemberResponse: {
             /** Format: uuid */
