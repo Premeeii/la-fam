@@ -72,9 +72,9 @@ export function CalendarGrid({
           onDateClick(arg.date);
         }}
 
-        eventClick={(arg) => {
+        eventClick={(arg) => { //send data to parent(page.tsx) to open dialog
           onEventClick(
-            arg.event.extendedProps as EventResponse
+            arg.event.extendedProps as EventResponse 
           );
         }}
 

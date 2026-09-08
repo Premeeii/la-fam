@@ -16,9 +16,10 @@ public class EventResponse {
     private OffsetDateTime endDate;
     private String color;
     private OffsetDateTime createdAt;
+    private String ownerName;
 
     public EventResponse(UUID id, UUID groupId, String title, String description, UUID ownerId,
-            OffsetDateTime startDate, OffsetDateTime endDate, String color, OffsetDateTime createdAt) {
+            OffsetDateTime startDate, OffsetDateTime endDate, String color, OffsetDateTime createdAt, String ownerName) {
         this.id = id;
         this.groupId = groupId;
         this.title = title;
@@ -28,6 +29,7 @@ public class EventResponse {
         this.endDate = endDate;
         this.color = color;
         this.createdAt = createdAt;
+        this.ownerName = ownerName;
     }
 
     public static EventResponse fromEntity(Event event) {
@@ -40,7 +42,9 @@ public class EventResponse {
                 event.getStartDate(),
                 event.getEndDate(),
                 event.getColor(),
-                event.getCreatedAt());
+                event.getCreatedAt(),
+                event.getOwner().getDisplayName()
+            );
     }
 
     public UUID getId() {
@@ -114,4 +118,13 @@ public class EventResponse {
     public void setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
 }
