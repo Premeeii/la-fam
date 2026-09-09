@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-
+import Image from 'next/image';
 import { Search, Settings, User, LogOut, Menu } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -89,8 +89,16 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <Link
             href="/groups"
-            className="text-xl font-bold tracking-tight text-foreground "
+            className="flex items-center gap-2 text-xl font-bold tracking-tight text-foreground "
           >
+            <Image
+                    src="icon.svg"
+                    alt="La'FAM"
+                    height={30}
+                    width={30}
+                    priority
+                    className="object-cover"
+                  />
             La'FAM
           </Link>
         </div>

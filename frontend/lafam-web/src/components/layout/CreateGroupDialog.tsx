@@ -70,7 +70,7 @@ export function CreateGroupDialog() {
             Set up a new space for your group to stay connected.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-1">
           <div className="flex flex-col gap-3">
             <Label htmlFor="name" className="text-gray-700 dark:text-gray-300 font-medium">
               Group Name
@@ -85,19 +85,19 @@ export function CreateGroupDialog() {
               <p className="text-sm text-red-500">{errors.name.message}</p>
             )}
           </div>
-          <DialogFooter className="mt-8 flex flex-row-reverse gap-3 sm:flex-row sm:justify-start">
+          <DialogFooter className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end">
             <Button
               type="button"
               variant="outline"
               onClick={() => handleOpenChange(false)}
-              className="w-full font-medium sm:w-auto"
+              className="w-full font-medium sm:w-auto sm:p-4"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={createGroupMutation.isPending}
-              className="w-full bg-blue-600 font-medium text-white hover:bg-blue-700 sm:w-auto"
+              className="w-full bg-blue-600 font-medium text-white hover:bg-blue-700 sm:w-auto sm:p-4"
             >
               {createGroupMutation.isPending ? 'Creating...' : 'Create Group'}
             </Button>
