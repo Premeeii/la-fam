@@ -26,7 +26,6 @@ export default function DashboardPage({
       <div className="mb-6 md:mb-8 flex items-start justify-between">
         <div>
           <h1 className="mb-1 text-2xl md:text-3xl font-semibold text-gray-900 dark:text-gray-100">
-            Welcome to{' '}
             {isLoading ? '...' : currentGroup?.groupName || 'Unknown Group'}
           </h1>
           <span className="text-sm font-normal text-gray-500 dark:text-gray-400">

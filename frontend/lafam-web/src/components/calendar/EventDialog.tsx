@@ -124,7 +124,7 @@ export function EventDialog({ //get props
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{mode === 'create' ? 'Add Event' : 'Edit Event'}</DialogTitle>
+          <DialogTitle className={'text-xl'}>{mode === 'create' ? 'Add Event' : 'Edit Event'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
           <div className="space-y-2">

@@ -7,7 +7,7 @@ import {
   ChevronRight,
   Users,
   Calendar,
-  Receipt,
+  ReceiptText,
   FileText,
   Plus,
 } from 'lucide-react';
@@ -28,7 +28,7 @@ export function GroupSidebar() {
       icon: LayoutGrid,
     },
     {
-      name: 'Users',
+      name: 'Members',
       href: currentGroupId ? `/groups/${currentGroupId}/users` : '#',
       icon: Users,
     },
@@ -40,7 +40,7 @@ export function GroupSidebar() {
     {
       name: 'Bills',
       href: currentGroupId ? `/groups/${currentGroupId}/bills` : '#',
-      icon: Receipt,
+      icon: ReceiptText,
     },
     /*{
       name: 'Notes',

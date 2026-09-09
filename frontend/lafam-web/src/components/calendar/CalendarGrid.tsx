@@ -59,6 +59,7 @@ export function CalendarGrid({
         dayMaxEvents={3}
         firstDay={1}
         height="150%"
+        eventDisplay="block"
 
         eventContent={(arg) => {
           return (
