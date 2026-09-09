@@ -102,7 +102,7 @@ export function GroupSidebar() {
                         className={cn(
                           'flex h-11 w-11 items-center justify-center rounded-xl text-sm font-semibold transition-all',
                           isActive
-                            ? 'scale-105 bg-white dark:bg-gray-800 text-blue-600 shadow-sm ring-2 ring-blue-500 ring-offset-2'
+                            ? 'scale-105 bg-white dark:bg-gray-800 text-blue-600 shadow-sm ring-2 ring-blue-500 ring-offset-2 dark:text-gray-100'
                             : `${getBgColorClass(index)} text-gray-700`,
                         )}
                       >
