@@ -40,10 +40,11 @@ export function UpcomingEvents({ groupId }: { groupId: string }) {
     .slice(0, 2);
 }, [events]);
 
-  const formatTime = (dateString: string) => {
+
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-  };
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
 
   if (isLoadingEvents) {
     return (
@@ -56,7 +57,7 @@ export function UpcomingEvents({ groupId }: { groupId: string }) {
 
   if (!upcomingEvents || upcomingEvents.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 border border-dashed rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500">
+      <div className="flex flex-col items-center justify-center p-8 rounded-xl bg-gray-50 dark:bg-background text-gray-400 dark:text-gray-500">
         <p>No upcoming events.</p>
       </div>
     );
@@ -79,7 +80,7 @@ export function UpcomingEvents({ groupId }: { groupId: string }) {
               </div>
               <div className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded shadow-sm">
                 {/*its will be required because of validation*/}
-                {formatTime(event.startDate!) } 
+                {formatDate(event.startDate!) } 
               </div>
             </div>
             

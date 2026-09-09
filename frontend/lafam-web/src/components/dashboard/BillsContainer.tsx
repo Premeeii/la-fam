@@ -41,7 +41,7 @@ export function BillsContainer({ groupId }: { groupId: string }) {
           </>
         ) : latestBills.length === 0 ? (
           // show message when no bills
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-gray-50 dark:bg-gray-800 p-6 text-gray-400 dark:text-gray-500">
+          <div className="flex flex-col items-center justify-center rounded-xl  bg-gray-50 dark:bg-background p-6 text-gray-400 dark:text-gray-500">
             <p className="text-sm">No bills added yet.</p>
           </div>
         ) : (
