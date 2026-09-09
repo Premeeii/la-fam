@@ -6,7 +6,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-white dark:bg-zinc-950 lg:flex-row lg:bg-white lg:dark:bg-zinc-950">
+    <div className="flex min-h-screen w-full flex-col bg-white lg:flex-row lg:bg-white dark:bg-zinc-950 lg:dark:bg-zinc-950">
       {/* Left side: Image */}
       <div className="relative hidden w-full lg:block lg:h-screen lg:w-1/2 xl:w-[60%]">
         <Image
@@ -23,9 +23,14 @@ export default function AuthLayout({
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
           {/* Logo */}
           <div className="mb-15 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-tr from-amber-300 via-red-400 to-indigo-500 text-lg font-bold text-white shadow-sm">
-              <div className="h-8 w-8 rounded-full bg-linear-to-tr from-yellow-300 via-pink-400 to-indigo-400 opacity-90 blur-[1px]" />
-            </div>
+            <Image
+              src="icon.svg"
+              alt="La'FAM"
+              height={30}
+              width={30}
+              priority
+              className="object-cover"
+            />
 
             <span className="text-xl font-semibold tracking-tight text-gray-900">
               La'FAM
