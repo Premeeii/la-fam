@@ -9,11 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Eye, EyeOff } from 'lucide-react';
+import { TurnstileWidget } from '@/components/auth/TurnstileWidget';
 
 export default function LoginPage() {
   const form = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
   const loginMutation = useLogin();
   const [showPassword, setShowPassword] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   return (
     <>
@@ -22,7 +24,13 @@ export default function LoginPage() {
       </p>
 
       <form
-        onSubmit={form.handleSubmit((data) => loginMutation.mutate(data))}
+        onSubmit={form.handleSubmit((data) => {
+          if (!turnstileToken) {
+            return; //don't notify user, just disable the button
+          }
+          // @ts-ignore
+          loginMutation.mutate({ ...data, turnstileToken });
+        })}
         className="flex flex-col gap-4"
       >
         <div>
@@ -35,7 +43,7 @@ export default function LoginPage() {
           <Input
             id="email"
             type="email"
-            className="mt-1 h-11 text-black border-gray-200 bg-gray-50 placeholder:text-gray-400 focus-visible:ring-blue-100"
+            className="mt-1 h-11 border-gray-200 bg-gray-50 text-black placeholder:text-gray-400 focus-visible:ring-blue-100"
             placeholder="Email"
             {...form.register('email')}
           />
@@ -57,7 +65,7 @@ export default function LoginPage() {
             <Input
               id="password"
               type={showPassword ? 'text' : 'password'}
-              className="h-11 border-gray-200 text-black bg-gray-50 pr-10 placeholder:text-gray-400 focus-visible:ring-blue-100"
+              className="h-11 border-gray-200 bg-gray-50 pr-10 text-black placeholder:text-gray-400 focus-visible:ring-blue-100"
               placeholder="Enter password"
               {...form.register('password')}
             />
@@ -77,7 +85,7 @@ export default function LoginPage() {
         </div>
 
         {/* Forgot Password */}
-        <div className="mt-1 mb-2 flex items-center justify-end">
+        <div className="mt-1 mb-1 flex items-center justify-end">
           <a
             href="#"
             className="text-xs font-medium text-blue-600 hover:underline"
@@ -86,10 +94,19 @@ export default function LoginPage() {
           </a>
         </div>
 
+        <TurnstileWidget
+          onSuccess={(token) => {
+            setTurnstileToken(token);
+          }}
+          onExpire={() => {
+            setTurnstileToken(null);
+          }}
+        />
+
         <Button
           type="submit"
           className="h-11 rounded-lg bg-blue-600 font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
-          disabled={loginMutation.isPending}
+          disabled={loginMutation.isPending || !turnstileToken}
         >
           {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
         </Button>
