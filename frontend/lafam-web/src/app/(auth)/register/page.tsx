@@ -10,16 +10,23 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Eye, EyeOff } from 'lucide-react';
 
+import { TurnstileWidget } from '@/components/auth/TurnstileWidget';
+
 export default function RegisterPage() {
   const form = useForm<RegisterFormValues>({ resolver: zodResolver(registerSchema) });
   const registerMutation = useRegister();
   const [showPassword, setShowPassword] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   return (
     <>
       <h1 className="mb-5 text-2xl font-semibold text-gray-900 tracking-tight">Sign up to Get Started</h1>
 
-      <form onSubmit={form.handleSubmit((data) => registerMutation.mutate(data))} className="flex flex-col gap-4">
+      <form onSubmit={form.handleSubmit((data) => {
+        if (!turnstileToken) return;
+        // @ts-ignore
+        registerMutation.mutate({ ...data, turnstileToken });
+      })} className="flex flex-col gap-4">
         <div>
           <Label htmlFor="displayName" className="text-xs font-semibold text-gray-700">Name</Label>
           <Input 
@@ -70,7 +77,12 @@ export default function RegisterPage() {
           )}
         </div>
 
-        <Button type="submit" className="h-11 mt-2 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm transition-colors rounded-lg" disabled={registerMutation.isPending}>
+        <TurnstileWidget
+          onSuccess={(token) => setTurnstileToken(token)}
+          onExpire={() => setTurnstileToken(null)}
+        />
+
+        <Button type="submit" className="h-11 mt-2 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm transition-colors rounded-lg" disabled={registerMutation.isPending || !turnstileToken}>
           {registerMutation.isPending ? 'Signing up...' : 'Sign up'}
         </Button>
       </form>
