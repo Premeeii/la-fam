@@ -28,13 +28,12 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint { 
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
                 Map<String, Object> body = new HashMap<>();
-                objectMapper.writeValue(response.getOutputStream(), authException.getMessage());
                 body.put("timestamp", OffsetDateTime.now().toString());
                 body.put("status", 401);
                 body.put("error", "Unauthorized");
                 body.put("message", "Full authentication is required to access this resource");
                 body.put("path", request.getRequestURI());
 
-                objectMapper.writeValue(response.getOutputStream(), body);
+                objectMapper.writeValue(response.getOutputStream(), authException.getMessage());
     }
 }
