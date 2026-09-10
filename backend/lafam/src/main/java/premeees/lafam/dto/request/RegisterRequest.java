@@ -18,6 +18,8 @@ public class RegisterRequest {
     @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
     private String password;
 
+    private String turnstileToken;
+
     public RegisterRequest() {
     }
 
@@ -49,5 +51,13 @@ public class RegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getTurnstileToken() {
+        return turnstileToken;
+    }
+
+    public void setTurnstileToken(String turnstileToken) {
+        this.turnstileToken = turnstileToken;
     }
 }

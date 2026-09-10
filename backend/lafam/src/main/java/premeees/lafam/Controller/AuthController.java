@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import premeees.lafam.Service.AuthService;
+import premeees.lafam.security.TurnstileService;
 import premeees.lafam.dto.request.LoginRequest;
 import premeees.lafam.dto.request.RefreshTokenRequest;
 import premeees.lafam.dto.request.RegisterRequest;
@@ -30,6 +31,7 @@ public class AuthController {
     private static final String REFRESH_TOKEN_COOKIE = "refresh_token";
 
     private final AuthService authService;
+    private final TurnstileService turnstileService;
 
     @Value("${spring.security.jwt.refresh-token-expiration}")
     private long refreshTokenExpiration;
@@ -37,12 +39,16 @@ public class AuthController {
     @Value("${app.auth.refresh-cookie.secure:true}")
     private boolean refreshCookieSecure;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, TurnstileService turnstileService) {
         this.authService = authService;
+        this.turnstileService = turnstileService;
     }
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request){
+        if (!turnstileService.verify(request.getTurnstileToken())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Turnstile verification failed");
+        }
         AuthResponse response = authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
         
@@ -50,6 +56,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request){
+        if (!turnstileService.verify(request.getTurnstileToken())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Turnstile verification failed");
+        }
         AuthResponse response = authService.login(request);
         return withRefreshCookie(HttpStatus.OK, response);
     }
