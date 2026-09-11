@@ -50,7 +50,7 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Turnstile verification failed");
         }
         AuthResponse response = authService.register(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return withRefreshCookie(HttpStatus.CREATED, response);
         
     }
 

@@ -40,15 +40,34 @@ export function useRegister() {
     const router = useRouter();
     return useMutation({
         mutationFn: (data: RegisterFormValues & { turnstileToken: string }) => register(data as any),
-        onSuccess: async () => {
-            toast.success('สมัครสมาชิกสำเร็จ กรุณาเข้าสู่ระบบ');
-            router.push('/login');
+        onSuccess: async (data: any) => {
+            if (data?.accessToken) {
+                Cookies.set('access_token', data.accessToken, { expires: 1 });
+            }
+            Cookies.remove('refresh_token');
+            const pendingToken = sessionStorage.getItem(PENDING_INVITE_KEY);
+            if (pendingToken) {
+                try {
+                    const res = await joinGroup(pendingToken);
+                    sessionStorage.removeItem(PENDING_INVITE_KEY);
+                    toast.success('Sign up Success!');
+                    if (res?.data?.groupId) {
+                        router.push(`/groups/${res.data.groupId}/dashboard`);
+                        return;
+                    }
+                }catch{
+                    toast.error('Sign up Success! But Invalid Invite Link');
+                }
+            } else {
+                toast.success('Sign up Success!');
+            }
+            router.push('/groups');
         },
         onError: (error: any) => {
             if(error.response?.status === 409) {
-                toast.error('อีเมลนี้ถูกใช้งานแล้ว');
+                toast.error('Email is already used');
             }else {
-                toast.error('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+                toast.error('Something went wrong. Please try again');
             }
         },
     });
