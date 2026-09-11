@@ -41,14 +41,14 @@ export function useCreateGroup() {
     mutationFn: (data: AddGroupFormValues) => createGroup(data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['userGroups'] });
-      toast.success('สร้างกลุ่มสำเร็จ');
+      toast.success('Create Group Success');
       if (data.groupId) {
         setGroupId(data.groupId);
         router.push(`/groups/${data.groupId}/dashboard`);
       }
     },
     onError: () => {
-      toast.error('ไม่สามารถสร้างกลุ่มได้ กรุณาลองใหม่อีกครั้ง');
+      toast.error('Failed to create group');
     },
   });
 }
