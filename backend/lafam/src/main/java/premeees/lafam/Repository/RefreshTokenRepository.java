@@ -1,5 +1,6 @@
 package premeees.lafam.Repository;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,5 +22,9 @@ public interface RefreshTokenRepository extends JpaRepository <RefreshToken, UUI
 
     @Modifying
     @Query("UPDATE RefreshToken rt SET rt.isRevoked = true WHERE rt.user = :user")
-     void revokeAllByUser(@Param("user") User user); 
+     void revokeAllByUser(@Param("user") User user);
+
+    @Modifying 
+    @Query ("DELETE FROM RefreshToken t WHERE t.expiresAt < :now OR t.isRevoked = true")
+    int deleteExpiredAndRevoked(@Param("now") OffsetDateTime now);
 }
