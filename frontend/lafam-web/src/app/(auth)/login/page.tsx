@@ -86,12 +86,12 @@ export default function LoginPage() {
 
         {/* Forgot Password */}
         <div className="mt-1 mb-1 flex items-center justify-end">
-          <a
-            href="#"
+          <Link
+            href="/forgot-password"
             className="text-xs font-medium text-blue-600 hover:underline"
           >
             Forgot password?
-          </a>
+          </Link>
         </div>
 
         <TurnstileWidget
