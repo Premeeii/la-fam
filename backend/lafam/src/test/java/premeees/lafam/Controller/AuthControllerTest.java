@@ -32,7 +32,8 @@ class AuthControllerTest {
         when(authService.login(Mockito.any(LoginRequest.class)))
                 .thenReturn(new AuthResponse("access-token", "refresh-token", null));
 
-        ResponseEntity<AuthResponse> response = controller.login(new LoginRequest("member@example.com", "password", "dummy-turnstile-token"));
+        ResponseEntity<AuthResponse> response = controller
+                .login(new LoginRequest("member@example.com", "password", "dummy-turnstile-token"));
         String setCookie = response.getHeaders().getFirst(HttpHeaders.SET_COOKIE);
         String json = new ObjectMapper().writeValueAsString(response.getBody());
 
