@@ -5,7 +5,8 @@ export function proxy(request: NextRequest) {
   const hasToken = request.cookies.has('access_token');
   const isAuthPage = request.nextUrl.pathname.startsWith('/login')
     || request.nextUrl.pathname.startsWith('/register')
-    || request.nextUrl.pathname.startsWith('/forgot-password');
+    || request.nextUrl.pathname.startsWith('/forgot-password')
+    || request.nextUrl.pathname.startsWith('/reset-password');
 
   if (!hasToken && !isAuthPage) {
     return NextResponse.redirect(new URL('/login', request.url));
