@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import premeees.lafam.Service.AuthService;
+import premeees.lafam.Service.EmailService;
 import premeees.lafam.security.TurnstileService;
 import premeees.lafam.dto.request.LoginRequest;
 import premeees.lafam.dto.request.RefreshTokenRequest;
@@ -21,8 +23,6 @@ import premeees.lafam.dto.request.RegisterRequest;
 import premeees.lafam.dto.response.AuthResponse;
 
 import java.time.Duration;
-
-
 
 @RestController
 @RequestMapping("/api/auth")
@@ -32,6 +32,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final TurnstileService turnstileService;
+    private final EmailService emailService;
 
     @Value("${spring.security.jwt.refresh-token-expiration}")
     private long refreshTokenExpiration;
@@ -39,23 +40,24 @@ public class AuthController {
     @Value("${app.auth.refresh-cookie.secure:true}")
     private boolean refreshCookieSecure;
 
-    public AuthController(AuthService authService, TurnstileService turnstileService) {
+    public AuthController(AuthService authService, TurnstileService turnstileService, EmailService emailService) {
         this.authService = authService;
         this.turnstileService = turnstileService;
+        this.emailService = emailService;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request){
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         if (!turnstileService.verify(request.getTurnstileToken())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Turnstile verification failed");
         }
         AuthResponse response = authService.register(request);
         return withRefreshCookie(HttpStatus.CREATED, response);
-        
+
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request){
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         if (!turnstileService.verify(request.getTurnstileToken())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Turnstile verification failed");
         }
@@ -65,7 +67,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refreshToken(
-            @CookieValue(value = REFRESH_TOKEN_COOKIE, required = false) String refreshToken) { //find refresh token at db
+            @CookieValue(value = REFRESH_TOKEN_COOKIE, required = false) String refreshToken) { // find refresh token at db
         if (refreshToken == null || refreshToken.isBlank()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token is required");
         }
@@ -85,8 +87,18 @@ public class AuthController {
                 .build();
     }
 
-    private ResponseEntity<AuthResponse> withRefreshCookie(HttpStatus status, AuthResponse response) { //as response container to have authresponse and httpOnly cookie together
-        return ResponseEntity.status(status)
+    @GetMapping("/test-email")
+    public ResponseEntity<Void> testEmail() {
+
+        emailService.sendPasswordResetEmail(
+                "peam972547@gmail.com",
+                "http://localhost:3000/reset-password?token=test");
+
+        return ResponseEntity.ok().build();
+    }
+
+    private ResponseEntity<AuthResponse> withRefreshCookie(HttpStatus status, AuthResponse response) { // as responsecontainer to have authresponse and httpOnly cookie together
+            return ResponseEntity.status(status)
                 .header(HttpHeaders.SET_COOKIE, refreshCookie(response.getRefreshToken()).toString())
                 .body(response);
     }
@@ -94,10 +106,10 @@ public class AuthController {
     private ResponseCookie refreshCookie(String refreshToken) {
         return ResponseCookie.from(REFRESH_TOKEN_COOKIE, refreshToken)
                 .httpOnly(true)
-                .secure(refreshCookieSecure) //set http through
-                .sameSite("Lax") //protect cross-site request forgery(csrf) browser will not sent cookie on every request
+                .secure(refreshCookieSecure) // set http through
+                .sameSite("Lax") // protect cross-site request forgery(csrf) browser will not sent cookie on every request
                 .path("/api/auth")
-                .maxAge(Duration.ofMillis(refreshTokenExpiration)) //expiration equal as in config
+                .maxAge(Duration.ofMillis(refreshTokenExpiration)) // expiration equal as in config
                 .build();
     }
 

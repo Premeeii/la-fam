@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import premeees.lafam.Service.UserService;
+import premeees.lafam.dto.request.ChangePasswordRequest;
 import premeees.lafam.dto.request.UpdateProfileRequest;
 import premeees.lafam.dto.response.AvatarUploadResponse;
 import premeees.lafam.dto.request.ConfirmAvatarRequest;
@@ -42,6 +43,14 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/me/change-password")
+    public ResponseEntity<Void> changePassword(
+            @Valid @RequestBody ChangePasswordRequest request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        userService.changePassword(userDetails.getUsername(), request);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/me/avatar/upload-url")
     public ResponseEntity<AvatarUploadResponse> requestAvatarUploadUrl(
         @RequestParam String contentType,
@@ -64,3 +73,4 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 }
+

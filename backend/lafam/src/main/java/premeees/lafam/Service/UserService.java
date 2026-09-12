@@ -1,11 +1,15 @@
 package premeees.lafam.Service;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import premeees.lafam.Entity.User;
 import premeees.lafam.Repository.UserRepository;
+import premeees.lafam.dto.request.ChangePasswordRequest;
 import premeees.lafam.dto.request.UpdateProfileRequest;
 import premeees.lafam.dto.response.AvatarUploadResponse;
 import premeees.lafam.dto.response.UserResponse;
@@ -15,10 +19,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final R2StorageService r2StorageService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, R2StorageService r2StorageService) {
+    public UserService(UserRepository userRepository, R2StorageService r2StorageService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.r2StorageService = r2StorageService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserResponse getMyProfile(String email) {
@@ -41,6 +47,26 @@ public class UserService {
 
         userRepository.save(user);
         return UserResponse.fromEntity(user);
+    }
+
+    // Change Password — must know old password (when already logged in)
+    @Transactional
+    public void changePassword(String email, ChangePasswordRequest request) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        // ตรวจสอบว่ารหัสเก่าถูกต้องไหม
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password is incorrect");
+        }
+
+        // ตรวจสอบว่ารหัสใหม่ไม่ซ้ำกับรหัสเก่า
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPasswordHash())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password must be different from current password");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 
     //use for request presigned url to upload picture

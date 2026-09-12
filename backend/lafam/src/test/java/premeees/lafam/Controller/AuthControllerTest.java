@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import premeees.lafam.Service.AuthService;
+import premeees.lafam.Service.EmailService;
 import premeees.lafam.security.TurnstileService;
 import premeees.lafam.dto.request.LoginRequest;
 import premeees.lafam.dto.response.AuthResponse;
@@ -22,7 +23,8 @@ class AuthControllerTest {
     void loginSetsHttpOnlyRefreshCookieWithoutReturningItInJson() throws Exception {
         AuthService authService = Mockito.mock(AuthService.class);
         TurnstileService turnstileService = Mockito.mock(TurnstileService.class);
-        AuthController controller = new AuthController(authService, turnstileService);
+        EmailService emailService = Mockito.mock(EmailService.class);
+        AuthController controller = new AuthController(authService, turnstileService, emailService);
         ReflectionTestUtils.setField(controller, "refreshTokenExpiration", 604800000L);
         ReflectionTestUtils.setField(controller, "refreshCookieSecure", true);
 
@@ -30,7 +32,8 @@ class AuthControllerTest {
         when(authService.login(Mockito.any(LoginRequest.class)))
                 .thenReturn(new AuthResponse("access-token", "refresh-token", null));
 
-        ResponseEntity<AuthResponse> response = controller.login(new LoginRequest("member@example.com", "password", "dummy-turnstile-token"));
+        ResponseEntity<AuthResponse> response = controller
+                .login(new LoginRequest("member@example.com", "password", "dummy-turnstile-token"));
         String setCookie = response.getHeaders().getFirst(HttpHeaders.SET_COOKIE);
         String json = new ObjectMapper().writeValueAsString(response.getBody());
 
