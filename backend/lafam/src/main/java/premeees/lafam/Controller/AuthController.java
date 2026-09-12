@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import premeees.lafam.Service.AuthService;
+import premeees.lafam.Service.EmailService;
 import premeees.lafam.security.TurnstileService;
 import premeees.lafam.dto.request.LoginRequest;
 import premeees.lafam.dto.request.RefreshTokenRequest;
@@ -32,6 +34,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final TurnstileService turnstileService;
+    private final EmailService emailService;
 
     @Value("${spring.security.jwt.refresh-token-expiration}")
     private long refreshTokenExpiration;
@@ -39,9 +42,10 @@ public class AuthController {
     @Value("${app.auth.refresh-cookie.secure:true}")
     private boolean refreshCookieSecure;
 
-    public AuthController(AuthService authService, TurnstileService turnstileService) {
+    public AuthController(AuthService authService, TurnstileService turnstileService, EmailService emailService) {
         this.authService = authService;
         this.turnstileService = turnstileService;
+        this.emailService = emailService;
     }
 
     @PostMapping("/register")
@@ -85,6 +89,17 @@ public class AuthController {
                 .build();
     }
 
+    @GetMapping("/test-email")
+    public ResponseEntity<Void> testEmail() {
+
+    emailService.sendPasswordResetEmail(
+            "peam972547@gmail.com",
+            "http://localhost:3000/reset-password?token=test"
+    );
+
+    return ResponseEntity.ok().build();
+}
+ 
     private ResponseEntity<AuthResponse> withRefreshCookie(HttpStatus status, AuthResponse response) { //as response container to have authresponse and httpOnly cookie together
         return ResponseEntity.status(status)
                 .header(HttpHeaders.SET_COOKIE, refreshCookie(response.getRefreshToken()).toString())
