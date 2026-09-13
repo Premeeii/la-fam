@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {login, register, joinGroup} from "@/lib/api/auth";
 import type { LoginFormValues, RegisterFormValues } from "../schemas/auth";
-import Cookies from 'js-cookie';
+
 
 const PENDING_INVITE_KEY = 'pendingInviteToken';
 
@@ -12,10 +12,6 @@ export function useLogin() {
     return useMutation({
         mutationFn: (data: LoginFormValues & { turnstileToken: string }) => login(data as any),
         onSuccess: async (data: any) => { // when login success
-            if (data?.accessToken) {
-                Cookies.set('access_token', data.accessToken, { expires: 1 }); //set access token in js-cookie
-            }
-            Cookies.remove('refresh_token'); // remove the legacy JavaScript-readable cookie
             const pendingToken = sessionStorage.getItem(PENDING_INVITE_KEY);
             if (pendingToken) {
                 try {
@@ -41,10 +37,6 @@ export function useRegister() {
     return useMutation({
         mutationFn: (data: RegisterFormValues & { turnstileToken: string }) => register(data as any),
         onSuccess: async (data: any) => {
-            if (data?.accessToken) {
-                Cookies.set('access_token', data.accessToken, { expires: 1 });
-            }
-            Cookies.remove('refresh_token');
             const pendingToken = sessionStorage.getItem(PENDING_INVITE_KEY);
             if (pendingToken) {
                 try {

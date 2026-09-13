@@ -1,17 +1,8 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
-});
-
-apiClient.interceptors.request.use((config) => {
-  const token = Cookies.get('access_token'); //get access token from js-cookie
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`; //attach token every request
-  }
-  return config;
 });
 
 apiClient.interceptors.response.use(
@@ -30,20 +21,12 @@ apiClient.interceptors.response.use(
       //check if token is expired
       error.config._retry = true;
       try {
-        const refreshResponse = await apiClient.post('/api/auth/refresh');
-        const { accessToken } = refreshResponse.data ?? {}; //fetch access token from refresh token
-        if (!accessToken) {
-          throw new Error('Refresh response is missing an access token');
-        }
-
-        Cookies.set('access_token', accessToken, { expires: 1 });
-        Cookies.remove('refresh_token'); // remove the legacy JavaScript-readable cookie
-        return apiClient(error.config); //retry the request with new token
+        await apiClient.post('/api/auth/refresh'); //backend send new cookie
+        return apiClient(error.config); // retry with new cookie
       } catch {
-        Cookies.remove('access_token'); //remove access token when refresh token failed
-        window.location.href = '/login'; //redirect to login page
+        window.location.href = '/login';
       }
     }
-    return Promise.reject(error); //reject the request
+    return Promise.reject(error);
   },
 );

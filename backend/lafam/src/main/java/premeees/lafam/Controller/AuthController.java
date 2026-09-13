@@ -29,6 +29,7 @@ import java.time.Duration;
 public class AuthController {
 
     private static final String REFRESH_TOKEN_COOKIE = "refresh_token";
+    private static final String ACCESS_TOKEN_COOKIE = "access_token";
 
     private final AuthService authService;
     private final TurnstileService turnstileService;
@@ -36,6 +37,9 @@ public class AuthController {
 
     @Value("${spring.security.jwt.refresh-token-expiration}")
     private long refreshTokenExpiration;
+
+    @Value("${spring.security.jwt.access-token-expiration}")
+    private long accessTokenExpiration;
 
     @Value("${app.auth.refresh-cookie.secure:true}")
     private boolean refreshCookieSecure;
@@ -83,7 +87,8 @@ public class AuthController {
             authService.logout(new RefreshTokenRequest(refreshToken));
         }
         return ResponseEntity.noContent()
-                .header(HttpHeaders.SET_COOKIE, clearRefreshCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, clearRefreshCookie().toString(),
+                        clearAccessTokenCookie().toString())
                 .build();
     }
 
@@ -97,9 +102,11 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    private ResponseEntity<AuthResponse> withRefreshCookie(HttpStatus status, AuthResponse response) { // as responsecontainer to have authresponse and httpOnly cookie together
-            return ResponseEntity.status(status)
-                .header(HttpHeaders.SET_COOKIE, refreshCookie(response.getRefreshToken()).toString())
+    // as responsecontainer to have authresponse and httpOnly cookie together
+    private ResponseEntity<AuthResponse> withRefreshCookie(HttpStatus status, AuthResponse response) {
+        return ResponseEntity.status(status)
+                .header(HttpHeaders.SET_COOKIE, refreshCookie(response.getRefreshToken()).toString(),
+                        accessCookie(response.getAccessToken()).toString())
                 .body(response);
     }
 
@@ -107,9 +114,23 @@ public class AuthController {
         return ResponseCookie.from(REFRESH_TOKEN_COOKIE, refreshToken)
                 .httpOnly(true)
                 .secure(refreshCookieSecure) // set http through
-                .sameSite("Lax") // protect cross-site request forgery(csrf) browser will not sent cookie on every request
+                // protect cross-site request forgery(csrf) browser will not sent cookie on
+                // every request
+                .sameSite("Lax")
                 .path("/api/auth")
                 .maxAge(Duration.ofMillis(refreshTokenExpiration)) // expiration equal as in config
+                .build();
+    }
+
+    private ResponseCookie accessCookie(String accessToken) {
+        return ResponseCookie.from(ACCESS_TOKEN_COOKIE, accessToken)
+                .httpOnly(true)
+                .secure(refreshCookieSecure)
+                .sameSite("Lax")
+                .path("/")
+                // cookie accessToken will same as refresh token because JWT inside will expire
+                // before cookie
+                .maxAge(Duration.ofMillis(refreshTokenExpiration))
                 .build();
     }
 
@@ -119,6 +140,16 @@ public class AuthController {
                 .secure(refreshCookieSecure)
                 .sameSite("Lax")
                 .path("/api/auth")
+                .maxAge(Duration.ZERO)
+                .build();
+    }
+
+    private ResponseCookie clearAccessTokenCookie() {
+        return ResponseCookie.from(ACCESS_TOKEN_COOKIE, "")
+                .httpOnly(true)
+                .secure(refreshCookieSecure)
+                .sameSite("Lax")
+                .path("/")
                 .maxAge(Duration.ZERO)
                 .build();
     }
