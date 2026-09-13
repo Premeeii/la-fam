@@ -18,6 +18,7 @@ public class AuthResponse {
         this.user = user;
     }
 
+    @JsonIgnore
     public String getAccessToken() {
         return accessToken;
     }
