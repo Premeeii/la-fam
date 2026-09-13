@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { useGroup } from '@/lib/hooks/useGroup';
+import { CreateGroupCardDialog } from '@/components/layout/CreateGroupCardDialog';
 
 export default function GroupPage() {
   const { data: groups, isLoading } = useGroup();
@@ -56,6 +57,7 @@ export default function GroupPage() {
               </div>
             </Card>
           ))}
+          <CreateGroupCardDialog />
         </div>
       )}
     </div>
