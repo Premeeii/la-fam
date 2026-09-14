@@ -4,14 +4,15 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { useGroup } from '@/lib/hooks/useGroup';
+import { CreateGroupCardDialog } from '@/components/layout/CreateGroupCardDialog';
 
 export default function GroupPage() {
   const { data: groups, isLoading } = useGroup();
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-        Your Groups
+      <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+        YOUR GROUPS
       </h1>
 
       {isLoading ? (
@@ -56,6 +57,7 @@ export default function GroupPage() {
               </div>
             </Card>
           ))}
+          <CreateGroupCardDialog />
         </div>
       )}
     </div>

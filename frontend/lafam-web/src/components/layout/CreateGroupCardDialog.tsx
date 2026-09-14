@@ -19,8 +19,9 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card } from '../ui/card';
 
-export function CreateGroupDialog() {
+export function CreateGroupCardDialog() {
   const [open, setOpen] = useState(false);
   const createGroupMutation = useCreateGroup();
 
@@ -56,9 +57,16 @@ export function CreateGroupDialog() {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
-          <Button className="hidden h-10 gap-2 rounded-lg bg-blue-600 px-4 text-white shadow-sm hover:bg-blue-700 sm:flex">
-            <Plus className="h-4 w-4 fill-white" /> Create Group
-          </Button>
+          <button type="button" className="w-full text-left">
+            <Card className="flex h-55 cursor-pointer flex-col justify-center overflow-hidden rounded-xl border-gray-100 dark:border-gray-700 bg-white dark:bg-background shadow-sm transition-shadow hover:shadow-md">
+              <div className="flex flex-col items-center gap-3 p-4">
+                <div className="flex items-center gap-4">
+                  <Plus className="h-6 w-6 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">Create Group</span>
+                </div>
+              </div>
+            </Card>
+          </button>
         }
       ></DialogTrigger>
       <DialogContent className="dark:bg-background border-0 bg-white sm:max-w-md">

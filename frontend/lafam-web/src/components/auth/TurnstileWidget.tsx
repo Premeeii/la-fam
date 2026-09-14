@@ -14,6 +14,7 @@ export function TurnstileWidget({onSuccess, onExpire}: TurnstileWidgetProps) {
         onSuccess={onSuccess}
         onExpire={onExpire}
         className='flex w-full justify-center'
+        options={{theme: 'light'}}
         />
     )
 }
