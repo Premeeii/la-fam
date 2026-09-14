@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import premeees.lafam.Entity.Bill;
 import premeees.lafam.Entity.BillCategory;
 import premeees.lafam.Entity.Group;
+import premeees.lafam.Entity.GroupMember;
 import premeees.lafam.Entity.User;
 import premeees.lafam.Repository.BillCategoryRepository;
 import premeees.lafam.Repository.BillRepository;
@@ -101,13 +102,21 @@ public class BillService {
         if (group.getDeletedAt() != null) {
             throw new IllegalArgumentException("Group has been deleted");
         }
-
+        
         // check a user is member of this group
-        groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
+        GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
 
         Bill bill = billRepository.findById(billId)
                 .orElseThrow(() -> new IllegalArgumentException("Bill not found"));
+        
+        boolean isCreator = bill.getCreatedBy().getId().equals(user.getId());
+        boolean isGroupOwner = "OWNER".equals(member.getRole());
+        
+        //check you are owner bill
+        if(!isCreator && !isGroupOwner){
+            throw new IllegalArgumentException("You are not authorized to modify this bill");
+        }
 
         // check a bill is in this group
         if (!bill.getGroup().getId().equals(groupId)) {
@@ -151,11 +160,19 @@ public class BillService {
         }
 
         // check a user is member of this group
-        groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
+        GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
 
         Bill bill = billRepository.findById(billId)
                 .orElseThrow(() -> new IllegalArgumentException("Bill not found"));
+
+        boolean isCreator = bill.getCreatedBy().getId().equals(user.getId());
+        boolean isGroupOwner = "OWNER".equals(member.getRole());
+
+         //check you are owner bill
+        if(!isCreator && !isGroupOwner){
+            throw new IllegalArgumentException("You are not authorized to modify this bill");
+        }
 
         // check a bill is in this group
         if (!bill.getGroup().getId().equals(groupId)) {
