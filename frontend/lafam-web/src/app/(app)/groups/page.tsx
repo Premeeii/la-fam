@@ -11,8 +11,8 @@ export default function GroupPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-        Your Groups
+      <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+        YOUR GROUPS
       </h1>
 
       {isLoading ? (

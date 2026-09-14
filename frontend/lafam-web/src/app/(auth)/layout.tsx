@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { ThemeProvider } from 'next-themes';
 
 export default function AuthLayout({
   children,
@@ -6,7 +7,8 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-white lg:flex-row lg:bg-white dark:bg-zinc-950 lg:dark:bg-zinc-950">
+    <ThemeProvider forcedTheme="light">
+    <div className="flex min-h-screen w-full flex-col bg-white lg:flex-row lg:bg-white">
       {/* Left side: Image */}
       <div className="relative hidden w-full lg:block lg:h-screen lg:w-1/2 xl:w-[60%]">
         <Image
@@ -64,5 +66,6 @@ export default function AuthLayout({
         </div>
       </div>
     </div>
+    </ThemeProvider>
   );
 }

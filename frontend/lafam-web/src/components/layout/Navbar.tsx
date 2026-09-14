@@ -1,7 +1,8 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, Settings, User, LogOut, Menu } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { Settings, User, LogOut } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -20,7 +21,6 @@ import { GroupNav } from './GroupNav';
 import { SearchGroupBar } from './SearchGroupBar';
 import { usePathname } from 'next/navigation';
 import { ThemeToggle } from './ThemeToggle';
-
 
 function getInitials(name?: string) {
   if (!name) return 'U';
@@ -74,7 +74,6 @@ export function UserMenu({
   );
 }
 
-
 export function Navbar() {
   const { data: user } = useCurrentUser();
   const pathname = usePathname();
@@ -83,37 +82,38 @@ export function Navbar() {
   const isJoinPage = pathname === '/groups/join';
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-100 dark:border-gray-700 dark:bg-background shadow-sm lg:dark:bg-background lg:dark:border-gray-700">
+    <header className="dark:bg-background lg:dark:bg-background sticky top-0 z-50 w-full border-b border-gray-100 shadow-sm dark:border-gray-700 lg:dark:border-gray-700">
       <div className="flex h-13 items-center justify-between px-4 md:px-6 lg:px-12">
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
           <Link
             href="/groups"
-            className="flex items-center gap-2 text-xl font-bold tracking-tight text-foreground "
+            className="text-foreground flex items-center gap-2 text-xl font-bold tracking-tight"
           >
             <Image
-                    src="icon.svg"
-                    alt="La'FAM"
-                    height={30}
-                    width={30}
-                    priority
-                    className="object-cover"
-                  />
+              src="icon.svg"
+              alt="La'FAM"
+              height={30}
+              width={30}
+              priority
+              className="object-cover"
+            />
             La'FAM
           </Link>
         </div>
 
         {/* Center: Search */}
-        <SearchGroupBar/>
+        <SearchGroupBar />
         {/* Right: Actions */}
         <div className="flex items-center gap-4">
-          <ThemeToggle/>
-          <Link href="/settings" className="text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
+          <ThemeToggle />
+          <Link
+            href="/settings"
+            className="text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+          >
             <Settings className="h-5 w-5" />
           </Link>
-          {isGroupSpecific && !isJoinPage && (
-            <GroupNav/>
-          )}
+          {isGroupSpecific && !isJoinPage && <GroupNav />}
           <CreateGroupDialog />
           <UserMenu
             displayName={user?.displayName ?? 'My Account'}
