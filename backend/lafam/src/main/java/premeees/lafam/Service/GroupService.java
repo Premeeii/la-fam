@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -307,7 +308,7 @@ public class GroupService {
         String extension = contentType.split("/")[1];
 
         // create objectKey use for userId have a file name in one row
-        String objectKey = "GroupAvatar/" + user.getId() + "." + extension;
+        String objectKey = "GroupAvatar/" + groupId + "." + extension;
 
         // Generate presigned URL
         String uploadUrl = r2StorageService.generatePresignedUploadUrl(objectKey, contentType);
