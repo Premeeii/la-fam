@@ -91,7 +91,7 @@ export function Navbar() {
             className="text-foreground flex items-center gap-2 text-xl font-bold tracking-tight"
           >
             <Image
-              src="icon.svg"
+              src="/icon.svg"
               alt="La'FAM"
               height={30}
               width={30}

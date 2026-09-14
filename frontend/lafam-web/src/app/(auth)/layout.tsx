@@ -26,7 +26,7 @@ export default function AuthLayout({
           {/* Logo */}
           <div className="mb-15 flex items-center gap-3">
             <Image
-              src="icon.svg"
+              src="/icon.svg"
               alt="La'FAM"
               height={30}
               width={30}

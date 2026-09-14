@@ -8,6 +8,7 @@ import { BillsHeader } from '@/components/bills/BillsHeader';
 import { BillCard } from '@/components/bills/BillCard';
 import { BillDialog } from '@/components/bills/BillDialog';
 import { Pagination } from '@/components/bills/Pagination';
+import { useGroup } from '@/lib/hooks/useGroup';
 
 const BILLS_PER_PAGE = 5;
 
@@ -18,6 +19,13 @@ export default function BillsPage({
 }) {
   const resolvedParams = use(params);
   const groupId = resolvedParams.groupId;
+
+  const { data: groups, isLoading } = useGroup();
+  
+    // Find the group that matches the current URL parameter
+    const currentGroup = groups?.find(
+      (g) => g.groupId === groupId,
+    );
 
   // State
   const [searchQuery, setSearchQuery] = useState('');
@@ -99,6 +107,7 @@ export default function BillsPage({
       <h1 className="text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-6">Bills</h1>
 
       <BillsHeader
+        groupId={groupId}
         categories={categories}
         searchQuery={searchQuery}
         onSearchChange={handleSearchChange}
@@ -125,7 +134,7 @@ export default function BillsPage({
               key={bill.id}
               bill={bill}
               groupId={groupId}
-              canEdit={bill.createdBy === currentUser?.id}
+              canEdit={bill.createdBy === currentUser?.id || currentGroup?.role === 'OWNER'}
               onEdit={handleEditBill}
             />
           ))
