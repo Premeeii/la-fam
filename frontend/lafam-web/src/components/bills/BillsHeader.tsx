@@ -10,17 +10,20 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { BillCategoryResponse } from '@/lib/api/bills';
+import { AddBillPopover } from './AddBillPopover';
 
 interface BillsHeaderProps {
+  groupId: string;
   categories: BillCategoryResponse[];
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onFilterChange: (filter: 'all' | 'own' | string) => void; // 'all' | 'own' | categoryId
   activeFilter: string;
-  onAddBill: () => void;
+  onAddBill?: () => void;
 }
 
 export function BillsHeader({
+  groupId,
   categories,
   searchQuery,
   onSearchChange,
@@ -50,12 +53,7 @@ export function BillsHeader({
 
       {/* Actions */}
       <div className="flex items-center gap-2">
-        <Button
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium h-10 px-5"
-          onClick={onAddBill}
-        >
-          Add Bill
-        </Button>
+        <AddBillPopover groupId={groupId} />
 
         <DropdownMenu>
           <DropdownMenuTrigger
