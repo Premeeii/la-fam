@@ -92,15 +92,15 @@ public class AuthController {
                 .build();
     }
 
-    @GetMapping("/test-email")
-    public ResponseEntity<Void> testEmail() {
+    // @GetMapping("/test-email")
+    // public ResponseEntity<Void> testEmail() {
 
-        emailService.sendPasswordResetEmail(
-                "peam972547@gmail.com",
-                "http://localhost:3000/reset-password?token=test");
+    //     emailService.sendPasswordResetEmail(
+    //             "peam972547@gmail.com",
+    //             "http://localhost:3000/reset-password?token=test");
 
-        return ResponseEntity.ok().build();
-    }
+    //     return ResponseEntity.ok().build();
+    // }
 
     // as responsecontainer to have authresponse and httpOnly cookie together
     private ResponseEntity<AuthResponse> withRefreshCookie(HttpStatus status, AuthResponse response) {

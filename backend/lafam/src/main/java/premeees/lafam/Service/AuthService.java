@@ -102,7 +102,6 @@ public class AuthService {
         }
 
         User user = refreshToken.getUser();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
 
         refreshToken.setIsRevoked(true);
         refreshTokenRepository.save(refreshToken);
