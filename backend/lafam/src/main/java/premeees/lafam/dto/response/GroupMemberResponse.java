@@ -16,8 +16,9 @@ public class GroupMemberResponse {
     private String displayName;
     private String bio;
     private String userAvatarUrl;
+    private Boolean isBooked;
 
-    public GroupMemberResponse(UUID userId, UUID groupId, String role, OffsetDateTime joinedAt, String groupName, String groupAvatarUrl, String displayName, String userAvatarUrl, String bio) {
+    public GroupMemberResponse(UUID userId, UUID groupId, String role, OffsetDateTime joinedAt, String groupName, String groupAvatarUrl, String displayName, String userAvatarUrl, String bio, Boolean isBooked) {
         this.userId = userId;
         this.groupId = groupId;
         this.role = role;
@@ -27,6 +28,7 @@ public class GroupMemberResponse {
         this.displayName = displayName;
         this.userAvatarUrl = userAvatarUrl;
         this.bio = bio;
+        this.isBooked = isBooked;
     }
 
     public static GroupMemberResponse fromEntity(GroupMember member) {
@@ -39,7 +41,8 @@ public class GroupMemberResponse {
             member.getGroup().getGroupAvatarUrl(),
             member.getUser().getDisplayName(),
             member.getUser().getAvatarUrl(),
-            member.getUser().getBio()
+            member.getUser().getBio(),
+            member.getIsBooked()
         );
     }
 
@@ -114,5 +117,12 @@ public class GroupMemberResponse {
     public void setBio(String bio) {
         this.bio = bio;
     }
-    
+
+    public Boolean getIsBooked() {
+        return isBooked;
+    }
+
+    public void setIsBooked(Boolean isBooked) {
+        this.isBooked = isBooked;
+    }
 }

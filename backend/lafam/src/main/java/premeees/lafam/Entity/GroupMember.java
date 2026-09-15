@@ -34,6 +34,9 @@ public class GroupMember {
     @Column(name = "leaved_at")
     private OffsetDateTime leavedAt;
 
+    @Column(name = "is_booked", nullable = false)
+    private Boolean isBooked = false;
+
     public GroupMember() {}
 
     public GroupMember(Group group, User user, String role) {
@@ -88,6 +91,14 @@ public class GroupMember {
 
     public void setLeavedAt(OffsetDateTime leavedAt) {
         this.leavedAt = leavedAt;
+    }
+
+    public Boolean getIsBooked() {
+        return isBooked;
+    }
+
+    public void setIsBooked(Boolean isBooked) {
+        this.isBooked = isBooked;
     }
 
 }
