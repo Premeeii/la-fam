@@ -131,4 +131,12 @@ public class GroupController {
             groupId, userDetails.getUsername(), request.getObjectKey());
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/{groupId}/bookmark")
+    public ResponseEntity<GroupMemberResponse> toggleBookmarkGroup(
+            @PathVariable UUID groupId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        GroupMemberResponse response = groupService.toggleBookmarkGroup(groupId, userDetails.getUsername());
+        return ResponseEntity.ok(response);
+    }
 }

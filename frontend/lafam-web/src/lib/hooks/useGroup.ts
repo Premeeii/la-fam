@@ -149,3 +149,26 @@ export function useUpdateGroup(groupId: string) {
     },
   });
 }
+
+export function useGroupBookmark(groupId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const response = await apiClient.patch(
+        `/api/groups/${groupId}/bookmark`,
+      );
+
+      return response.data;
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['userGroups'],
+      });
+    },
+     onError: () => {
+      toast.error('Failed to bookmark a group');
+    },
+  });
+}
