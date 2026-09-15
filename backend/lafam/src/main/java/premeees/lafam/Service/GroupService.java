@@ -130,6 +130,33 @@ public class GroupService {
     }
 
     @Transactional
+    public GroupMemberResponse toggleBookmarkGroup(UUID groupId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+
+        if (group.getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group has been deleted");
+        }
+
+        GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
+
+        if (member.getLeavedAt() != null) {
+            throw new IllegalArgumentException("You have already left this group");
+        }
+        
+        boolean currentStatus = Boolean.TRUE.equals(member.getIsBooked());
+        member.setIsBooked(!currentStatus);
+
+        groupMemberRepository.save(member);
+
+        return GroupMemberResponse.fromEntity(member);
+    }
+
+    @Transactional
     public void softDeleteGroup(UUID groupId, String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
