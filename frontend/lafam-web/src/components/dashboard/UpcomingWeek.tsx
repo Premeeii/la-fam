@@ -3,34 +3,47 @@
 import { useMemo } from 'react';
 import Link from 'next/link';
 import { useGroupEvents } from '@/lib/hooks/useEvents';
-import { startOfWeek, endOfWeek, addDays, format, isSameDay, isToday } from 'date-fns';
+import {
+  startOfWeek,
+  endOfWeek,
+  addDays,
+  format,
+  isToday,
+  startOfDay,
+  endOfDay,
+} from 'date-fns';
 
 export function UpcomingWeek({ groupId }: { groupId: string }) {
-  // Get start and end of the current week (Sunday to Saturday)
-  const today = new Date();
-  const weekStart = startOfWeek(today);
-  const weekEnd = endOfWeek(today);
+  // Calculate start and end of current week starting on Monday
+  const { weekStart, fromStr, toStr } = useMemo(() => {
+    const now = new Date();
+    const start = startOfWeek(now, { weekStartsOn: 1 });
+    const end = endOfWeek(now, { weekStartsOn: 1 });
+    return {
+      weekStart: start,
+      fromStr: start.toISOString(),
+      toStr: end.toISOString(),
+    };
+  }, []);
 
   // Fetch events for this week
-  const { data: events = [] } = useGroupEvents(
-    groupId,
-    weekStart.toISOString(),
-    weekEnd.toISOString()
-  );
+  const { data: events = [] } = useGroupEvents(groupId, fromStr, toStr);
 
-  // Generate the 7 days of the week
+  // Generate the 7 days of the week (Monday to Sunday)
   const weekDays = useMemo(() => {
     return Array.from({ length: 7 }).map((_, index) => {
       const date = addDays(weekStart, index);
-      // Find events that happen on this day to show dots
-      const dayEvents = events.filter(
-        (event) => {
-          if (!event.startDate || !event.endDate) return false;
-          return new Date(event.startDate).getTime() <= date.getTime() + 24 * 60 * 60 * 1000 &&
-                 new Date(event.endDate).getTime() >= date.getTime();
-        }
-      );
-      
+      const dayStart = startOfDay(date);
+      const dayEnd = endOfDay(date);
+
+      // Find events that overlap with this day
+      const dayEvents = events.filter((event) => {
+        if (!event.startDate || !event.endDate) return false;
+        const eStart = new Date(event.startDate);
+        const eEnd = new Date(event.endDate);
+        return eStart <= dayEnd && eEnd >= dayStart;
+      });
+
       return {
         date,
         dayName: format(date, 'EEE').toUpperCase(),
@@ -69,13 +82,13 @@ export function UpcomingWeek({ groupId }: { groupId: string }) {
               </span>
               
               {/* Event indicators (dots) */}
-              {day.events.length > 0 && !day.isCurrentDay && (
-                <div className="absolute -bottom-3 flex gap-1">
-                  {day.events.slice(0, 1).map((e) => (
+              {day.events.length > 0 && (
+                <div className="absolute -bottom-3 flex gap-1 items-center justify-center">
+                  {day.events.slice(0, 3).map((e) => (
                     <span 
                       key={e.id} 
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: e.color || '#3b82f6' }}
+                      className="w-1.5 h-1.5 rounded-full ring-1 ring-white dark:ring-gray-800"
+                      style={{ backgroundColor: day.isCurrentDay ? '#ffffff' : (e.color || '#3b82f6') }}
                     />
                   ))}
                 </div>

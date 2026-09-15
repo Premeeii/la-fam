@@ -14,7 +14,7 @@ export default function GroupPage() {
       <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         YOUR GROUPS
       </h1>
-      <div className='w-full border-t border-gray-300'/>
+      <div className='w-full border-t border-gray-300 dark:border-gray-700'/>
 
       {isLoading ? (
         <div className="text-gray-500 dark:text-gray-400">Loading groups...</div>
