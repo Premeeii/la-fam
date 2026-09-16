@@ -50,7 +50,7 @@ export function SearchGroupBar() {
         <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
         <Input
           type="text"
-          placeholder="Search Group..."
+          placeholder="Search Group"
           className="h-10 w-full rounded-lg border-gray-200 dark:border-gray-700 bg-white dark:bg-background pr-4 pl-10 text-sm shadow-sm placeholder:text-gray-400 focus-visible:ring-blue-100 dark:text-white"
           value={searchQuery}
           onChange={handleSearch}

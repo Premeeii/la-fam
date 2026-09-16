@@ -31,9 +31,11 @@ function getInitials(name?: string) {
 
 export function UserMenu({
   displayName,
+  email,
   avatarUrl,
 }: {
   displayName?: string;
+  email?: string;
   avatarUrl?: string | null;
 }) {
   const logoutMutation = useLogout();
@@ -41,7 +43,7 @@ export function UserMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
-        <Avatar className="h-9 w-9 border border-blue-100 dark:border-blue-900">
+        <Avatar className="h-9 w-9 border border-blue-100 ">
           {avatarUrl && (
             <AvatarImage src={avatarUrl} alt={displayName ?? 'User'} />
           )}
@@ -50,24 +52,45 @@ export function UserMenu({
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end" className="w-80 p-4">
         <DropdownMenuGroup>
-          <DropdownMenuLabel className="truncate font-normal text-gray-500 dark:text-gray-400">
-            {displayName ?? 'My Account'}
+          <DropdownMenuLabel className="font-normal p-2">
+            <div className="flex items-center gap-3">
+              <Avatar className="h-10 w-10 shrink-0 border border-blue-100 dark:border-blue-900">
+                {avatarUrl && (
+                  <AvatarImage src={avatarUrl} alt={displayName ?? 'User'} />
+                )}
+                <AvatarFallback className="bg-blue-50 text-sm font-semibold text-blue-600">
+                  {getInitials(displayName)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-1 flex-col min-w-0">
+                <span className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+                  {displayName ?? 'My Account'}
+                </span>
+                <span className="truncate text-xs text-gray-500 dark:text-gray-400">
+                  {email ?? 'My email'}
+                </span>
+              </div>
+            </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="h-11 cursor-pointer">
             <Link href="/profile" className="flex w-full items-center">
-              <User className="mr-2 h-4 w-4" /> Account
+              Profile
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
+        <DropdownMenuItem className="h-11 cursor-pointer">
+          <Link href="/settings" className="flex w-full items-center">
+            Settings
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => logoutMutation.mutate()}
           className="h-11 cursor-pointer text-red-500 focus:bg-red-50 focus:text-red-600 dark:focus:bg-red-900/30"
         >
-          <LogOut className="mr-2 h-4 w-4" /> Logout
+          Logout
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -98,25 +121,20 @@ export function Navbar() {
               priority
               className="object-cover"
             />
-            La'FAM
+            <span className="hidden sm:block">La'FAM</span>
           </Link>
         </div>
 
         {/* Center: Search */}
         <SearchGroupBar />
         {/* Right: Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <ThemeToggle />
-          <Link
-            href="/settings"
-            className="text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
-          >
-            <Settings className="h-5 w-5" />
-          </Link>
           {isGroupSpecific && !isJoinPage && <GroupNav />}
           <CreateGroupDialog />
           <UserMenu
             displayName={user?.displayName ?? 'My Account'}
+            email={user?.email ?? 'My email'}
             avatarUrl={user?.avatarUrl}
           />
         </div>

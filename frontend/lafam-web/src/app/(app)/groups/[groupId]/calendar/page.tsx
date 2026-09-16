@@ -58,7 +58,7 @@ export default function CalendarPage({
   };
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-background shadow-sm">
+    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-background shadow-sm">
       {/* Calendar Header */}
       <CalendarHeader
         currentDate={currentDate}

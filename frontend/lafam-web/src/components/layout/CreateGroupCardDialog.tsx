@@ -58,11 +58,13 @@ export function CreateGroupCardDialog() {
       <DialogTrigger
         render={
           <button type="button" className="w-full text-left">
-            <Card className="flex h-55 cursor-pointer flex-col justify-center overflow-hidden rounded-xl border-gray-100 dark:border-gray-700 bg-white dark:bg-background shadow-sm transition-shadow hover:shadow-md">
-              <div className="flex flex-col items-center gap-3 p-4">
-                <div className="flex items-center gap-4">
-                  <Plus className="h-6 w-6 text-gray-500 dark:text-gray-400" />
-                  <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">Create Group</span>
+            <Card className="dark:bg-background flex h-32 sm:h-55 cursor-pointer flex-col justify-center overflow-hidden rounded-xl opacity-60 border-gray-100 border-2  bg-white shadow-sm transition-shadow hover:shadow-md dark:border-gray-700">
+              <div className="flex flex-col items-center gap-2 sm:gap-3 p-3 sm:p-4">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <Plus className="h-5 w-5 sm:h-6 sm:w-6 text-gray-500 dark:text-gray-400" />
+                  <span className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    Create Group
+                  </span>
                 </div>
               </div>
             </Card>

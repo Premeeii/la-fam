@@ -56,8 +56,9 @@ export function CreateGroupDialog() {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
-          <Button className="hidden h-10 gap-2 rounded-lg bg-blue-600 px-4 text-white shadow-sm hover:bg-blue-700 sm:flex">
-            <Plus className="h-4 w-4 fill-white" /> Create Group
+          <Button className="flex h-9 items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-2.5 text-xs font-medium text-white shadow-sm hover:bg-blue-700 sm:h-10 sm:px-4">
+            <Plus className="h-4 w-4" />
+            <span className="inline">Create Group</span>
           </Button>
         }
       ></DialogTrigger>

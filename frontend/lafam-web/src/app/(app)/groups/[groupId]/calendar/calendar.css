@@ -1,7 +1,7 @@
           /* Custom FullCalendar Overrides for Tailwind look */
           .custom-calendar-wrapper .fc {
-              --fc-border-color: #f3f4f6;
-              /* Tailwind gray-100 */
+              --fc-border-color: #e5e7eb;
+              /* Tailwind gray-200 */
               --fc-daygrid-event-dot-width: 8px;
               --fc-event-text-color: #fff;
               --fc-today-bg-color: #eff6ff;
@@ -29,7 +29,7 @@
 
           .custom-calendar-wrapper .fc-theme-standard td,
           .custom-calendar-wrapper .fc-theme-standard th {
-              border-color: #f3f4f6;
+              border-color: #e5e7eb;
           }
 
           .custom-calendar-wrapper .fc-daygrid-day-number {

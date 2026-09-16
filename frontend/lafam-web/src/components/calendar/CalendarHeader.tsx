@@ -20,7 +20,7 @@ export function CalendarHeader({
   onAddEvent,
 }: CalendarHeaderProps) {
   return (
-    <div className="flex items-start justify-between gap-2 border-b border-gray-100 dark:border-gray-700 p-4 sm:items-center sm:p-6">
+    <div className="flex items-start justify-between gap-2 border-b border-gray-200 dark:border-gray-700 p-4 sm:items-center sm:p-6">
       <h1 className="w-24 min-w-0 shrink text-xl leading-tight font-semibold wrap-break-word text-gray-900 dark:text-gray-100 sm:w-auto sm:text-2xl">
         {format(currentDate, 'MMMM yyyy')}
       </h1>
