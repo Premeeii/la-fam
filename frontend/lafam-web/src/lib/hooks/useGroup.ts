@@ -129,6 +129,31 @@ export function useLeaveGroup() {
   });
 }
 
+export function useKickMember() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({groupId, userId}: {groupId: string, userId: string}) => {
+      const response = await apiClient.delete(
+        `/api/groups/${groupId}/members/${userId}`,
+      );
+
+      return response.data;
+    },
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['groupMembers', variables.groupId],
+      });
+      toast.success('Member removed successfully');
+    },
+    onError: (error: any) => {
+      const msg = error.response?.data?.message || 'Failed to kick a member';
+      toast.error(msg);
+    },
+  });
+}
+
 export function useUpdateGroup(groupId: string) {
   const queryClient = useQueryClient();
 
