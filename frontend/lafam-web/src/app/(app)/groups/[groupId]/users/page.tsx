@@ -1,9 +1,17 @@
 'use client';
 
 import { use } from 'react';
-import { useGroupMembers } from '@/lib/hooks/useGroup';
+import { useGroupMembers, useGroup, useKickMember } from '@/lib/hooks/useGroup';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Ellipsis, UserMinus, User } from 'lucide-react';
 
 function getInitials(name?: string) {
   if (!name) return 'U';
@@ -24,6 +32,14 @@ export default function UsersPage({
     error,
   } = useGroupMembers(resolvedParams.groupId);
 
+  const { data: groups } = useGroup();
+  const currentGroup = groups?.find(
+    (g) => g.groupId === resolvedParams.groupId,
+  );
+  const isOwner = currentGroup?.role === 'OWNER';
+
+  const { mutate: kickMember, isPending: isKicking } = useKickMember();
+
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
@@ -31,7 +47,9 @@ export default function UsersPage({
       </h1>
       <div className="border-t border-gray-400"></div>
       {isLoading ? (
-        <div className="text-gray-500 dark:text-gray-400">Loading members...</div>
+        <div className="text-gray-500 dark:text-gray-400">
+          Loading members...
+        </div>
       ) : error ? (
         <div className="text-red-500">Failed to load members</div>
       ) : (
@@ -39,9 +57,48 @@ export default function UsersPage({
           {members?.map((member) => (
             <Card
               key={member.userId}
-              className="flex h-80 flex-col items-center justify-center rounded-xl border-gray-200 dark:border-gray-700 bg-white dark:bg-background p-8 text-center shadow-sm transition-shadow hover:shadow-md"
+              className="dark:bg-background relative flex h-80 flex-col items-center justify-center rounded-xl border-gray-200 bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md dark:border-gray-700"
             >
-              <Avatar className="mb-4 h-24 w-24 border border-gray-100 dark:border-gray-700 shadow-sm">
+              <div className="absolute top-4 right-4">
+                <DropdownMenu>
+                  <DropdownMenuTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                      >
+                        <span className="sr-only">Open menu</span>
+                        <Ellipsis className="h-4 w-4" />
+                      </Button>
+                    }
+                  ></DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-40">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>View Profile</span>
+                    </DropdownMenuItem>
+                    
+                    {isOwner && member.role !== 'OWNER' && (
+                      <DropdownMenuItem
+                        className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-700 dark:text-red-500 dark:focus:bg-red-950/50 dark:focus:text-red-400"
+                        onClick={() =>
+                          kickMember({
+                            groupId: resolvedParams.groupId,
+                            userId: member.userId || 'undefined',
+                          })
+                        }
+                        disabled={isKicking}
+                      >
+                        <UserMinus className="mr-2 h-4 w-4" />
+                        <span>Kick from group</span>
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              <Avatar className="mb-4 h-24 w-24 border border-gray-100 shadow-sm dark:border-gray-700">
                 {member.userAvatarUrl && (
                   <AvatarImage
                     src={member.userAvatarUrl}
@@ -61,7 +118,7 @@ export default function UsersPage({
                   ? `${member.bio.substring(0, 20)}...`
                   : member.bio}
               </h4>
-              <p className="mt-1 text-sm font-medium text-gray-400 dark:text-gray-500 capitalize">
+              <p className="mt-1 text-sm font-medium text-gray-400 capitalize dark:text-gray-500">
                 {member.role?.toLowerCase() || 'Member'}
               </p>
             </Card>

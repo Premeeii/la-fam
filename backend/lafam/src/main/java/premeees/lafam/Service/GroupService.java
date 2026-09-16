@@ -207,6 +207,41 @@ public class GroupService {
     }
 
     @Transactional
+    public void kickMember(UUID groupId, UUID userIdToKick, String email) {
+        User requester = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+        if (group.getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group has been deleted");
+        }
+
+        // Check requester's role
+        GroupMember requesterMember = groupMemberRepository.findByGroupIdAndUserId(groupId, requester.getId())
+                .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
+
+        if (!"OWNER".equals(requesterMember.getRole())) {
+            throw new IllegalArgumentException("Only the group owner can kick members");
+        }
+
+        if (requester.getId().equals(userIdToKick)) {
+            throw new IllegalArgumentException("You cannot kick yourself");
+        }
+
+        // Check target member
+        GroupMember targetMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userIdToKick)
+                .orElseThrow(() -> new IllegalArgumentException("Target user is not a member of this group"));
+
+        if (targetMember.getLeavedAt() != null) {
+            throw new IllegalArgumentException("User has already left or been kicked from this group");
+        }
+
+        targetMember.setLeavedAt(OffsetDateTime.now());
+        groupMemberRepository.save(targetMember);
+    }
+
+    @Transactional
     public GroupMemberResponse joinGroupByToken(String token, String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
