@@ -104,7 +104,6 @@ export default function BillsPage({
 
   return (
     <div className="flex flex-col h-full w-full">
-      <h1 className="text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-6">Bills</h1>
 
       <BillsHeader
         groupId={groupId}

@@ -43,7 +43,7 @@ export function UpcomingEvents({ groupId }: { groupId: string }) {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
   }
 
   if (isLoadingEvents) {
@@ -71,14 +71,14 @@ export function UpcomingEvents({ groupId }: { groupId: string }) {
         return (
           <div 
             key={event.id} 
-            className="flex flex-col justify-between p-4 bg-white dark:bg-gray-700 border border-gray-500 rounded-xl shadow-sm relative"
+            className="flex flex-col justify-between p-4 bg-white dark:bg-gray-700 rounded-md shadow-sm relative light:border light:border-gray-200"
           >
             <div className="flex justify-between items-start mb-4">
               <div className="flex flex-col">
                 <h3 className="font-semibold text-gray-900 dark:text-gray-100">{event.title}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">{event.description || 'No description'}</p>
               </div>
-              <div className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded shadow-sm">
+              <div className="bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded shadow-sm">
                 {/*its will be required because of validation*/}
                 {formatDate(event.startDate!) } 
               </div>
