@@ -78,6 +78,15 @@ public class GroupController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{groupId}/members/{userId}")
+    public ResponseEntity<Void> kickMember(
+            @PathVariable UUID groupId,
+            @PathVariable UUID userId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        groupService.kickMember(groupId, userId, userDetails.getUsername());
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/join")
     public ResponseEntity<GroupMemberResponse> joinGroup(
             @RequestParam String token,
