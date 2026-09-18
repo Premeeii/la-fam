@@ -29,7 +29,7 @@ export function BillsContainer({ groupId }: { groupId: string }) {
   };
 
   return (
-    <div className="flex w-full flex-col rounded-[20px] border border-gray-200 dark:border-gray-700 bg-white dark:bg-background p-6 shadow-sm">
+    <div className="flex w-full flex-col rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-background p-6 shadow-sm">
       <h2 className="mb-5 text-xl font-semibold text-gray-800 dark:text-gray-200">Bills</h2>
 
       <div className="flex flex-1 flex-col gap-3">

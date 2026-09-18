@@ -66,7 +66,7 @@ export function UpcomingWeek({ groupId }: { groupId: string }) {
         </Link>
       </div>
 
-      <div className="border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-background p-4 sm:p-6 md:p-8 shadow-sm flex justify-between items-center overflow-x-auto custom-scrollbar">
+      <div className="border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-background p-4 sm:p-6 md:p-8 shadow-sm flex justify-between items-center overflow-x-auto custom-scrollbar">
         {weekDays.map((day, i) => (
           <div key={i} className="flex flex-col items-center justify-center gap-1 sm:gap-2 min-w-[32px] sm:min-w-[40px]">
             <span className="text-[10px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400">{day.dayName}</span>
