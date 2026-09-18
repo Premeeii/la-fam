@@ -57,12 +57,12 @@ export function CreateGroupPopover() {
         align="end"
         sideOffset={12}
       >
-        <div className="mb-3">
+        <div className="mb-1">
           <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-            Create New Group
+            Create Group
           </h3>
           <p className="mt-1 text-sm text-gray-500">
-            Set up a new space for your group to stay connected.
+            Set up a group for manage or organize Calendar and Receipt.
           </p>
         </div>
 
