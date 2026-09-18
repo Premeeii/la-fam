@@ -44,7 +44,7 @@ export function InviteMemberPopover({ groupId }: { groupId: string }) {
             />
             <Button 
               size="sm" 
-              className="bg-blue-600 hover:bg-blue-700 text-white h-9 px-4 rounded-full font-medium"
+              className="bg-blue-600 hover:bg-blue-700 text-white h-9 px-4 rounded-md font-medium"
               onClick={handleGenerate}
               disabled={isGenerating}
             >

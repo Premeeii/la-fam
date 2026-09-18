@@ -34,7 +34,7 @@ export function UsersContainer({ groupId }: UsersContainerProps) {
   }
 
   return (
-    <div className="dark:bg-background mt-6 flex w-full flex-col rounded-[20px] border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700">
+    <div className="dark:bg-background mt-6 flex w-full flex-col rounded-md border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700">
       <h2 className="mb-5 text-xl font-semibold text-gray-800 dark:text-gray-200">
         Members
       </h2>

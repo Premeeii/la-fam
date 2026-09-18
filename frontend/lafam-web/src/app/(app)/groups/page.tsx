@@ -21,7 +21,7 @@ function GroupCardItem({ group }: { group: GroupMemberResponse }) {
   };
 
   return (
-    <Card className="dark:bg-background relative flex h-32 sm:h-55 flex-col overflow-hidden rounded-xl border-gray-100 border-2 shadow-sm transition-shadow hover:shadow-md dark:border-gray-700">
+    <Card className="dark:bg-neutral-900 relative flex h-32 sm:h-55 flex-col overflow-hidden rounded-xl shadow-sm transition-shadow hover:shadow-md bg-gray-200 dark:border-gray-700">
       <div className="flex flex-1 items-center gap-2.5 sm:gap-4 p-3 sm:p-6 min-h-0">
         <Avatar className="h-10 w-10 sm:h-20 sm:w-20 shrink-0 border border-gray-100 shadow-sm dark:border-gray-700">
           {group.groupAvatarUrl && (
@@ -41,7 +41,7 @@ function GroupCardItem({ group }: { group: GroupMemberResponse }) {
         </div>
       </div>
 
-      <div className="dark:bg-background mt-auto flex items-center justify-between border-t border-gray-50 bg-white px-3 py-2 sm:px-6 sm:py-4 dark:border-gray-700">
+      <div className="dark:bg-neutral-900 mt-auto flex items-center justify-between border-t border-gray-100 bg-gray-200 px-3 py-2 sm:px-6 sm:py-4 dark:border-gray-700">
         <button
           type="button"
           onClick={handleBookmarkToggle}
@@ -87,8 +87,7 @@ export default function GroupPage() {
           {/* bookmarked */}
           {bookmarkedGroups.length > 0 && (
             <div className="flex flex-col gap-6 ">
-              <div className="w-full border-t border-gray-300 dark:border-gray-700" />
-              <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                 BOOKMARKED GROUPS
               </h2>
 
@@ -100,13 +99,13 @@ export default function GroupPage() {
                   />
                 ))}
               </div>
+              <div className="w-full border-t mt-6 border-gray-300 dark:border-gray-700" />
             </div>
           )}
 
           {/* YOUR GROUPS SECTION (INCLUDES ALL GROUPS) */}
           <div className="flex flex-col gap-6 ">
-            <div className="w-full border-t border-gray-300 dark:border-gray-700" />
-            <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                 GROUPS
               </h2>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
