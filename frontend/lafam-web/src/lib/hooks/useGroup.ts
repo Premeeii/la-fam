@@ -39,12 +39,14 @@ export function useCreateGroup() {
 
   return useMutation({
     mutationFn: (data: AddGroupFormValues) => createGroup(data),
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ['userGroups'] });
       toast.success('Create Group Success');
-      if (data.groupId) {
-        setGroupId(data.groupId);
-        router.push(`/groups/${data.groupId}/dashboard`);
+      
+      const newGroupId = data.id || data.groupId;
+      if (newGroupId) {
+        setGroupId(newGroupId);
+        router.push(`/groups/${newGroupId}/dashboard`);
       }
     },
     onError: () => {

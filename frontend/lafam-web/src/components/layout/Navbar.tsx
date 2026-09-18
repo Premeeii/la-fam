@@ -16,7 +16,7 @@ import {
 
 import { useLogout } from '@/lib/hooks/useLogout';
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
-import { CreateGroupDialog } from './CreateGroupDialog';
+import { CreateGroupPopover } from './CreateGroupPopover';
 import { GroupNav } from './GroupNav';
 import { SearchGroupBar } from './SearchGroupBar';
 import { usePathname } from 'next/navigation';
@@ -131,7 +131,7 @@ export function Navbar() {
         <div className="flex items-center gap-2 sm:gap-4">
           <ThemeToggle />
           {isGroupSpecific && !isJoinPage && <GroupNav />}
-          <CreateGroupDialog />
+          <CreateGroupPopover />
           <UserMenu
             displayName={user?.displayName ?? 'My Account'}
             email={user?.email ?? 'My email'}
