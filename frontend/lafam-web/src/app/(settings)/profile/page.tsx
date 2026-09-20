@@ -104,7 +104,7 @@ export default function ProfilePage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push('/groups')}
           className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
           aria-label="Go back"
         >

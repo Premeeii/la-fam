@@ -43,10 +43,7 @@ export default function UsersPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-        MEMBERS
-      </h1>
-      <div className="border-t border-gray-400"></div>
+      <div className="border-t border-gray-100"></div>
       {isLoading ? (
         <div className="text-gray-500 dark:text-gray-400">
           Loading members...
@@ -58,7 +55,7 @@ export default function UsersPage({
           {members?.map((member) => (
             <Card
               key={member.userId}
-              className="dark:bg-background relative flex h-80 flex-col items-center justify-center rounded-xl border-gray-200 bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md dark:border-gray-700"
+              className="dark:bg-background relative flex h-80 flex-col items-center justify-center rounded-md border-gray-200 bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md dark:border-gray-700"
             >
               <div className="absolute top-4 right-4">
                 <DropdownMenu>

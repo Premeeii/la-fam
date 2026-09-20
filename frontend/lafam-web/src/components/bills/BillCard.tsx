@@ -26,7 +26,7 @@ export function BillCard({ bill, groupId, canEdit, onEdit }: BillCardProps) {
   };
 
   return (
-    <div className="flex items-stretch bg-white dark:bg-background border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
+    <div className="flex items-stretch bg-white dark:bg-background border border-gray-200 dark:border-gray-700 rounded-md shadow-sm overflow-hidden">
       {/* Left section */}
       <div className="flex-1 p-5 flex flex-col gap-1 border-r border-gray-100 dark:border-gray-700">
         <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{bill.categoryName}</span>

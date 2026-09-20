@@ -21,7 +21,7 @@ function GroupCardItem({ group }: { group: GroupMemberResponse }) {
   };
 
   return (
-    <Card className="dark:bg-neutral-900 relative flex h-32 sm:h-55 flex-col overflow-hidden rounded-xl shadow-sm transition-shadow hover:shadow-md bg-gray-200 dark:border-gray-700">
+    <Card className="dark:bg-neutral-900 relative flex h-28 sm:h-55 flex-col overflow-hidden rounded-xl shadow-sm transition-shadow hover:shadow-md bg-gray-200 dark:border-gray-700">
       <div className="flex flex-1 items-center gap-2.5 sm:gap-4 p-3 sm:p-6 min-h-0">
         <Avatar className="h-10 w-10 sm:h-20 sm:w-20 shrink-0 border border-gray-100 shadow-sm dark:border-gray-700">
           {group.groupAvatarUrl && (
@@ -41,7 +41,7 @@ function GroupCardItem({ group }: { group: GroupMemberResponse }) {
         </div>
       </div>
 
-      <div className="dark:bg-neutral-900 mt-auto flex items-center justify-between border-t border-gray-100 bg-gray-200 px-3 py-2 sm:px-6 sm:py-4 dark:border-gray-700">
+      <div className="dark:bg-neutral-900 mt-auto flex items-center justify-between bg-gray-200 px-3 py-2 sm:px-6 sm:py-4 dark:border-gray-700">
         <button
           type="button"
           onClick={handleBookmarkToggle}

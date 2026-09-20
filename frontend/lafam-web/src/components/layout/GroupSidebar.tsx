@@ -76,7 +76,7 @@ export function GroupSidebar() {
   };
 
   return (
-    <aside className="hidden shrink-0 border-r border-gray-100 dark:border-gray-700 dark:bg-background lg:flex lg:dark:bg-background lg:dark:border-gray-700">
+    <aside className="hidden shrink-0 border-gray-100 dark:border-gray-700 dark:bg-background lg:flex lg:dark:bg-background lg:dark:border-gray-700">
       {/* 1st Column: Group Switcher */}
       <div className="flex w-22 flex-col items-center gap-4 border-r border-gray-100 dark:border-gray-700 bg-gray-50/30 dark:bg-gray-800/30 py-4 lg:dark:bg-background lg:dark:border-gray-700">
         <div className="my-1 h-px w-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
