@@ -242,6 +242,45 @@ public class GroupService {
     }
 
     @Transactional
+    public void transferOwnership(UUID groupId, UUID newOwnerId, String email) {
+        User requester = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("Group not found"));
+        if (group.getDeletedAt() != null) {
+            throw new IllegalArgumentException("Group has been deleted");
+        }
+
+        // Check requester's role
+        GroupMember currentOwner = groupMemberRepository.findByGroupIdAndUserId(groupId, requester.getId())
+                .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
+
+        if (!"OWNER".equals(currentOwner.getRole())) {
+            throw new IllegalArgumentException("Only the group owner can transfer ownership");
+        }
+
+        if (requester.getId().equals(newOwnerId)) {
+            throw new IllegalArgumentException("You are already the owner of this group");
+        }
+
+        // Check target member
+        GroupMember newOwner = groupMemberRepository.findByGroupIdAndUserId(groupId, newOwnerId)
+                .orElseThrow(() -> new IllegalArgumentException("Target user is not a member of this group"));
+
+        if (newOwner.getLeavedAt() != null) {
+            throw new IllegalArgumentException("Target user has left the group and cannot become owner");
+        }
+
+        // Transfer roles
+        currentOwner.setRole("MEMBER");
+        newOwner.setRole("OWNER");
+
+        groupMemberRepository.save(currentOwner);
+        groupMemberRepository.save(newOwner);
+    }
+
+    @Transactional
     public GroupMemberResponse joinGroupByToken(String token, String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));

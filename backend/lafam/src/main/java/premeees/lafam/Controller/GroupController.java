@@ -87,6 +87,15 @@ public class GroupController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{groupId}/members/{userId}/transfer-ownership")
+    public ResponseEntity<Void> transferOwnership(
+            @PathVariable UUID groupId,
+            @PathVariable UUID userId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        groupService.transferOwnership(groupId, userId, userDetails.getUsername());
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/join")
     public ResponseEntity<GroupMemberResponse> joinGroup(
             @RequestParam String token,
