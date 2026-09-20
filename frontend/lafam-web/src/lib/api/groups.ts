@@ -85,3 +85,16 @@ export async function confirmGroupAvatarUpload(
 
   return response.data;
 }
+
+export async function transferOwnership({
+  groupId,
+  userId,
+}: {
+  groupId: string;
+  userId: string;
+}) {
+  const response = await apiClient.patch(
+    `/api/groups/${groupId}/members/${userId}/transfer-ownership`
+  );
+  return response.data;
+}

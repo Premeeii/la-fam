@@ -7,6 +7,10 @@ import {
   leaveGroup,
   joinGroup,
   previewInviteToken,
+  requestGroupAvatarUploadUrl,
+  uploadGroupFileToR2,
+  confirmGroupAvatarUpload,
+  transferOwnership,
 } from '../api/groups';
 import type { AddGroupFormValues } from '../schemas/group';
 import { toast } from 'sonner';
@@ -196,6 +200,34 @@ export function useGroupBookmark(groupId: string) {
     },
      onError: () => {
       toast.error('Failed to bookmark a group');
+    },
+  });
+}
+
+export function useTransferOwnership() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      groupId,
+      userId,
+    }: {
+      groupId: string;
+      userId: string;
+    }) => {
+      return transferOwnership({ groupId, userId });
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['groupMembers', variables.groupId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['userGroups'],
+      });
+      toast.success('Ownership transferred successfully');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to transfer ownership');
     },
   });
 }
