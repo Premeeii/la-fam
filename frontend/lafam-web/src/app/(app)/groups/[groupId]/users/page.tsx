@@ -1,7 +1,7 @@
 'use client';
 
 import { use } from 'react';
-import { useGroupMembers, useGroup, useKickMember } from '@/lib/hooks/useGroup';
+import { useGroupMembers, useGroup, useKickMember, useTransferOwnership } from '@/lib/hooks/useGroup';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Ellipsis, UserMinus, User } from 'lucide-react';
+import { Ellipsis, UserMinus, User, Crown } from 'lucide-react';
 
 function getInitials(name?: string) {
   if (!name) return 'U';
@@ -39,6 +39,7 @@ export default function UsersPage({
   const isOwner = currentGroup?.role === 'OWNER';
 
   const { mutate: kickMember, isPending: isKicking } = useKickMember();
+  const { mutate: transferOwner, isPending: isTransferring } = useTransferOwnership();
 
   return (
     <div className="flex flex-col gap-6">
@@ -78,6 +79,22 @@ export default function UsersPage({
                       <User className="mr-2 h-4 w-4" />
                       <span>View Profile</span>
                     </DropdownMenuItem>
+                    
+                    {isOwner && member.role !== 'OWNER' && (
+                      <DropdownMenuItem
+                        className="cursor-pointer focus:bg-gray-100 dark:focus:bg-gray-800"
+                        onClick={() =>
+                          transferOwner({
+                            groupId: resolvedParams.groupId,
+                            userId: member.userId || 'undefined',
+                          })
+                        }
+                        disabled={isTransferring}
+                      >
+                        <Crown className="mr-2 h-4 w-4" />
+                        <span>Make Owner</span>
+                      </DropdownMenuItem>
+                    )}
                     
                     {isOwner && member.role !== 'OWNER' && (
                       <DropdownMenuItem
