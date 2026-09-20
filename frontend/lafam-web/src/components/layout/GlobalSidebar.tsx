@@ -21,7 +21,7 @@ export function GlobalSidebar() {
   ];
 
   return (
-    <aside className="w-48 shrink-0 border-r border-gray-100 dark:border-gray-700 bg-white dark:bg-background min-h-[calc(100vh-4rem)] p-4 flex-col gap-2 hidden lg:flex lg:dark:bg-background lg:dark:border-gray-700">
+    <aside className="w-48 shrink-0  border-gray-100 dark:border-gray-700 bg-white dark:bg-background min-h-[calc(100vh-4rem)] p-4 flex-col gap-2 hidden lg:flex lg:dark:bg-background lg:dark:border-gray-700">
       {navItems.map((item) => {
         const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/settings'); // mock setting
         return (
