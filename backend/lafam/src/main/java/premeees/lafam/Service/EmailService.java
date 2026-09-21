@@ -67,4 +67,46 @@ public class EmailService {
                 .retrieve()
                 .toBodilessEntity();
     }
+
+    public void sendEmailChangeVerificationEmail(String email, String verifyUrl) {
+        Map<String, Object> body = Map.of(
+                "from", fromEmail,
+                "to", List.of(email),
+                "subject", "Verify your email change request - La Fam",
+                "html", """
+                        <h2>Email Change Request</h2>
+
+                        <p>
+                            We received a request to change the email
+                            address associated with your La Fam account.
+                        </p>
+
+                        <p>
+                            <a href="%s">
+                                Verify Email Change
+                            </a>
+                        </p>
+
+                        <p>
+                            This link will expire in 15 minutes.
+                        </p>
+
+                        <p>
+                            If you did not request this change,
+                            please change your password immediately
+                            as someone may have access to your account.
+                        </p>
+                        """.formatted(verifyUrl)
+        );
+
+        restClient.post()
+                .uri(RESEND_URL)
+                .header(
+                        "Authorization",
+                        "Bearer " + resendApiKey
+                )
+                .body(body)
+                .retrieve()
+                .toBodilessEntity();
+    }
 }

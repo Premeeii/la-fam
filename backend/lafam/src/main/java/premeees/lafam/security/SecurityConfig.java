@@ -44,6 +44,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint(restAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/groups/invites/*/preview").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/users/me/email/verify-token").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/users/me/email/confirm-change").permitAll()
                         .requestMatchers("/api/auth/**",
                                 "/api/health",
                                 "/actuator/health",
