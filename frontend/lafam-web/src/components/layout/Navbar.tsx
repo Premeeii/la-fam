@@ -2,7 +2,20 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
-import { Settings, User, LogOut } from 'lucide-react';
+import {
+  Settings,
+  User,
+  LogOut,
+  ChevronRight,
+  Sun,
+  Moon,
+  Laptop,
+} from 'lucide-react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -12,6 +25,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
 } from '@/components/ui/dropdown-menu';
 
 import { useLogout } from '@/lib/hooks/useLogout';
@@ -39,11 +56,12 @@ export function UserMenu({
   avatarUrl?: string | null;
 }) {
   const logoutMutation = useLogout();
+  const { setTheme, theme } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
-        <Avatar className="h-9 w-9 border border-blue-100 ">
+        <Avatar className="h-9 w-9 border border-blue-100">
           {avatarUrl && (
             <AvatarImage src={avatarUrl} alt={displayName ?? 'User'} />
           )}
@@ -54,7 +72,7 @@ export function UserMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80 p-4">
         <DropdownMenuGroup>
-          <DropdownMenuLabel className="font-normal p-2">
+          <DropdownMenuLabel className="p-2 font-normal">
             <div className="flex items-center gap-3">
               <Avatar className="h-10 w-10 shrink-0 border border-blue-100 dark:border-blue-900">
                 {avatarUrl && (
@@ -64,7 +82,7 @@ export function UserMenu({
                   {getInitials(displayName)}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex flex-1 flex-col min-w-0">
+              <div className="flex min-w-0 flex-1 flex-col">
                 <span className="truncate text-sm font-semibold text-gray-900 dark:text-white">
                   {displayName ?? 'My Account'}
                 </span>
@@ -86,6 +104,38 @@ export function UserMenu({
             Settings
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="h-11 cursor-pointer">
+            <div className="flex w-full items-center">
+              Theme
+            </div>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent className="mr-6 flex w-36 flex-col gap-1 p-1">
+              <DropdownMenuItem
+                onClick={() => setTheme('light')}
+                className={`flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors ${theme === 'light' ? 'bg-gray-100 font-medium dark:bg-gray-800' : ''}`}
+              >
+                <Sun className="h-4 w-4" />
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setTheme('dark')}
+                className={`flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors ${theme === 'dark' ? 'bg-gray-100 font-medium dark:bg-gray-800' : ''}`}
+              >
+                <Moon className="h-4 w-4" />
+                Dark
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setTheme('system')}
+                className={`flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors ${theme === 'system' ? 'bg-gray-100 font-medium dark:bg-gray-800' : ''}`}
+              >
+                <Laptop className="h-4 w-4" />
+                System
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
         <DropdownMenuItem
           onClick={() => logoutMutation.mutate()}
           className="h-11 cursor-pointer text-red-500 focus:bg-red-50 focus:text-red-600 dark:focus:bg-red-900/30"
@@ -129,7 +179,6 @@ export function Navbar() {
         <SearchGroupBar />
         {/* Right: Actions */}
         <div className="flex items-center gap-2 sm:gap-4">
-          <ThemeToggle />
           {isGroupSpecific && !isJoinPage && <GroupNav />}
           <CreateGroupPopover />
           <UserMenu
