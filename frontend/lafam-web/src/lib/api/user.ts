@@ -29,3 +29,20 @@ export async function confirmAvatarUpload(objectKey: string) {
     const res = await apiClient.patch('/api/users/me/avatar/confirm', { objectKey });
     return res.data;
 }
+
+
+export async function requestEmailChange(): Promise<void> {
+    await apiClient.post('/api/users/me/email/request-change');
+}
+
+export async function verifyEmailChangeToken(token: string): Promise<void> {
+    await apiClient.get(`/api/users/me/email/verify-token?token=${encodeURIComponent(token)}`);
+}
+
+export async function confirmEmailChange(data: {
+    token: string;
+    newEmail: string;
+    password: string;
+}): Promise<void> {
+    await apiClient.post('/api/users/me/email/confirm-change', data);
+}
