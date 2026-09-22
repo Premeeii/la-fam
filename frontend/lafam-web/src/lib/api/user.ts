@@ -46,3 +46,7 @@ export async function confirmEmailChange(data: {
 }): Promise<void> {
     await apiClient.post('/api/users/me/email/confirm-change', data);
 }
+
+export async function deleteAccount(password: string): Promise<void> {
+    await apiClient.delete('/api/users/me', { data: { password } });
+}

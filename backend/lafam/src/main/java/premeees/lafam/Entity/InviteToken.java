@@ -24,7 +24,7 @@ public class InviteToken {
     private String token;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invited_by", nullable = false)
+    @JoinColumn(name = "invited_by")
     private User invitedBy;
 
     @Column(name = "invited_email", length = 255)
