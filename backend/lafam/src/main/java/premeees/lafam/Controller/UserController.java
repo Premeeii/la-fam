@@ -3,6 +3,7 @@ package premeees.lafam.Controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import premeees.lafam.Service.AccountDeletionService;
 import premeees.lafam.Service.UserService;
 import premeees.lafam.dto.request.ChangePasswordRequest;
 import premeees.lafam.dto.request.UpdateProfileRequest;
 import premeees.lafam.dto.response.AvatarUploadResponse;
 import premeees.lafam.dto.request.ConfirmAvatarRequest;
+import premeees.lafam.dto.request.DeleteAccountRequest;
 import premeees.lafam.dto.response.UserResponse;
 
 @RestController
@@ -24,9 +27,11 @@ import premeees.lafam.dto.response.UserResponse;
 public class UserController {
 
     private final UserService userService;
+    private final AccountDeletionService accountDeletionService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AccountDeletionService accountDeletionService) {
         this.userService = userService;
+        this.accountDeletionService = accountDeletionService;
     }
 
     @GetMapping("/me")
@@ -53,10 +58,9 @@ public class UserController {
 
     @PostMapping("/me/avatar/upload-url")
     public ResponseEntity<AvatarUploadResponse> requestAvatarUploadUrl(
-        @RequestParam String contentType,
-        @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        if(!contentType.startsWith("image/")) {
+            @RequestParam String contentType,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        if (!contentType.startsWith("image/")) {
             return ResponseEntity.badRequest().build();
         }
         AvatarUploadResponse request = userService.requestAvatarUpload(userDetails.getUsername(), contentType);
@@ -65,12 +69,18 @@ public class UserController {
 
     @PatchMapping("/me/avatar/confirm")
     public ResponseEntity<UserResponse> confirmAvatarUpload(
-        @Valid @RequestBody ConfirmAvatarRequest request,
-        @AuthenticationPrincipal UserDetails userDetails
-    ) {
+            @Valid @RequestBody ConfirmAvatarRequest request,
+            @AuthenticationPrincipal UserDetails userDetails) {
         UserResponse response = userService.confirmAvatarUpload(
                 userDetails.getUsername(), request.getObjectKey());
         return ResponseEntity.ok(response);
     }
-}
 
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteMyAccount(
+            @Valid @RequestBody DeleteAccountRequest request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        accountDeletionService.deleteAccount(userDetails.getUsername(), request.getPassword());
+        return ResponseEntity.noContent().build();
+    }
+}
