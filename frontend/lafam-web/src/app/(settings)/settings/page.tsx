@@ -9,6 +9,7 @@ import { requestEmailChange } from '@/lib/api/user';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { ChangePasswordDialog } from '@/components/setting/ChangePasswordDialog';
+import { ChangeTheme } from '@/components/setting/ChangeTheme';
 
 function maskEmail(email: string): string {
   const [local, domain] = email.split('@');
@@ -71,8 +72,8 @@ export default function SettingsPage() {
 
         <div className="mt-4 divide-gray-200 rounded-lg dark:divide-gray-800">
           {/* Email Row */}
-          <div className="flex items-center justify-between px-4 py-4">
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <div className="flex items-center px-4 py-4 md:justify-between flex-col md:flex-row">
+            <span className="text-sm font-medium w-full md:w-auto text-gray-600 dark:text-gray-400">
               Email
             </span>
 
@@ -109,6 +110,12 @@ export default function SettingsPage() {
             <ChangePasswordDialog />
           </div>
         </div>
+      </div>
+      <div className="mt-6">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          Appearance
+        </h2>
+        <ChangeTheme />
       </div>
     </div>
   );
