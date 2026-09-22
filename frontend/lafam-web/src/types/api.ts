@@ -20,6 +20,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/users/me/email/request-change": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["requestEmailChange"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/me/email/confirm-change": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["confirmEmailChange"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/users/me/change-password": {
         parameters: {
             query?: never;
@@ -254,7 +286,7 @@ export interface paths {
         get: operations["getMyProfile"];
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["deleteMyAccount"];
         options?: never;
         head?: never;
         patch: operations["updateMyProfile"];
@@ -274,6 +306,22 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["confirmAvatarUpload"];
+        trace?: never;
+    };
+    "/api/groups/{groupId}/members/{userId}/transfer-ownership": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["transferOwnership"];
         trace?: never;
     };
     "/api/groups/{groupId}/events/{eventId}": {
@@ -338,6 +386,22 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["confirmAvatarUpload_1"];
+        trace?: never;
+    };
+    "/api/users/me/email/verify-token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["verifyToken"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/groups/{groupId}/members": {
@@ -467,6 +531,12 @@ export interface components {
             createdBy?: string;
             /** Format: date-time */
             createdAt?: string;
+        };
+        ConfirmEmailChangeRequest: {
+            token: string;
+            /** Format: email */
+            newEmail: string;
+            password: string;
         };
         ChangePasswordRequest: {
             currentPassword: string;
@@ -625,6 +695,9 @@ export interface components {
             id?: string;
             name?: string;
         };
+        DeleteAccountRequest: {
+            password: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -670,6 +743,46 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    requestEmailChange: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    confirmEmailChange: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConfirmEmailChangeRequest"];
+            };
+        };
         responses: {
             /** @description OK */
             200: {
@@ -1089,6 +1202,28 @@ export interface operations {
             };
         };
     };
+    deleteMyAccount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteAccountRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     updateMyProfile: {
         parameters: {
             query?: never;
@@ -1134,6 +1269,27 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["UserResponse"];
                 };
+            };
+        };
+    };
+    transferOwnership: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                groupId: string;
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -1301,6 +1457,26 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["GroupResponse"];
                 };
+            };
+        };
+    };
+    verifyToken: {
+        parameters: {
+            query: {
+                token: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
