@@ -8,12 +8,14 @@ import { useMutation } from '@tanstack/react-query';
 import { requestEmailChange } from '@/lib/api/user';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { ChangePasswordDialog } from '@/components/setting/ChangePasswordDialog';
 
 function maskEmail(email: string): string {
   const [local, domain] = email.split('@');
   if (!domain) return email;
   const visible = Math.max(1, Math.min(2, local.length - 2));
-  const masked = local.slice(0, visible) + '*'.repeat(Math.max(0, local.length - visible));
+  const masked =
+    local.slice(0, visible) + '*'.repeat(Math.max(0, local.length - visible));
   return `${masked}@${domain}`;
 }
 
@@ -67,7 +69,7 @@ export default function SettingsPage() {
           Accounts
         </h2>
 
-        <div className="mt-4 divide-y divide-gray-200 rounded-lg dark:divide-gray-800">
+        <div className="mt-4 divide-gray-200 rounded-lg dark:divide-gray-800">
           {/* Email Row */}
           <div className="flex items-center justify-between px-4 py-4">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -99,6 +101,12 @@ export default function SettingsPage() {
                 {requestChangeMutation.isPending ? 'Sending...' : 'Edit'}
               </Button>
             </div>
+          </div>
+          <div className="flex items-center justify-between px-4 py-4">
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              Password
+            </span>
+            <ChangePasswordDialog />
           </div>
         </div>
       </div>
