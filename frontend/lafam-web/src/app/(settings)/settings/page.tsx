@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { ChangePasswordDialog } from '@/components/setting/ChangePasswordDialog';
 import { ChangeTheme } from '@/components/setting/ChangeTheme';
+import { DeleteAccountDialog } from '@/components/setting/DeleteAccountDialog';
 
 function maskEmail(email: string): string {
   const [local, domain] = email.split('@');
@@ -117,6 +118,24 @@ export default function SettingsPage() {
         </h2>
         <ChangeTheme />
       </div>
+      <div className="mt-10">
+  <h2 className="text-lg font-semibold text-red-600">
+    Danger Zone
+  </h2>
+  <div className="mt-4 rounded-lg border border-red-200 dark:border-red-900/50 p-4">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+          Delete Account
+        </p>
+        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          Permanently delete your account and all associated data.
+        </p>
+      </div>
+      <DeleteAccountDialog />
+    </div>
+  </div>
+</div>
     </div>
   );
 }
