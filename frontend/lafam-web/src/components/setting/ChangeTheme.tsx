@@ -64,7 +64,7 @@ export function ChangeTheme() {
             {/* Mini preview */}
             <div className="flex flex-col">
               {/* Navbar preview */}
-              <div className={cn('h-3.5 w-full', t.navbar)} />
+              <div className={cn('h-5 w-full', t.navbar)} />
               {/* Body preview */}
               <div className={cn('h-30 w-full', t.body)} />
             </div>
