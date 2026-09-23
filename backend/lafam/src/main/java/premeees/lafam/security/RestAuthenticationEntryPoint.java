@@ -34,6 +34,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint { 
                 body.put("message", "Full authentication is required to access this resource");
                 body.put("path", request.getRequestURI());
 
-                objectMapper.writeValue(response.getOutputStream(), authException.getMessage());
+                objectMapper.writeValue(response.getOutputStream(), body);
     }
 }
