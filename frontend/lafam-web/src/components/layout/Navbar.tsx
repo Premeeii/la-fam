@@ -93,16 +93,18 @@ export function UserMenu({
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="h-11 cursor-pointer">
-            <Link href="/profile" className="flex w-full items-center">
-              Profile
-            </Link>
+          <DropdownMenuItem
+            className="h-11 cursor-pointer"
+            render={<Link href="/profile" />}
+          >
+            Profile
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuItem className="h-11 cursor-pointer">
-          <Link href="/settings" className="flex w-full items-center">
-            Settings
-          </Link>
+        <DropdownMenuItem
+          className="h-11 cursor-pointer"
+          render={<Link href="/settings" />}
+        >
+          Settings
         </DropdownMenuItem>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="h-11 cursor-pointer">
