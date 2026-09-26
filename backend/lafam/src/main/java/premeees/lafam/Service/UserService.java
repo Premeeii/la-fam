@@ -97,7 +97,7 @@ public class UserService {
         
         //delete oldAvatarUrl out of R2 if has it
         String oldAvatarUrl = user.getAvatarUrl();
-        if (oldAvatarUrl != null && !oldAvatarUrl.isBlank()) {
+        if (oldAvatarUrl != null && !oldAvatarUrl.isBlank() && oldAvatarUrl.contains("avatar/")) {
             try{
                 String oldKey = oldAvatarUrl.substring(oldAvatarUrl.lastIndexOf("avatar/"));
                 // remove timestamp query param if exists

@@ -113,9 +113,14 @@ public class AccountDeletionService {
         if (avatarUrl == null || avatarUrl.isBlank()) return;
 
         try {
-            // avatarUrl = "<https://pub-xxx.r2.dev/avatars/abc-123.webp>"
-            // objectKey = "avatars/abc-123.webp"
-            String objectKey = avatarUrl.substring(avatarUrl.indexOf("avatars/"));
+            int index = avatarUrl.indexOf("avatar/");
+            if (index == -1) return; //catch url not contain avatar/
+
+            String objectKey = avatarUrl.substring(index);
+            if (objectKey.contains("?")) {
+                objectKey = objectKey.substring(0, objectKey.indexOf("?"));
+            }
+
             r2StorageService.deleteObject(objectKey);
         } catch (Exception e) {
             // Log but don't block account deletion
