@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +21,11 @@ import premeees.lafam.dto.request.RefreshTokenRequest;
 import premeees.lafam.dto.request.RegisterRequest;
 import premeees.lafam.dto.response.AuthResponse;
 
+import premeees.lafam.security.rateLimit.RateLimitService;
+import premeees.lafam.security.rateLimit.RateLimitProperties;
+import premeees.lafam.security.rateLimit.RateLimitException;
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.time.Duration;
 
 @RestController
@@ -34,6 +38,8 @@ public class AuthController {
     private final AuthService authService;
     private final TurnstileService turnstileService;
     private final EmailService emailService;
+    private final RateLimitService rateLimitService;
+    private final RateLimitProperties rateLimitProperties;
 
     @Value("${spring.security.jwt.refresh-token-expiration}")
     private long refreshTokenExpiration;
@@ -44,14 +50,22 @@ public class AuthController {
     @Value("${app.auth.refresh-cookie.secure:true}")
     private boolean refreshCookieSecure;
 
-    public AuthController(AuthService authService, TurnstileService turnstileService, EmailService emailService) {
+    public AuthController(AuthService authService, TurnstileService turnstileService, EmailService emailService,
+            RateLimitService rateLimitService, RateLimitProperties rateLimitProperties) {
         this.authService = authService;
         this.turnstileService = turnstileService;
         this.emailService = emailService;
+        this.rateLimitService = rateLimitService;
+        this.rateLimitProperties = rateLimitProperties;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request,
+            HttpServletRequest httpRequest) {
+        String ip = getClientIp(httpRequest);
+        if (!rateLimitService.tryConsume("register:" + ip, rateLimitProperties.register())) {
+            throw new RateLimitException("Too many registration attempts. Please try again later.");
+        }
         if (!turnstileService.verify(request.getTurnstileToken())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Turnstile verification failed");
         }
@@ -61,7 +75,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request,
+            HttpServletRequest httpRequest) {
+        String ip = getClientIp(httpRequest);
+        if (!rateLimitService.tryConsume("login:" + ip, rateLimitProperties.login())) {
+            throw new RateLimitException("Too many login attempts. Please try again later.");
+        }
         if (!turnstileService.verify(request.getTurnstileToken())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Turnstile verification failed");
         }
@@ -71,7 +90,8 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refreshToken(
-            @CookieValue(value = REFRESH_TOKEN_COOKIE, required = false) String refreshToken) { // find refresh token at db
+            @CookieValue(value = REFRESH_TOKEN_COOKIE, required = false) String refreshToken) { // find refresh token at
+                                                                                                // db
         if (refreshToken == null || refreshToken.isBlank()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token is required");
         }
@@ -95,11 +115,11 @@ public class AuthController {
     // @GetMapping("/test-email")
     // public ResponseEntity<Void> testEmail() {
 
-    //     emailService.sendPasswordResetEmail(
-    //             "peam972547@gmail.com",
-    //             "http://localhost:3000/reset-password?token=test");
+    // emailService.sendPasswordResetEmail(
+    // "peam972547@gmail.com",
+    // "http://localhost:3000/reset-password?token=test");
 
-    //     return ResponseEntity.ok().build();
+    // return ResponseEntity.ok().build();
     // }
 
     // as responsecontainer to have authresponse and httpOnly cookie together
@@ -152,5 +172,13 @@ public class AuthController {
                 .path("/")
                 .maxAge(Duration.ZERO)
                 .build();
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
+        if (xForwardedFor != null && !xForwardedFor.isBlank()) {
+            return xForwardedFor.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
     }
 }
