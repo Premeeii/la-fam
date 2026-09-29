@@ -3,8 +3,8 @@
 import { useRef, useState, use } from 'react';
 import './calendar.css';
 import FullCalendar from '@fullcalendar/react';
-import { EventDialog } from '@/components/calendar/EventDialog';
-import { EventResponse } from '@/lib/api/events';
+import { EventPopover } from '@/components/calendar/EventPopover';
+import type { EventResponse } from '@/lib/api/events';
 
 import { CalendarHeader } from '@/components/calendar/CalendarHeader';
 import { CalendarGrid } from '@/components/calendar/CalendarGrid';
@@ -18,11 +18,12 @@ export default function CalendarPage({
   const calendarRef = useRef<FullCalendar>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  // Dialog state
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dialogMode, setDialogMode] = useState<'create' | 'edit'>('create');
+  // Popover state
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [popoverMode, setPopoverMode] = useState<'create' | 'edit'>('create');
   const [selectedEvent, setSelectedEvent] = useState<EventResponse | undefined>();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const handlePrev = () => {
     calendarRef.current?.getApi()?.prev();
@@ -36,25 +37,28 @@ export default function CalendarPage({
     calendarRef.current?.getApi()?.today();
   };
 
-  const handleDateClick = (date: Date) => {
-    setDialogMode('create');
+  const handleDateClick = (date: Date, el?: HTMLElement) => {
+    setPopoverMode('create');
     setSelectedEvent(undefined);
     setSelectedDate(date);
-    setIsDialogOpen(true);
+    setAnchorEl(el || null);
+    setIsPopoverOpen(true);
   };
 
-  const handleEventClick = (event: EventResponse) => {
-    setDialogMode('edit');
+  const handleEventClick = (event: EventResponse, el?: HTMLElement) => {
+    setPopoverMode('edit');
     setSelectedEvent(event);
     setSelectedDate(undefined);
-    setIsDialogOpen(true);
+    setAnchorEl(el || null);
+    setIsPopoverOpen(true);
   };
 
   const handleAddEventClick = () => {
-    setDialogMode('create');
+    setPopoverMode('create');
     setSelectedEvent(undefined);
     setSelectedDate(new Date());
-    setIsDialogOpen(true);
+    setAnchorEl(null);
+    setIsPopoverOpen(true);
   };
 
   return (
@@ -77,14 +81,15 @@ export default function CalendarPage({
         onCurrentDateChange={setCurrentDate}
       />
 
-      {/* Add / Edit Event Dialog */}
-      <EventDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
+      {/* Add / Edit Event Popover */}
+      <EventPopover
+        isOpen={isPopoverOpen}
+        onClose={() => setIsPopoverOpen(false)}
         groupId={groupId}
-        mode={dialogMode}
+        mode={popoverMode}
         initialData={selectedEvent}
         selectedDate={selectedDate}
+        anchorEl={anchorEl}
       />
     </div>
   );
