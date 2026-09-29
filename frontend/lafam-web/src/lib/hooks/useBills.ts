@@ -9,6 +9,7 @@ import {
     getAllCategories,
     type BillResponse,
     type BillCategoryResponse,
+    type PageResponse,
 } from "../api/bills";
 import type { components } from "@/types/api";
 import { toast } from "sonner";
@@ -16,10 +17,10 @@ import { toast } from "sonner";
 type CreateBillRequest = components['schemas']['CreateBillRequest'];
 type UpdateBillRequest = components['schemas']['UpdateBillRequest'];
 
-export function useGroupBills(groupId: string) {
-    return useQuery<BillResponse[]>({
-        queryKey: ['bills', groupId],
-        queryFn: () => getGroupBills(groupId),
+export function useGroupBills(groupId: string, page = 0, size = 5) {
+    return useQuery<PageResponse<BillResponse>>({
+        queryKey: ['bills', groupId, page, size],
+        queryFn: () => getGroupBills(groupId, page, size),
         enabled: !!groupId,
     });
 }
