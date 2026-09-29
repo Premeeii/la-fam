@@ -4,7 +4,7 @@ import { use, useState, useMemo } from 'react';
 import { useGroupBills, useMyBills, useBillsByCategory, useBillCategories } from '@/lib/hooks/useBills';
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 import type { BillResponse } from '@/lib/api/bills';
-import { BillsHeader } from '@/components/bills/BillsHeader';
+import { BillsHeader, type SortOption } from '@/components/bills/BillsHeader';
 import { BillCard } from '@/components/bills/BillCard';
 import { BillDialog } from '@/components/bills/BillDialog';
 import { Pagination } from '@/components/bills/Pagination';
@@ -20,16 +20,17 @@ export default function BillsPage({
   const resolvedParams = use(params);
   const groupId = resolvedParams.groupId;
 
-  const { data: groups, isLoading } = useGroup();
+  const { data: groups } = useGroup();
   
-    // Find the group that matches the current URL parameter
-    const currentGroup = groups?.find(
-      (g) => g.groupId === groupId,
-    );
+  // Find the group that matches the current URL parameter
+  const currentGroup = groups?.find(
+    (g) => g.groupId === groupId,
+  );
 
   // State
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('all'); // 'all' | 'own' | categoryId
+  const [sortOrder, setSortOrder] = useState<SortOption>('newest');
   const [currentPage, setCurrentPage] = useState(1);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState<'create' | 'edit'>('create');
@@ -38,12 +39,24 @@ export default function BillsPage({
   // Data fetching
   const { data: currentUser } = useCurrentUser();
   const { data: categories = [] } = useBillCategories();
-  const { data: allBills = [], isLoading: isLoadingAll } = useGroupBills(groupId);
-  const { data: myBills = [] } = useMyBills(groupId);
+  const { data: rawAllBills, isLoading: isLoadingAll } = useGroupBills(groupId, currentPage - 1, BILLS_PER_PAGE);
+  const { data: rawMyBills } = useMyBills(groupId);
 
   // Determine which category is selected for the category query
   const selectedCategoryId = (activeFilter !== 'all' && activeFilter !== 'own') ? activeFilter : null;
-  const { data: categoryBills = [] } = useBillsByCategory(groupId, selectedCategoryId);
+  const { data: rawCategoryBills } = useBillsByCategory(groupId, selectedCategoryId);
+
+  // Safely extract bills array (handles both raw Array and Spring Page object { content: [...] })
+  const extractBills = (data: any): BillResponse[] => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.content)) return data.content;
+    return [];
+  };
+
+  const allBills = useMemo(() => extractBills(rawAllBills), [rawAllBills]);
+  const myBills = useMemo(() => extractBills(rawMyBills), [rawMyBills]);
+  const categoryBills = useMemo(() => extractBills(rawCategoryBills), [rawCategoryBills]);
 
   // Choose the right bill list based on filter
   const baseBills = useMemo(() => {
@@ -55,31 +68,59 @@ export default function BillsPage({
   // Apply search filter & sort
   const filteredBills = useMemo(() => {
     let result = baseBills;
+
+    // Filter by search query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      result = baseBills.filter(
+      result = result.filter(
         (bill) =>
           bill.title?.toLowerCase().includes(q) ||
-          bill.categoryName?.toLowerCase().includes(q)
+          bill.categoryName?.toLowerCase().includes(q) ||
+          bill.creatorName?.toLowerCase().includes(q)
       );
     }
     
-    // Sort from newest to oldest
+    // Sort bills
     return [...result].sort((a, b) => {
+      if (sortOrder === 'oldest') {
+        const dateA = new Date(a.createdAt || 0).getTime();
+        const dateB = new Date(b.createdAt || 0).getTime();
+        return dateA - dateB;
+      }
+      if (sortOrder === 'amount_desc') {
+        return (b.amount || 0) - (a.amount || 0);
+      }
+      if (sortOrder === 'amount_asc') {
+        return (a.amount || 0) - (b.amount || 0);
+      }
+      // Default: newest
       const dateA = new Date(a.createdAt || 0).getTime();
       const dateB = new Date(b.createdAt || 0).getTime();
       return dateB - dateA;
     });
-  }, [baseBills, searchQuery]);
+  }, [baseBills, searchQuery, sortOrder]);
 
-  // Pagination
-  const totalPages = Math.max(1, Math.ceil(filteredBills.length / BILLS_PER_PAGE));
+  // Pagination total pages calculation
+  const totalPages = useMemo(() => {
+    // If using default view (All bills, no search filter), use backend totalPages
+    if (activeFilter === 'all' && !searchQuery.trim() && rawAllBills && typeof rawAllBills.totalPages === 'number') {
+      return Math.max(1, rawAllBills.totalPages);
+    }
+    // Otherwise calculate client-side total pages
+    return Math.max(1, Math.ceil(filteredBills.length / BILLS_PER_PAGE));
+  }, [activeFilter, searchQuery, rawAllBills, filteredBills.length]);
+
   const paginatedBills = useMemo(() => {
+    // If using default view, backend already returned 5 items for this page
+    if (activeFilter === 'all' && !searchQuery.trim()) {
+      return filteredBills;
+    }
+    // Otherwise slice client-side filtered bills
     const start = (currentPage - 1) * BILLS_PER_PAGE;
     return filteredBills.slice(start, start + BILLS_PER_PAGE);
-  }, [filteredBills, currentPage]);
+  }, [activeFilter, searchQuery, filteredBills, currentPage]);
 
-  // Reset page when filter or search changes
+  // Reset page when filter, search, or sort changes
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
     setCurrentPage(1);
@@ -87,6 +128,11 @@ export default function BillsPage({
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (sort: SortOption) => {
+    setSortOrder(sort);
     setCurrentPage(1);
   };
 
@@ -112,6 +158,8 @@ export default function BillsPage({
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
         activeFilter={activeFilter}
+        sortOrder={sortOrder}
+        onSortChange={handleSortChange}
         onAddBill={handleAddBill}
       />
 

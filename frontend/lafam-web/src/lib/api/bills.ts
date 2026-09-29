@@ -1,13 +1,32 @@
 import { apiClient } from './client';
 import type { components } from '@/types/api';
 
+export interface PageResponse<T> {
+    content: T[];
+    totalPages: number;
+    totalElements: number;
+    number: number;
+    size: number;
+}
+
 export type BillResponse = components['schemas']['BillResponse'];
 export type BillCategoryResponse = components['schemas']['BillCategoryResponse'];
 type CreateBillRequest = components['schemas']['CreateBillRequest'];
 type UpdateBillRequest = components['schemas']['UpdateBillRequest'];
 
-export async function getGroupBills(groupId: string): Promise<BillResponse[]> {
-    const response = await apiClient.get(`/api/groups/${groupId}/bills`);
+export async function getGroupBills(groupId: string, page = 0, size = 5): Promise<PageResponse<BillResponse>> {
+    const response = await apiClient.get(`/api/groups/${groupId}/bills`, {
+        params: { page, size }
+    });
+    if (Array.isArray(response.data)) {
+        return {
+            content: response.data,
+            totalPages: 1,
+            totalElements: response.data.length,
+            number: page,
+            size: size
+        };
+    }
     return response.data;
 }
 

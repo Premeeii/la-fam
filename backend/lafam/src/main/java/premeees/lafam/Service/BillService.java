@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,7 +73,7 @@ public class BillService {
     }
 
     @Transactional(readOnly = true)
-    public List<BillResponse> getGroupBills(UUID groupId, String email) {
+    public Page<BillResponse> getGroupBills(UUID groupId, String email, Pageable pageable) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -84,11 +88,13 @@ public class BillService {
         groupMemberRepository.findByGroupIdAndUserId(groupId, user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("You are not a member of this group"));
 
-        List<Bill> bills = billRepository.findAllByGroupId(groupId);
+        if (pageable == null || pageable.isUnpaged()) { 
+            pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "createdAt")); //new to old
+        }
 
-        return bills.stream()
-                .map(BillResponse::fromEntity)
-                .toList();
+        Page<Bill> bills = billRepository.findAllByGroupId(groupId, pageable);
+
+        return bills.map(BillResponse::fromEntity);
     }
 
     @Transactional

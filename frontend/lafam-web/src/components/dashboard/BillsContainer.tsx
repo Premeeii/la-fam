@@ -11,7 +11,8 @@ export function BillsContainer({ groupId }: { groupId: string }) {
   // sort bills latest first
   const latestBills = useMemo(() => {
     if (!bills) return [];
-    return [...bills]
+    const billsArray = Array.isArray(bills) ? bills : (bills.content || []);
+    return [...billsArray]
       .sort((a, b) => {
         const dateA = new Date(a.createdAt || 0).getTime();
         const dateB = new Date(b.createdAt || 0).getTime();
