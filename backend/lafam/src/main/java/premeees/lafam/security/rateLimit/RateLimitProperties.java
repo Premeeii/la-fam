@@ -7,7 +7,12 @@ public record RateLimitProperties(
         Limit login,
         Limit register,
         Limit forgotPassword,
-        Limit resetPassword
+        Limit resetPassword,
+        Limit createGroup,
+        Limit inviteGroup,
+        Limit billCreate,
+        Limit global
+        
 
 ) {
 
