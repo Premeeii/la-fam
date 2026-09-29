@@ -16,28 +16,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import premeees.lafam.Service.BillService;
 import premeees.lafam.dto.request.CreateBillRequest;
 import premeees.lafam.dto.request.UpdateBillRequest;
 import premeees.lafam.dto.response.BillCategoryResponse;
 import premeees.lafam.dto.response.BillResponse;
+import premeees.lafam.security.rateLimit.RateLimitException;
+import premeees.lafam.security.rateLimit.RateLimitProperties;
+import premeees.lafam.security.rateLimit.RateLimitService;
 
 @RestController
 @RequestMapping("/api")
 public class BillController {
 
     private final BillService billService;
+    private final RateLimitService rateLimitService;
+    private final RateLimitProperties rateLimitProperties;
 
-    public BillController(BillService billService) {
+    public BillController(BillService billService, RateLimitService rateLimitService, RateLimitProperties rateLimitProperties) {
         this.billService = billService;
+        this.rateLimitService = rateLimitService;
+        this.rateLimitProperties = rateLimitProperties;
     }
 
     @PostMapping("/groups/{groupId}/bills")
     public ResponseEntity<BillResponse> createBill(
             @PathVariable UUID groupId,
             @Valid @RequestBody CreateBillRequest request,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal UserDetails userDetails,
+            HttpServletRequest httpRequest) {
+        String ip = getClientIp(httpRequest);
+        if (!rateLimitService.tryConsume("createBill:" + ip, rateLimitProperties.billCreate())) {
+            throw new RateLimitException("Too many bill creation attempts. Please try again later.");
+        }
         BillResponse response = billService.createBill(groupId, request, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -90,5 +103,9 @@ public class BillController {
             @AuthenticationPrincipal UserDetails userDetails) {
         List<BillResponse> bills = billService.getBillsByCategory(groupId, categoryId, userDetails.getUsername());
         return ResponseEntity.ok(bills);
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        return request.getRemoteAddr();
     }
 }

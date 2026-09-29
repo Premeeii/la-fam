@@ -18,14 +18,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import premeees.lafam.Service.GroupService;
+import premeees.lafam.security.rateLimit.RateLimitService;
+import premeees.lafam.security.rateLimit.RateLimitProperties;
+import premeees.lafam.security.rateLimit.RateLimitException;
 import premeees.lafam.dto.request.ConfirmAvatarRequest;
 import premeees.lafam.dto.request.CreateGroupRequest;
 import premeees.lafam.dto.response.AvatarUploadResponse;
 import premeees.lafam.dto.response.GroupMemberResponse;
 import premeees.lafam.dto.response.GroupResponse;
 import premeees.lafam.dto.response.InviteTokenResponse;
+
 import premeees.lafam.dto.response.InviteTokenPreviewResponse;
 
 @RestController
@@ -33,15 +38,24 @@ import premeees.lafam.dto.response.InviteTokenPreviewResponse;
 public class GroupController {
 
     private final GroupService groupService;
+    private final RateLimitService rateLimitService;
+    private final RateLimitProperties rateLimitProperties;
 
-    public GroupController(GroupService groupService) {
+    public GroupController(GroupService groupService, RateLimitService rateLimitService,
+            RateLimitProperties rateLimitProperties) {
         this.groupService = groupService;
+        this.rateLimitService = rateLimitService;
+        this.rateLimitProperties = rateLimitProperties;
     }
 
     @PostMapping
     public ResponseEntity<GroupResponse> createGroup(
             @Valid @RequestBody CreateGroupRequest request,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest httpRequest) {
+        String ip = getClientIp(httpRequest);
+        if (!rateLimitService.tryConsume("create-group:" + ip, rateLimitProperties.createGroup())) {
+            throw new RateLimitException("Too many login attempts. Please try again later.");
+        }
         GroupResponse response = groupService.createGroup(request, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -107,7 +121,11 @@ public class GroupController {
     @PostMapping("/{groupId}/invites")
     public ResponseEntity<InviteTokenResponse> generateInviteToken(
             @PathVariable UUID groupId,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest httpRequest) {
+        String ip = getClientIp(httpRequest);
+        if (!rateLimitService.tryConsume("invite-group:" + ip, rateLimitProperties.inviteGroup())) {
+            throw new RateLimitException("Too many login attempts. Please try again later.");
+        }
         InviteTokenResponse response = groupService.generateInviteToken(groupId, userDetails.getUsername());
         return ResponseEntity.ok(response);
     }
@@ -156,5 +174,9 @@ public class GroupController {
             @AuthenticationPrincipal UserDetails userDetails) {
         GroupMemberResponse response = groupService.toggleBookmarkGroup(groupId, userDetails.getUsername());
         return ResponseEntity.ok(response);
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        return request.getRemoteAddr();
     }
 }
