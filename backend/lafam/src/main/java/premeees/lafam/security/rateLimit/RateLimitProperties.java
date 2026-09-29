@@ -12,7 +12,6 @@ public record RateLimitProperties(
         Limit inviteGroup,
         Limit billCreate,
         Limit global
-        
 
 ) {
 
