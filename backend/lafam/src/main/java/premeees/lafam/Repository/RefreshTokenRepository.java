@@ -20,9 +20,9 @@ public interface RefreshTokenRepository extends JpaRepository <RefreshToken, UUI
     @Query("UPDATE RefreshToken rt SET rt.isRevoked = true WHERE rt.tokenHash = :tokenHash")
     void revokeAllByTokenHash(@Param("tokenHash") String tokenHash);
 
-    @Modifying
-    @Query("UPDATE RefreshToken rt SET rt.isRevoked = true WHERE rt.user = :user")
-     void revokeAllByUser(@Param("user") User user);
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE RefreshToken rt SET rt.isRevoked = true WHERE rt.user = :user AND rt.isRevoked = false")
+    void revokeAllByUser(@Param("user") User user);
 
     @Modifying 
     @Query ("DELETE FROM RefreshToken t WHERE t.expiresAt < :now OR t.isRevoked = true")

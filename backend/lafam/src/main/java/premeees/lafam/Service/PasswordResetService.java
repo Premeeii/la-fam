@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import premeees.lafam.Entity.PasswordResetToken;
 import premeees.lafam.Entity.User;
 import premeees.lafam.Repository.PasswordResetTokenRepository;
+import premeees.lafam.Repository.RefreshTokenRepository;
 import premeees.lafam.Repository.UserRepository;
 
 @Service
@@ -22,6 +23,7 @@ public class PasswordResetService {
     private static final int TOKEN_EXPIRY_MINUTES = 15;
 
     private final PasswordResetTokenRepository tokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
@@ -29,11 +31,13 @@ public class PasswordResetService {
     public PasswordResetService(PasswordResetTokenRepository tokenRepository,
                                 UserRepository userRepository,
                                 EmailService emailService,
-                                PasswordEncoder passwordEncoder) {
+                                PasswordEncoder passwordEncoder,
+                                RefreshTokenRepository refreshTokenRepository) {
         this.tokenRepository = tokenRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     /**
@@ -87,6 +91,7 @@ public class PasswordResetService {
         // change password
         User user = resetToken.getUser();
         user.setPasswordHash(passwordEncoder.encode(newPassword));
+        refreshTokenRepository.revokeAllByUser(user);
         userRepository.save(user);
 
         // mark token as used
