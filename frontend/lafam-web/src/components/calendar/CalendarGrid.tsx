@@ -11,8 +11,8 @@ import type { EventResponse } from '@/lib/api/events';
 interface CalendarGridProps {
   groupId: string;
   calendarRef?: RefObject<FullCalendar | null>;
-  onDateClick: (date: Date) => void;
-  onEventClick: (event: EventResponse) => void;
+  onDateClick: (date: Date, el?: HTMLElement) => void;
+  onEventClick: (event: EventResponse, el?: HTMLElement) => void;
   onCurrentDateChange: (date: Date) => void;
 }
 
@@ -70,12 +70,13 @@ export function CalendarGrid({
         }}
 
         dateClick={(arg) => {
-          onDateClick(arg.date);
+          onDateClick(arg.date, arg.dayEl as HTMLElement);
         }}
 
-        eventClick={(arg) => { //send data to parent(page.tsx) to open dialog
+        eventClick={(arg) => { //send data to parent(page.tsx) to open popover
           onEventClick(
-            arg.event.extendedProps as EventResponse 
+            arg.event.extendedProps as EventResponse,
+            arg.el as HTMLElement
           );
         }}
 
