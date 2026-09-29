@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
 import premeees.lafam.Entity.User;
+import premeees.lafam.Repository.RefreshTokenRepository;
 import premeees.lafam.Repository.UserRepository;
 import premeees.lafam.dto.request.ChangePasswordRequest;
 import premeees.lafam.dto.request.UpdateProfileRequest;
@@ -18,11 +19,13 @@ import premeees.lafam.dto.response.UserResponse;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final R2StorageService r2StorageService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, R2StorageService r2StorageService, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository, R2StorageService r2StorageService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
         this.r2StorageService = r2StorageService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -66,6 +69,7 @@ public class UserService {
         }
 
         user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        refreshTokenRepository.revokeAllByUser(user);
         userRepository.save(user);
     }
 
