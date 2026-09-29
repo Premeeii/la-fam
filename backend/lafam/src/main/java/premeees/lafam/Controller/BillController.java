@@ -3,6 +3,10 @@ package premeees.lafam.Controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -56,10 +60,11 @@ public class BillController {
     }
 
     @GetMapping("/groups/{groupId}/bills")
-    public ResponseEntity<List<BillResponse>> getGroupBills(
+    public ResponseEntity<Page<BillResponse>> getGroupBills(
             @PathVariable UUID groupId,
-            @AuthenticationPrincipal UserDetails userDetails) {
-        List<BillResponse> bills = billService.getGroupBills(groupId, userDetails.getUsername());
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<BillResponse> bills = billService.getGroupBills(groupId, userDetails.getUsername(), pageable);
         return ResponseEntity.ok(bills);
     }
 
