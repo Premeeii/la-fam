@@ -41,13 +41,12 @@ export function EventPopover({
 
   const canEdit = mode === 'create' || (mode === 'edit' && initialData?.ownerId === currentUser?.id);
 
-  const defaultStartDate = selectedDate
-    ? new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
-    : new Date().toISOString().slice(0, 16);
+  const baseDate = selectedDate
+    ? new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000)
+    : new Date();
 
-  const defaultEndDate = selectedDate
-    ? new Date(selectedDate.getTime() + 60 * 60 * 1000 - selectedDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
-    : new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16);
+  const defaultStartDate = baseDate.toISOString().slice(0, 16);
+  const defaultEndDate = new Date(baseDate.getTime() + 60 * 60 * 1000).toISOString().slice(0, 16);
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventSchema),

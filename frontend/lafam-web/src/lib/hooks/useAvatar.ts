@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
 import { requestAvatarUploadUrl, uploadFileToR2, confirmAvatarUpload } from '@/lib/api/user';
 import { requestGroupAvatarUploadUrl, uploadGroupFileToR2, confirmGroupAvatarUpload } from '../api/groups';
 import { toast } from 'sonner';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -27,11 +27,15 @@ const themes = [
   },
 ] as const;
 
+const emptySubscribe = () => () => {};
+
 export function ChangeTheme() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   if (!mounted) {
     return (

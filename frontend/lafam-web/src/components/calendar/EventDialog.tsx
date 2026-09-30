@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { eventSchema, type EventFormValues } from '@/lib/schemas/event';
 import { useCreateEvent, useUpdateEvent, useDeleteEvent } from '@/lib/hooks/useEvents';
-import { useGroupMembers } from '@/lib/hooks/useGroup';
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 import { EventResponse } from '@/lib/api/events';
 import {
@@ -44,15 +43,12 @@ export function EventDialog({ //get props
   // identify ability for user edit or delete you must to be own event
   const canEdit = mode === 'create' || (mode === 'edit' && initialData?.ownerId === currentUser?.id); 
 
-  //date when click in calendar
-  const defaultStartDate = selectedDate
-    ? new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
-    : new Date().toISOString().slice(0, 16);
+  const baseDate = selectedDate
+    ? new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000)
+    : new Date();
 
-  //date end 1 hour after start
-  const defaultEndDate = selectedDate
-    ? new Date(selectedDate.getTime() + 60 * 60 * 1000 - selectedDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
-    : new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16);
+  const defaultStartDate = baseDate.toISOString().slice(0, 16);
+  const defaultEndDate = new Date(baseDate.getTime() + 60 * 60 * 1000).toISOString().slice(0, 16);
 
   //create event hook form for event 
   const form = useForm<EventFormValues>({ 

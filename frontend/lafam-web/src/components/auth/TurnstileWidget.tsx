@@ -24,3 +24,5 @@ export const TurnstileWidget = forwardRef<
     />
   );
 });
+
+TurnstileWidget.displayName = 'TurnstileWidget';

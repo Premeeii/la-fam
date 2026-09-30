@@ -35,7 +35,6 @@ export function BillsHeader({
   activeFilter,
   sortOrder = 'newest',
   onSortChange,
-  onAddBill,
 }: BillsHeaderProps) {
   const getFilterLabel = () => {
     if (activeFilter === 'all') return 'Categories';

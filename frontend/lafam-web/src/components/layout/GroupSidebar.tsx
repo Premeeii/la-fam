@@ -8,8 +8,6 @@ import {
   Users,
   Calendar,
   ReceiptText,
-  FileText,
-  Plus,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGroup } from '@/lib/hooks/useGroup';

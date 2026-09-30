@@ -35,7 +35,6 @@ export default function LoginPage() {
           if (!turnstileToken) {
             return; //don't notify user, just disable the button
           }
-          // @ts-ignore
           loginMutation.mutate({ ...data, turnstileToken });
         })}
         className="flex flex-col gap-4"
@@ -117,7 +116,7 @@ export default function LoginPage() {
       </form>
 
       <p className="mt-6 text-center text-sm text-gray-500">
-        Don't have an account?{' '}
+        Don&apos;t have an account?{' '}
         <Link
           href="/register"
           className="font-semibold text-blue-600 hover:underline"

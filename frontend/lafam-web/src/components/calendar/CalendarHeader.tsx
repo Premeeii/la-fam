@@ -4,7 +4,6 @@ import { Button } from '../ui/button';
 import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { useState } from 'react';
-import { EventResponse } from '@/lib/api/events';
 import { useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,7 +32,6 @@ export function CalendarHeader({
   onPrev,
   onToday,
   onNext,
-  onAddEvent,
 }: CalendarHeaderProps) {
   const params = useParams();
   const groupId = params.groupId as string;
@@ -41,8 +39,9 @@ export function CalendarHeader({
   
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-  const defaultStartDate = new Date().toISOString().slice(0, 16);
-  const defaultEndDate = new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16);
+  const now = new Date();
+  const defaultStartDate = now.toISOString().slice(0, 16);
+  const defaultEndDate = new Date(now.getTime() + 60 * 60 * 1000).toISOString().slice(0, 16);
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventSchema),

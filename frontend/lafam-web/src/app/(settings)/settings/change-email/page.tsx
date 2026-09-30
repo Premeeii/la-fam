@@ -22,12 +22,11 @@ export default function ChangeEmailPage() {
   const [password, setPassword] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const activeTokenStatus = !token ? 'invalid' : tokenStatus;
+
   // Step 2: Validate token on page load
   useEffect(() => {
-    if (!token) {
-      setTokenStatus('invalid');
-      return;
-    }
+    if (!token) return;
 
     verifyEmailChangeToken(token)
       .then(() => setTokenStatus('valid'))
@@ -54,7 +53,7 @@ export default function ChangeEmailPage() {
   };
 
   // Loading state
-  if (tokenStatus === 'loading') {
+  if (activeTokenStatus === 'loading') {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -68,7 +67,7 @@ export default function ChangeEmailPage() {
   }
 
   // Invalid token
-  if (tokenStatus === 'invalid') {
+  if (activeTokenStatus === 'invalid') {
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <div className="mx-auto w-full max-w-md text-center">
