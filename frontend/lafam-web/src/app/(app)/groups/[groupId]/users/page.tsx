@@ -21,8 +21,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Ellipsis, UserMinus, User, Crown } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Ellipsis, UserMinus, User, Crown, AlertTriangle } from 'lucide-react';
 import { ProfileCard } from '@/components/groups/ProfileCard';
+import type { components } from '@/types/api';
+
+type GroupMemberResponse = components['schemas']['GroupMemberResponse'];
 
 function getInitials(name?: string) {
   if (!name) return 'U';
@@ -56,6 +67,24 @@ export default function UsersPage({
   const [activeProfileUserId, setActiveProfileUserId] = useState<string | null>(
     null,
   );
+  const [transferTarget, setTransferTarget] = useState<GroupMemberResponse | null>(
+    null,
+  );
+
+  const handleConfirmTransfer = () => {
+    if (!transferTarget?.userId) return;
+    transferOwner(
+      {
+        groupId: resolvedParams.groupId,
+        userId: transferTarget.userId,
+      },
+      {
+        onSuccess: () => {
+          setTransferTarget(null);
+        },
+      },
+    );
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -78,7 +107,7 @@ export default function UsersPage({
                   if (!open) setActiveProfileUserId(null);
                 }}
               >
-                <Card className="dark:bg-background relative flex h-80 flex-col items-center justify-center rounded-md border-gray-200 bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md dark:border-gray-700">
+                <Card className="relative flex h-80 flex-col items-center justify-center rounded-md border-gray-200 bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-background">
                   <div className="absolute top-4 right-4 flex items-center justify-center">
                     <PopoverTrigger
                       render={
@@ -115,15 +144,10 @@ export default function UsersPage({
                         {isOwner && member.role !== 'OWNER' && (
                           <DropdownMenuItem
                             className="cursor-pointer focus:bg-gray-100 dark:focus:bg-gray-800"
-                            onClick={() =>
-                              transferOwner({
-                                groupId: resolvedParams.groupId,
-                                userId: member.userId || 'undefined',
-                              })
-                            }
+                            onClick={() => setTransferTarget(member)}
                             disabled={isTransferring}
                           >
-                            <Crown className="mr-2 h-4 w-4" />
+                            <Crown className="mr-2 h-4 w-4 text-amber-500" />
                             <span>Make Owner</span>
                           </DropdownMenuItem>
                         )}
@@ -190,6 +214,48 @@ export default function UsersPage({
           })}
         </div>
       )}
+
+      <Dialog
+        open={Boolean(transferTarget)}
+        onOpenChange={(open) => {
+          if (!open) setTransferTarget(null);
+        }}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400">
+              <AlertTriangle className="h-6 w-6" />
+            </div>
+            <DialogTitle className="text-center text-lg font-bold text-gray-900 dark:text-gray-100">
+              Transfer Group Ownership
+            </DialogTitle>
+            <DialogDescription className="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">
+              Are you sure you want to transfer ownership to{' '}
+              <span className="font-semibold text-gray-900 dark:text-gray-100">
+                {transferTarget?.displayName || 'this member'}
+              </span>
+              ? You will lose Owner privileges for this group.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter className="mt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setTransferTarget(null)}
+              disabled={isTransferring}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmTransfer}
+              disabled={isTransferring}
+              className="bg-amber-600 hover:bg-amber-700 text-white font-medium"
+            >
+              {isTransferring ? 'Transferring...' : 'Transfer Ownership'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
