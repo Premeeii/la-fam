@@ -67,7 +67,7 @@ function JoinGroupContent() {
           </div>
           <h2 className="text-xl font-bold text-gray-900">Token ไม่ถูกต้อง/หมดอายุ</h2>
           <p className="text-gray-500 mt-2">This invite link is invalid, has expired, or has already been used.</p>
-          <Button className="mt-6 w-full" variant="outline" onClick={() => router.push('/')}>
+          <Button className="mt-6 w-full" variant="outline" onClick={() => router.push('/groups')}>
             Go Home
           </Button>
         </Card>
@@ -78,7 +78,7 @@ function JoinGroupContent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
       <Card className="p-8 text-center shadow-lg border-0 rounded-2xl max-w-md w-full flex flex-col items-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">You've been invited!</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-6 dark:text-gray-100">You've been invited!</h1>
         
         <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-xl w-full border border-gray-100">
             <Avatar className="h-16 w-16 shadow-sm border border-gray-200">

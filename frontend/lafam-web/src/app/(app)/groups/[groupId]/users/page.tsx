@@ -59,7 +59,6 @@ export default function UsersPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="border-t border-gray-100"></div>
       {isLoading ? (
         <div className="text-gray-500 dark:text-gray-400">
           Loading members...
