@@ -7,7 +7,7 @@ import type { LoginFormValues, RegisterFormValues } from "../schemas/auth";
 
 const PENDING_INVITE_KEY = 'pendingInviteToken';
 
-export function useLogin() {
+export function useLogin(options?: { onError?: () => void }) {
     const router = useRouter();
     return useMutation({
         mutationFn: (data: LoginFormValues & { turnstileToken: string }) => login(data as any),
@@ -28,7 +28,10 @@ export function useLogin() {
             }
             router.push('/groups');
         },
-        onError: () => toast.error('อีเมลหรือรหัสผ่านไม่ถูกต้อง'),
+        onError: (error) => {
+            toast.error('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+            options?.onError?.(); // let component reset turnstile + clear token
+        }
     });
 }
 

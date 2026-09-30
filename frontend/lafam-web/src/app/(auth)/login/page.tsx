@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,12 +10,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Eye, EyeOff } from 'lucide-react';
 import { TurnstileWidget } from '@/components/auth/TurnstileWidget';
+import { TurnstileInstance } from '@marsidev/react-turnstile';
 
 export default function LoginPage() {
   const form = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema) });
-  const loginMutation = useLogin();
   const [showPassword, setShowPassword] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileInstance>(null);
+  const loginMutation = useLogin({
+    onError: () => {
+      turnstileRef.current?.reset();
+      setTurnstileToken(null);
+    },
+  });
 
   return (
     <>
@@ -95,12 +102,9 @@ export default function LoginPage() {
         </div>
 
         <TurnstileWidget
-          onSuccess={(token) => {
-            setTurnstileToken(token);
-          }}
-          onExpire={() => {
-            setTurnstileToken(null);
-          }}
+          onSuccess={(token) => setTurnstileToken(token)}
+          onExpire={() => setTurnstileToken(null)}
+          ref={turnstileRef}
         />
 
         <Button
