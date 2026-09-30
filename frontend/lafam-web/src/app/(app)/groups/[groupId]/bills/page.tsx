@@ -1,7 +1,12 @@
 'use client';
 
 import { use, useState, useMemo } from 'react';
-import { useGroupBills, useMyBills, useBillsByCategory, useBillCategories } from '@/lib/hooks/useBills';
+import {
+  useGroupBills,
+  useMyBills,
+  useBillsByCategory,
+  useBillCategories,
+} from '@/lib/hooks/useBills';
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 import type { BillResponse } from '@/lib/api/bills';
 import { BillsHeader, type SortOption } from '@/components/bills/BillsHeader';
@@ -21,11 +26,9 @@ export default function BillsPage({
   const groupId = resolvedParams.groupId;
 
   const { data: groups } = useGroup();
-  
+
   // Find the group that matches the current URL parameter
-  const currentGroup = groups?.find(
-    (g) => g.groupId === groupId,
-  );
+  const currentGroup = groups?.find((g) => g.groupId === groupId);
 
   // State
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,24 +42,42 @@ export default function BillsPage({
   // Data fetching
   const { data: currentUser } = useCurrentUser();
   const { data: categories = [] } = useBillCategories();
-  const { data: rawAllBills, isLoading: isLoadingAll } = useGroupBills(groupId, currentPage - 1, BILLS_PER_PAGE);
+  const { data: rawAllBills, isLoading: isLoadingAll } = useGroupBills(
+    groupId,
+    currentPage - 1,
+    BILLS_PER_PAGE,
+  );
   const { data: rawMyBills } = useMyBills(groupId);
 
   // Determine which category is selected for the category query
-  const selectedCategoryId = (activeFilter !== 'all' && activeFilter !== 'own') ? activeFilter : null;
-  const { data: rawCategoryBills } = useBillsByCategory(groupId, selectedCategoryId);
+  const selectedCategoryId =
+    activeFilter !== 'all' && activeFilter !== 'own' ? activeFilter : null;
+  const { data: rawCategoryBills } = useBillsByCategory(
+    groupId,
+    selectedCategoryId,
+  );
 
   // Safely extract bills array (handles both raw Array and Spring Page object { content: [...] })
-  const extractBills = (data: any): BillResponse[] => {
+  const extractBills = (data: unknown): BillResponse[] => {
     if (!data) return [];
-    if (Array.isArray(data)) return data;
-    if (Array.isArray(data.content)) return data.content;
+    if (Array.isArray(data)) return data as BillResponse[];
+    if (
+      typeof data === 'object' &&
+      data !== null &&
+      'content' in data &&
+      Array.isArray((data as { content: unknown[] }).content)
+    ) {
+      return (data as { content: BillResponse[] }).content;
+    }
     return [];
   };
 
   const allBills = useMemo(() => extractBills(rawAllBills), [rawAllBills]);
   const myBills = useMemo(() => extractBills(rawMyBills), [rawMyBills]);
-  const categoryBills = useMemo(() => extractBills(rawCategoryBills), [rawCategoryBills]);
+  const categoryBills = useMemo(
+    () => extractBills(rawCategoryBills),
+    [rawCategoryBills],
+  );
 
   // Choose the right bill list based on filter
   const baseBills = useMemo(() => {
@@ -76,10 +97,10 @@ export default function BillsPage({
         (bill) =>
           bill.title?.toLowerCase().includes(q) ||
           bill.categoryName?.toLowerCase().includes(q) ||
-          bill.creatorName?.toLowerCase().includes(q)
+          bill.creatorName?.toLowerCase().includes(q),
       );
     }
-    
+
     // Sort bills
     return [...result].sort((a, b) => {
       if (sortOrder === 'oldest') {
@@ -103,7 +124,12 @@ export default function BillsPage({
   // Pagination total pages calculation
   const totalPages = useMemo(() => {
     // If using default view (All bills, no search filter), use backend totalPages
-    if (activeFilter === 'all' && !searchQuery.trim() && rawAllBills && typeof rawAllBills.totalPages === 'number') {
+    if (
+      activeFilter === 'all' &&
+      !searchQuery.trim() &&
+      rawAllBills &&
+      typeof rawAllBills.totalPages === 'number'
+    ) {
       return Math.max(1, rawAllBills.totalPages);
     }
     // Otherwise calculate client-side total pages
@@ -149,8 +175,7 @@ export default function BillsPage({
   };
 
   return (
-    <div className="flex flex-col h-full w-full">
-
+    <div className="flex h-full w-full flex-col">
       <BillsHeader
         groupId={groupId}
         categories={categories}
@@ -164,15 +189,15 @@ export default function BillsPage({
       />
 
       {/* Bills list */}
-      <div className="flex flex-col gap-4 mt-6">
+      <div className="mt-6 flex flex-col gap-4">
         {isLoadingAll ? (
           <>
-            <div className="h-24 w-full bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
-            <div className="h-24 w-full bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
-            <div className="h-24 w-full bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
+            <div className="h-24 w-full animate-pulse rounded-xl bg-gray-100 dark:bg-gray-700" />
+            <div className="h-24 w-full animate-pulse rounded-xl bg-gray-100 dark:bg-gray-700" />
+            <div className="h-24 w-full animate-pulse rounded-xl bg-gray-100 dark:bg-gray-700" />
           </>
         ) : paginatedBills.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 rounded-xl text-gray-400 dark:text-gray-500">
+          <div className="flex flex-col items-center justify-center rounded-xl p-12 text-gray-400 dark:text-gray-500">
             <p>No bills found.</p>
           </div>
         ) : (
@@ -181,7 +206,10 @@ export default function BillsPage({
               key={bill.id}
               bill={bill}
               groupId={groupId}
-              canEdit={bill.createdBy === currentUser?.id || currentGroup?.role === 'OWNER'}
+              canEdit={
+                bill.createdBy === currentUser?.id ||
+                currentGroup?.role === 'OWNER'
+              }
               onEdit={handleEditBill}
             />
           ))

@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -78,7 +78,7 @@ function JoinGroupContent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
       <Card className="p-8 text-center shadow-lg border-0 rounded-2xl max-w-md w-full flex flex-col items-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6 dark:text-gray-100">You've been invited!</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-6 dark:text-gray-100">You&apos;ve been invited!</h1>
         
         <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-xl w-full border border-gray-100">
             <Avatar className="h-16 w-16 shadow-sm border border-gray-200">

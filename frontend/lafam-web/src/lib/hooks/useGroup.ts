@@ -7,9 +7,6 @@ import {
   leaveGroup,
   joinGroup,
   previewInviteToken,
-  requestGroupAvatarUploadUrl,
-  uploadGroupFileToR2,
-  confirmGroupAvatarUpload,
   transferOwnership,
 } from '../api/groups';
 import type { AddGroupFormValues } from '../schemas/group';
@@ -19,6 +16,14 @@ import { useCurrentGroup } from '../stores/currentGroup';
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 
 type GroupMemberResponse = components['schemas']['GroupMemberResponse'];
+
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 
 export function useGroup() {
   return useQuery<GroupMemberResponse[]>({
@@ -43,7 +48,7 @@ export function useCreateGroup() {
 
   return useMutation({
     mutationFn: (data: AddGroupFormValues) => createGroup(data),
-    onSuccess: (data: any) => {
+    onSuccess: (data: { id?: string; groupId?: string }) => {
       queryClient.invalidateQueries({ queryKey: ['userGroups'] });
       toast.success('Create Group Success');
       
@@ -84,7 +89,7 @@ export function usePreviewJoinGroup() {
       toast.success('Successfully joined the group!');
       router.push(`/groups/${data.groupId}/dashboard`);
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       const msg = error?.response?.data?.message || 'Failed to join group';
       toast.error(msg);
     },
@@ -128,7 +133,7 @@ export function useLeaveGroup() {
       toast.success('leave group success');
       router.push('/groups');
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       const msg = error?.response?.data?.message || 'Failed to leave group';
       toast.error(msg);
     },
@@ -153,7 +158,7 @@ export function useKickMember() {
       });
       toast.success('Member removed successfully');
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       const msg = error.response?.data?.message || 'Failed to kick a member';
       toast.error(msg);
     },
@@ -226,7 +231,7 @@ export function useTransferOwnership() {
       });
       toast.success('Ownership transferred successfully');
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       toast.error(error.response?.data?.message || 'Failed to transfer ownership');
     },
   });

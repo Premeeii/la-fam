@@ -24,7 +24,6 @@ export default function RegisterPage() {
 
       <form onSubmit={form.handleSubmit((data) => {
         if (!turnstileToken) return;
-        // @ts-ignore
         registerMutation.mutate({ ...data, turnstileToken });
       })} className="flex flex-col gap-4">
         <div>

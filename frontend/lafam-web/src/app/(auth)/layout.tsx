@@ -35,7 +35,7 @@ export default function AuthLayout({
             />
 
             <span className="text-xl font-semibold tracking-tight text-gray-900">
-              La'FAM
+              La&apos;FAM
             </span>
           </div>
 
@@ -62,7 +62,7 @@ export default function AuthLayout({
             </div>
           </div>
 
-          <span>© La'FAM 2026</span>
+          <span>© La&apos;FAM 2026</span>
         </div>
       </div>
     </div>

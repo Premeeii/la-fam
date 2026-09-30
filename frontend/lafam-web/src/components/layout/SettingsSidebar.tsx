@@ -30,7 +30,7 @@ export function SettingsSidebar() {
     },
   ];
 
-  const NavLinks = () => (
+  const renderNavLinks = () => (
     <>
       {navItems.map((item) => {
         const isActive = pathname === item.href;
@@ -78,7 +78,7 @@ export function SettingsSidebar() {
                 Settings
               </h2>
               <nav className="flex flex-col gap-2">
-                <NavLinks />
+                {renderNavLinks()}
               </nav>
             </div>
           </SheetContent>
@@ -88,7 +88,7 @@ export function SettingsSidebar() {
       {/* Desktop Sidebar */}
       <aside className="hidden w-64 shrink-0 border-r border-gray-200 px-6 py-6 lg:block dark:border-gray-800">
         <nav className="flex flex-col gap-2">
-          <NavLinks />
+          {renderNavLinks()}
         </nav>
       </aside>
     </>

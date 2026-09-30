@@ -3,19 +3,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import {
-  Settings,
-  User,
-  LogOut,
-  ChevronRight,
   Sun,
   Moon,
   Laptop,
 } from 'lucide-react';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -37,7 +28,6 @@ import { CreateGroupPopover } from './CreateGroupPopover';
 import { GroupNav } from './GroupNav';
 import { SearchGroupBar } from './SearchGroupBar';
 import { usePathname } from 'next/navigation';
-import { ThemeToggle } from './ThemeToggle';
 
 function getInitials(name?: string) {
   if (!name) return 'U';
@@ -173,7 +163,7 @@ export function Navbar() {
               priority
               className="object-cover"
             />
-            <span className="hidden sm:block">La'FAM</span>
+            <span className="hidden sm:block">La&apos;FAM</span>
           </Link>
         </div>
 

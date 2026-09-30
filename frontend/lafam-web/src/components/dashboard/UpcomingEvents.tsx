@@ -20,25 +20,25 @@ export function UpcomingEvents({ groupId }: { groupId: string }) {
 
   // Filter events that haven't ended yet and sort by start date
   const upcomingEvents = useMemo(() => {
-  if (!events) return [];
+    if (!events) return [];
 
-  const nowTime = Date.now();
+    const nowTime = new Date(fromStr).getTime();
 
-  return [...events]
-    .filter((event) => {
-      if (!event.startDate || !event.endDate) { //if dont have startdate or enddate skip it
-        return false;
-      }
+    return [...events]
+      .filter((event) => {
+        if (!event.startDate || !event.endDate) {
+          return false;
+        }
 
-      return new Date(event.endDate).getTime() >= nowTime;
-    })
-    .sort(
-      (a, b) =>
-        new Date(a.startDate!).getTime() - //sort events by startdate ascending
-        new Date(b.startDate!).getTime()
-    )
-    .slice(0, 2);
-}, [events]);
+        return new Date(event.endDate).getTime() >= nowTime;
+      })
+      .sort(
+        (a, b) =>
+          new Date(a.startDate!).getTime() -
+          new Date(b.startDate!).getTime()
+      )
+      .slice(0, 2);
+  }, [events, fromStr]);
 
 
   const formatDate = (dateString: string) => {

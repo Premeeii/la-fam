@@ -22,7 +22,7 @@ export function InviteMemberPopover({ groupId }: { groupId: string }) {
       const res = await generateInviteToken(groupId);
       const link = `${window.location.origin}/join?token=${res.token}`;
       setInviteLink(link);
-    } catch (error) {
+    } catch {
       toast.error('Failed to generate invite token');
     } finally {
       setIsGenerating(false);

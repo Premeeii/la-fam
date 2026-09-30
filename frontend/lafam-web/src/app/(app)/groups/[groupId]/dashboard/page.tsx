@@ -23,13 +23,13 @@ export default function DashboardPage({
 
   return (
     <div className="flex h-full w-full flex-col">
-      <div className="mb-6 md:mb-8 flex items-start justify-between">
+      <div className="mb-6 flex items-start justify-between md:mb-8">
         <div>
-          <h1 className="mb-1 text-2xl md:text-3xl font-semibold text-gray-900 dark:text-gray-100">
+          <h1 className="mb-1 text-2xl font-semibold text-gray-900 md:text-3xl dark:text-gray-100">
             {isLoading ? '...' : currentGroup?.groupName || 'Unknown Group'}
           </h1>
           <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-            What's will happening,{' '}
+            What&apos;s will happening,{' '}
             {new Date().toLocaleDateString('en-US', {
               month: 'short',
               day: 'numeric',

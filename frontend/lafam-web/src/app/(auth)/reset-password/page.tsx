@@ -44,9 +44,10 @@ function ResetPasswordForm() {
         newPassword: data.newPassword,
       });
       setSuccess(true);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorObj = err as { response?: { data?: { message?: string } } };
       setError(
-        err.response?.data?.message ||
+        errorObj.response?.data?.message ||
           'Failed to reset password. The token might be expired.',
       );
     } finally {

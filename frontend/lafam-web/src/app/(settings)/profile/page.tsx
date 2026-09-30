@@ -1,5 +1,7 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+
+import Image from 'next/image';
+import { useRef, useState } from 'react';
 import { useCurrentUser } from '@/lib/hooks/useCurrentUser';
 import { useAvatarUpload } from '@/lib/hooks/useAvatar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -27,15 +29,11 @@ export default function ProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Profile form state
-  const [displayName, setDisplayName] = useState('');
-  const [bio, setBio] = useState('');
-  // sync value from user data when loaded
-  useEffect(() => {
-    if (user) {
-      setDisplayName(user.displayName || '');
-      setBio(user.bio || '');
-    }
-  }, [user]);
+  const [displayName, setDisplayName] = useState<string | null>(null);
+  const [bio, setBio] = useState<string | null>(null);
+
+  const currentDisplayName = displayName ?? user?.displayName ?? '';
+  const currentBio = bio ?? user?.bio ?? '';
   // Mutation for update displayName and bio
   const updateProfileMutation = useMutation({
     mutationFn: async (data: { displayName?: string; bio?: string }) => {
@@ -82,8 +80,8 @@ export default function ProfilePage() {
 
     // update displayName + bio
     updateProfileMutation.mutate({
-      displayName: displayName.trim() || undefined,
-      bio: bio.trim() || undefined,
+      displayName: currentDisplayName.trim() || undefined,
+      bio: currentBio.trim() || undefined,
     });
   };
 
@@ -105,28 +103,32 @@ export default function ProfilePage() {
       <div className="flex items-center gap-3">
         <button
           onClick={() => router.push('/groups')}
-          className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+          className="rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900"
           aria-label="Go back"
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">Your Profile</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+          Your Profile
+        </h1>
       </div>
 
       {/* Banner + Avatar */}
       <div className="relative mt-6">
         {/* Banner */}
-        <img
+        <Image
           src="/profile_cover.webp"
           alt="Profile Cover"
+          width={800}
+          height={192}
           className="h-48 w-full rounded-t-xl object-cover"
         />
         {/* Avatar — above banner */}
         <div className="absolute -bottom-14 left-1/2 -translate-x-1/2">
           <div className="relative">
-            <Avatar className="h-28 w-28 border-4 border-white dark:border-background shadow-md">
+            <Avatar className="dark:border-background h-28 w-28 border-4 border-white shadow-md">
               <AvatarImage src={preview || user?.avatarUrl || undefined} />
-              <AvatarFallback className="bg-gray-300 dark:bg-gray-700 text-3xl text-gray-600 dark:text-gray-300">
+              <AvatarFallback className="bg-gray-300 text-3xl text-gray-600 dark:bg-gray-700 dark:text-gray-300">
                 {initials}
               </AvatarFallback>
             </Avatar>
@@ -154,10 +156,12 @@ export default function ProfilePage() {
 
       {/* About Section */}
       <div className="mt-20">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">About</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+          About
+        </h2>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Required fields are marked with an asterisk
-            <span className="text-red-500">*</span>
+          Required fields are marked with an asterisk
+          <span className="text-red-500">*</span>
         </p>
         <div className="mt-6 flex flex-col gap-5">
           {/* Display Name */}
@@ -170,25 +174,28 @@ export default function ProfilePage() {
             </Label>
             <Input
               id="displayName"
-              value={displayName}
+              value={currentDisplayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Your display name"
-              className="h-11 rounded-lg border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 text-gray-900 dark:text-gray-100"
+              className="h-11 rounded-lg border-gray-200 bg-gray-50 px-4 text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
               required
             />
           </div>
           {/* Bio */}
           <div className="flex flex-col gap-2">
-            <Label htmlFor="bio" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <Label
+              htmlFor="bio"
+              className="text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
               Bio
             </Label>
             <textarea
               id="bio"
-              value={bio}
+              value={currentBio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="Tell something about yourself"
               rows={4}
-              className="w-full resize-none rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
             />
           </div>
         </div>
@@ -196,7 +203,7 @@ export default function ProfilePage() {
         <div className="mt-6 flex justify-end">
           <Button
             onClick={handleSave}
-            disabled={isPending || !displayName.trim()}
+            disabled={isPending || !currentDisplayName.trim()}
             className="bg-blue-600 px-6 hover:bg-blue-700 dark:text-gray-100"
           >
             {isPending ? 'Saving...' : 'Save'}
