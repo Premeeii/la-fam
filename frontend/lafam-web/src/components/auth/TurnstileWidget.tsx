@@ -1,20 +1,26 @@
-'use client'
+'use client';
 
-import { Turnstile } from '@marsidev/react-turnstile'
+import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
+import { forwardRef } from 'react';
 
 interface TurnstileWidgetProps {
-    onSuccess: (token: string) => void;
-    onExpire?: () => void;
+  onSuccess: (token: string) => void;
+  onExpire?: () => void;
 }
 
-export function TurnstileWidget({onSuccess, onExpire}: TurnstileWidgetProps) {
-    return (
-        <Turnstile 
-        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-        onSuccess={onSuccess}
-        onExpire={onExpire}
-        className='flex w-full justify-center'
-        options={{theme: 'light'}}
-        />
-    )
-}
+export const TurnstileWidget = forwardRef<
+  TurnstileInstance,
+  TurnstileWidgetProps
+>(({ onSuccess, onExpire }, ref) => {
+  return (
+    <Turnstile
+      siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+      onSuccess={onSuccess}
+      onExpire={onExpire}
+      className="flex w-full justify-center"
+      options={{ theme: 'light' }}
+      ref={ref}
+      onError={() => onExpire?.()} //clear token if error
+    />
+  );
+});
