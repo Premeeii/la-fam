@@ -10,6 +10,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -28,6 +29,8 @@ import premeees.lafam.Service.EmailService;
 import premeees.lafam.TestcontainersConfiguration;
 import premeees.lafam.Repository.UserRepository;
 import premeees.lafam.security.TurnstileService;
+import premeees.lafam.security.rateLimit.RateLimitService;
+import jakarta.servlet.http.Cookie;
 
 @SpringBootTest(classes = LafamApplication.class)
 @AutoConfigureMockMvc
@@ -47,9 +50,13 @@ public class AuthIntegrationTest {
     @MockitoBean
     private EmailService emailService;
 
+    @MockitoBean
+    private RateLimitService rateLimitService;
+
     @BeforeEach
     void setUp() {
         Mockito.when(turnstileService.verify(Mockito.anyString())).thenReturn(true);
+        Mockito.when(rateLimitService.tryConsume(Mockito.anyString(), Mockito.any())).thenReturn(true);
     }
 
     @Test
@@ -262,4 +269,51 @@ public class AuthIntegrationTest {
                 .andExpect(cookie().doesNotExist("refresh_token"));
     }
 
+    //Refresh Token
+    @Test
+    void RefreshTokenShouldReturnNewAccessTokenAndRefreshToken() throws Exception {
+        String registerJson = """
+                {
+                    "email": "refresh-test@example.com",
+                    "password": "Password123!",
+                    "displayName": "Refresh Test User",
+                    "turnstileToken": "dummy"
+                }
+                """;
+
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(registerJson))
+                .andExpect(status().isCreated());
+
+        String loginJson = """
+                {
+                    "email": "refresh-test@example.com",
+                    "password": "Password123!",
+                    "turnstileToken": "dummy"
+                }
+                """;
+
+        MvcResult result = mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(loginJson))
+                .andExpect(status().isOk())
+                .andExpect(cookie().exists("access_token"))
+                .andExpect(cookie().exists("refresh_token"))
+                .andReturn();
+
+        Cookie refreshCookie = result.getResponse().getCookie("refresh_token");
+
+        mockMvc.perform(post("/api/auth/refresh")
+                .cookie(refreshCookie))
+                .andExpect(status().isOk())
+                .andExpect(cookie().exists("access_token"))
+                .andExpect(cookie().exists("refresh_token"))
+                .andExpect(jsonPath("$.refresh_token").doesNotExist())
+                .andExpect(jsonPath("$.access_token").doesNotExist());
+
+        mockMvc.perform(post("/api/auth/refresh")
+                .cookie(refreshCookie))
+                .andExpect(status().isBadRequest());
+    }
 }
