@@ -23,7 +23,8 @@ class JwtAuthenticationFilterTest {
     @Test
     void opaqueRefreshTokenDoesNotAuthenticateAProtectedRequest() throws Exception {
         JwtService jwtService = new JwtService();
-        ReflectionTestUtils.setField(jwtService, "secretKey", "gIPctRo9Czsgn5DRqTBfyQrg3phE6xd828IEkQvFcxg");
+        String secretKey = System.getenv().getOrDefault("JWT_SECRET", "dGVzdF9qd3Rfc2VjcmV0X2tleV9mb3JfdGVzdGluZ19wdXJwb3Nlc18zMmJ5dGVz");
+        ReflectionTestUtils.setField(jwtService, "secretKey", secretKey);
         UserDetailsService userDetailsService = email -> {
             throw new AssertionError("Opaque refresh tokens must not reach user lookup");
         };
