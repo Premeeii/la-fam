@@ -22,6 +22,8 @@ export function useGroupBills(groupId: string, page = 0, size = 5) {
         queryKey: ['bills', groupId, page, size],
         queryFn: () => getGroupBills(groupId, page, size),
         enabled: !!groupId,
+        staleTime: 0,
+        refetchOnMount: 'always',
     });
 }
 
@@ -30,6 +32,8 @@ export function useMyBills(groupId: string) {
         queryKey: ['bills', groupId, 'me'],
         queryFn: () => getMyBills(groupId),
         enabled: !!groupId,
+        staleTime: 0,
+        refetchOnMount: 'always',
     });
 }
 
@@ -38,6 +42,8 @@ export function useBillsByCategory(groupId: string, categoryId: string | null) {
         queryKey: ['bills', groupId, 'category', categoryId],
         queryFn: () => getBillsByCategory(groupId, categoryId!),
         enabled: !!groupId && !!categoryId,
+        staleTime: 0,
+        refetchOnMount: 'always',
     });
 }
 

@@ -8,6 +8,8 @@ export function useGroupEvents(groupId: string, from: string, to: string) {
         queryKey: ['events', groupId, from, to],
         queryFn: () => getGroupEvents(groupId, from, to),
         enabled: !!groupId && !!from && !!to,
+        staleTime: 0,
+        refetchOnMount: 'always',
     });
 }
 
