@@ -158,5 +158,108 @@ public class AuthIntegrationTest {
                         "A".repeat(101),
                         "Integration User"));
     }
+    
+    //Login Integration Test
+    @Test
+    void loginFlowShouldSetHttpOnlyCookies() throws Exception {
+        String registerJson = """
+                {
+                    "email": "login-test@example.com",
+                    "password": "Password123!",
+                    "displayName": "Login Test User",
+                    "turnstileToken": "dummy"
+                }
+                """;
+
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(registerJson))
+                .andExpect(status().isCreated());
+
+        String loginJson = """
+                {
+                    "email": "login-test@example.com",
+                    "password": "Password123!",
+                    "turnstileToken": "dummy"
+                }
+                """;
+
+        mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(loginJson))
+                .andExpect(status().isOk())
+                .andExpect(cookie().exists("access_token"))
+                .andExpect(cookie().exists("refresh_token"))
+                .andExpect(jsonPath("$.refresh_token").doesNotExist())
+                .andExpect(jsonPath("$.access_token").doesNotExist());
+    }
+
+    @Test
+    void wrongPasswordShouldReturnUnauthorized() throws Exception {
+        String registerJson = """
+                {
+                    "email": "wrong-pass-test@example.com",
+                    "password": "Password123!",
+                    "displayName": "Wrong Pass User",
+                    "turnstileToken": "dummy"
+                }
+                """;
+
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(registerJson))
+                .andExpect(status().isCreated());
+
+        String loginJson = """
+                {
+                    "email": "wrong-pass-test@example.com",
+                    "password": "WrongPassword123!",
+                    "turnstileToken": "dummy"
+                }
+                """;
+
+        mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(loginJson))
+                .andExpect(status().isUnauthorized())
+                .andExpect(cookie().doesNotExist("access_token"))
+                .andExpect(cookie().doesNotExist("refresh_token"));
+    }
+
+    @Test
+    void userNotExistsShouldReturnUnauthorized() throws Exception {
+        String loginJson = """
+                {
+                    "email": "wronguser@example.com",
+                    "password": "Password123!",
+                    "turnstileToken": "dummy"
+                }
+                """;
+
+        mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(loginJson))
+                .andExpect(status().isUnauthorized())
+                .andExpect(cookie().doesNotExist("access_token"))
+                .andExpect(cookie().doesNotExist("refresh_token"));
+    }
+
+    @Test
+    void invalidEmailShouldReturnBadRequest() throws Exception {
+        String loginJson = """
+                {
+                    "email": "invalid-email",
+                    "password": "Password123!",
+                    "turnstileToken": "dummy"
+                }
+                """;
+
+        mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(loginJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(cookie().doesNotExist("access_token"))
+                .andExpect(cookie().doesNotExist("refresh_token"));
+    }
 
 }
