@@ -57,7 +57,7 @@ export function BillsHeader({
   };
 
   return (
-    <div className="flex items-center justify-between gap-4">
+    <div className="flex flex-wrap items-center justify-between gap-4">
       {/* Search */}
       <div className="relative flex-1 max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -70,7 +70,7 @@ export function BillsHeader({
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex grow items-center justify-end gap-2 ">
         <AddBillPopover groupId={groupId} />
 
         {/* Sort Menu */}
