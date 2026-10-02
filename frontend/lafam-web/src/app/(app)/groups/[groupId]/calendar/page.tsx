@@ -85,6 +85,7 @@ export default function CalendarPage({
 
       {/* Add / Edit Event Popover */}
       <EventPopover
+        key={selectedEvent?.id ?? `create-${selectedDate?.getTime() ?? 'new'}`} //select event id or create timestamp when change event on grid
         isOpen={isPopoverOpen}
         onClose={() => setIsPopoverOpen(false)}
         groupId={groupId}
