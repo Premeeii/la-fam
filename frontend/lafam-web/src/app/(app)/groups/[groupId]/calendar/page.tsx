@@ -21,7 +21,9 @@ export default function CalendarPage({
   // Popover state
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [popoverMode, setPopoverMode] = useState<'create' | 'edit'>('create');
-  const [selectedEvent, setSelectedEvent] = useState<EventResponse | undefined>();
+  const [selectedEvent, setSelectedEvent] = useState<
+    EventResponse | undefined
+  >();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -62,7 +64,7 @@ export default function CalendarPage({
   };
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-background shadow-sm">
+    <div className="dark:bg-background flex min-h-full flex-col overflow-y-auto rounded-xl border border-gray-200 bg-white pb-40 shadow-sm md:h-full md:overflow-hidden md:pb-0 dark:border-gray-700">
       {/* Calendar Header */}
       <CalendarHeader
         currentDate={currentDate}
@@ -83,6 +85,7 @@ export default function CalendarPage({
 
       {/* Add / Edit Event Popover */}
       <EventPopover
+        key={selectedEvent?.id ?? `create-${selectedDate?.getTime() ?? 'new'}`} //select event id or create timestamp when change event on grid
         isOpen={isPopoverOpen}
         onClose={() => setIsPopoverOpen(false)}
         groupId={groupId}

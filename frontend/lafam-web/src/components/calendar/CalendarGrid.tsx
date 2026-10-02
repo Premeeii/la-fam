@@ -16,7 +16,8 @@ interface CalendarGridProps {
   onCurrentDateChange: (date: Date) => void;
 }
 
-function mapEventsToCalendarEvents(events: EventResponse[]) { //map backend response straight to fullCalendar
+function mapEventsToCalendarEvents(events: EventResponse[]) {
+  //map backend response straight to fullCalendar
   return events.map((event) => ({
     id: event.id,
     title: event.title,
@@ -35,21 +36,22 @@ export function CalendarGrid({
   onEventClick,
   onCurrentDateChange,
 }: CalendarGridProps) {
-  const [dateRange, setDateRange] = useState({ //start date like August 2026
+  const [dateRange, setDateRange] = useState({
     from: '', //from = 2026-07-1
     to: '', //from = 2026-07-31
   });
 
-  const { data: events = [], isLoading } = useGroupEvents( //fetch array event from backend
+  const { data: events = [], isLoading } = useGroupEvents(
+    //fetch array event from backend
     groupId,
     dateRange.from,
-    dateRange.to
+    dateRange.to,
   );
 
   const mappedEvents = mapEventsToCalendarEvents(events); //converts backend response format into fullcalendar format
 
   return (
-    <div className="custom-calendar-wrapper relative flex-1 overflow-auto p-0">
+    <div className="custom-calendar-wrapper relative min-h-[600px] flex-1 overflow-auto p-0 md:min-h-0">
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, interactionPlugin]}
@@ -58,12 +60,12 @@ export function CalendarGrid({
         headerToolbar={false}
         dayMaxEvents={3}
         firstDay={1}
-        height="150%"
+        height="auto"
         eventDisplay="block"
 
         eventContent={(arg) => {
           return (
-            <div className="flex w-full items-center overflow-hidden text-ellipsis whitespace-nowrap px-1.5 py-0.5 text-xs text-black">
+            <div className="flex w-full items-center overflow-hidden px-1.5 py-0.5 text-xs text-ellipsis whitespace-nowrap text-black">
               <span className="truncate font-medium">{arg.event.title}</span>
             </div>
           );
@@ -73,10 +75,30 @@ export function CalendarGrid({
           onDateClick(arg.date, arg.dayEl as HTMLElement);
         }}
 
-        eventClick={(arg) => { //send data to parent(page.tsx) to open popover
+        eventClick={(arg) => {
+          // if clicked inside FullCalendar's +more popover, anchor to the grid day cell instead
+          const morePopover = arg.el.closest('.fc-popover, .fc-more-popover');
+          let targetEl: HTMLElement = arg.el;
+
+          if (morePopover) {
+            const eventDate = arg.event.start;
+            if (eventDate) {
+              const year = eventDate.getFullYear();
+              const month = String(eventDate.getMonth() + 1).padStart(2, '0');
+              const day = String(eventDate.getDate()).padStart(2, '0');
+              const dateStr = `${year}-${month}-${day}`;
+              const dayCell = document.querySelector<HTMLElement>(
+                `.fc-daygrid-day[data-date="${dateStr}"]`,
+              );
+              if (dayCell) {
+                targetEl = dayCell; //set to the day cell when clicked inside FullCalendar's +more popover
+              }
+            }
+          }
+
           onEventClick(
             arg.event.extendedProps as EventResponse,
-            arg.el as HTMLElement
+            targetEl,
           );
         }}
 
@@ -86,9 +108,7 @@ export function CalendarGrid({
             to: arg.endStr,
           });
 
-          onCurrentDateChange(
-            arg.view.currentStart
-          );
+          onCurrentDateChange(arg.view.currentStart);
         }}
       />
       {isLoading && (
@@ -99,5 +119,3 @@ export function CalendarGrid({
     </div>
   );
 }
-
-

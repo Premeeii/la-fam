@@ -118,7 +118,7 @@ export function EventDialog({ //get props
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="dark:bg-background sm:max-w-[425px]">
+      <DialogContent className="dark:bg-background sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className={'text-xl'}>{mode === 'create' ? 'Add Event' : 'Edit Event'}</DialogTitle>
         </DialogHeader>

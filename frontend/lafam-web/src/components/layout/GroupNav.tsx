@@ -14,6 +14,7 @@ import { useCurrentGroup } from '@/lib/stores/currentGroup';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 export function GroupNav() {
   const SNAP_POINTS = ['28rem', 1];
@@ -21,6 +22,7 @@ export function GroupNav() {
 
   const { data: groups, isLoading } = useGroup();
   const currentGroupId = useCurrentGroup((s) => s.groupId);
+  const [open, setOpen] = useState(false);
 
   const groupNavItems = [
     {
@@ -28,7 +30,7 @@ export function GroupNav() {
       href: currentGroupId ? `/groups/${currentGroupId}/dashboard` : '#',
     },
     {
-      name: 'Users',
+      name: 'Members',
       href: currentGroupId ? `/groups/${currentGroupId}/users` : '#',
     },
     {
@@ -51,7 +53,7 @@ export function GroupNav() {
   ];
 
   return (
-    <Drawer snapPoints={SNAP_POINTS} showSwipeHandle>
+    <Drawer open={open} onOpenChange={setOpen} snapPoints={SNAP_POINTS} showSwipeHandle>
       <DrawerTrigger
         render={
           <button className="text-gray-400 transition-colors hover:text-gray-600 lg:hidden">
@@ -72,6 +74,7 @@ export function GroupNav() {
                 <Link
                   key={item.name}
                   href={item.href}
+                  onClick={() => setOpen(false)}
                   className={cn(
                     'flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                     isActive

@@ -78,8 +78,9 @@ export default function SettingsPage() {
               Email
             </span>
 
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-900 dark:text-gray-100">
+            <div className="flex items-center gap-3 w-full md:w-auto justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-900 dark:text-gray-100">
                 {showEmail ? email : maskEmail(email)}
               </span>
 
@@ -93,6 +94,7 @@ export default function SettingsPage() {
                   <Eye className="h-4 w-4" />
                 )}
               </button>
+              </div>
 
               <Button
                 size="sm"
@@ -104,7 +106,8 @@ export default function SettingsPage() {
               </Button>
             </div>
           </div>
-          <div className="flex items-center justify-between px-4 py-4">
+          
+          <div className="flex items-center w-full md:w-auto justify-between px-4 py-4">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Password
             </span>
