@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { verifyEmailChangeToken, confirmEmailChange } from '@/lib/api/user';
@@ -12,7 +12,7 @@ import { Loader2, CheckCircle2, XCircle, Mail } from 'lucide-react';
 
 type TokenStatus = 'loading' | 'valid' | 'invalid';
 
-export default function ChangeEmailPage() {
+function ChangeEmailContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get('token') || '';
@@ -186,5 +186,22 @@ export default function ChangeEmailPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function ChangeEmailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+            <p className="text-sm text-gray-500 dark:text-gray-400">Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <ChangeEmailContent />
+    </Suspense>
   );
 }
