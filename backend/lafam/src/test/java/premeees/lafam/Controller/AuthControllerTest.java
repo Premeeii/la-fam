@@ -70,4 +70,27 @@ class AuthControllerTest {
         assertTrue(accessTokenCookie.contains("Path=/"));
     }
 
+     @Test
+    void turnStileFalseShouldNotBeAbleToLogin() throws Exception{
+        AuthService authService = Mockito.mock(AuthService.class);
+        TurnstileService turnstileService = Mockito.mock(TurnstileService.class);
+        EmailService emailService = Mockito.mock(EmailService.class);
+        RateLimitService rateLimitService = Mockito.mock(RateLimitService.class);
+        RateLimitProperties rateLimitProperties = Mockito.mock(RateLimitProperties.class);
+        HttpServletRequest httpRequest = Mockito.mock(HttpServletRequest.class);
+
+        AuthController controller = new AuthController(authService, turnstileService, emailService, rateLimitService,
+                rateLimitProperties);
+        ReflectionTestUtils.setField(controller, "refreshTokenExpiration", 604800000L);
+        ReflectionTestUtils.setField(controller, "accessTokenExpiration", 900000L);
+        ReflectionTestUtils.setField(controller, "refreshCookieSecure", true);
+
+        when(rateLimitService.tryConsume(Mockito.anyString(), Mockito.any())).thenReturn(true);
+        when(turnstileService.verify(Mockito.anyString())).thenReturn(false);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> controller
+                .login(new LoginRequest("member@example.com", "password", "dummy-turnstile-token"), httpRequest));
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+    }
+
 }
