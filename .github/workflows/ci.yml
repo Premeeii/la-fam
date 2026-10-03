@@ -63,6 +63,3 @@ jobs:
       
     - name: Build Next.js App
       run: npm run build
-
-      
-      
