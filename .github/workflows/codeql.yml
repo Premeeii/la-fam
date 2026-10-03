@@ -23,7 +23,7 @@ jobs:
       matrix:
         include:
           - language: java
-            build-mode: autobuild
+            build-mode: manual
           - language: javascript-typescript
             build-mode: none
 
@@ -37,12 +37,19 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: 'maven'
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
+
+      - name: Build Java Application (Maven)
+        if: matrix.language == 'java'
+        run: |
+          chmod +x ./backend/lafam/mvnw
+          ./backend/lafam/mvnw compile -f ./backend/lafam/pom.xml -DskipTests
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
