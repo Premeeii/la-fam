@@ -44,16 +44,15 @@ export function EventPopover({
     mode === 'create' ||
     (mode === 'edit' && initialData?.ownerId === currentUser?.id);
 
-  const baseDate = selectedDate
-    ? new Date(
-        selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000,
-      )
-    : new Date();
+  const getLocalDatetimeStr = (d: Date | string) => {
+    const date = new Date(d);
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return localDate.toISOString().slice(0, 16);
+  };
 
-  const defaultStartDate = baseDate.toISOString().slice(0, 16);
-  const defaultEndDate = new Date(baseDate.getTime() + 60 * 60 * 1000)
-    .toISOString()
-    .slice(0, 16);
+  const baseDate = selectedDate || new Date();
+  const defaultStartDate = getLocalDatetimeStr(baseDate);
+  const defaultEndDate = getLocalDatetimeStr(new Date(baseDate.getTime() + 60 * 60 * 1000));
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventSchema),
@@ -73,10 +72,10 @@ export function EventPopover({
           title: initialData.title || '',
           description: initialData.description || '',
           startDate: initialData.startDate
-            ? new Date(initialData.startDate).toISOString().slice(0, 16)
+            ? getLocalDatetimeStr(initialData.startDate)
             : defaultStartDate,
           endDate: initialData.endDate
-            ? new Date(initialData.endDate).toISOString().slice(0, 16)
+            ? getLocalDatetimeStr(initialData.endDate)
             : defaultEndDate,
           color: initialData.color || '#3b82f6',
         });
