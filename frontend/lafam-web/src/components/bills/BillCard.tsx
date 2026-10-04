@@ -11,7 +11,6 @@ interface BillCardProps {
 }
 
 export function BillCard({ bill, groupId, canEdit, onEdit }: BillCardProps) {
-  const { data: members } = useGroupMembers(groupId);
 
   const formatAmount = (amount?: number) => {
     if (amount == null) return '0';

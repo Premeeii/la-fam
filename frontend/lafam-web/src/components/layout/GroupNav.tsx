@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/drawer';
 import { ChevronRight, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useGroup } from '@/lib/hooks/useGroup';
 import { useCurrentGroup } from '@/lib/stores/currentGroup';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -20,7 +19,6 @@ export function GroupNav() {
   const SNAP_POINTS = ['28rem', 1];
   const pathname = usePathname();
 
-  const { data: groups, isLoading } = useGroup();
   const currentGroupId = useCurrentGroup((s) => s.groupId);
   const [open, setOpen] = useState(false);
 
