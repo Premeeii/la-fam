@@ -1,0 +1,114 @@
+services:
+
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: lafam_postgres_prod
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-lafam_db}
+
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-lafam_db}"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - lafam-network
+
+
+  backend:
+    build:
+      context: ./backend/lafam
+      dockerfile: Dockerfile
+
+    container_name: lafam_backend_prod
+    restart: unless-stopped
+
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+
+      DB_URL: jdbc:postgresql://postgres-db:5432/${POSTGRES_DB:-lafam_db}
+      DB_USERNAME: ${POSTGRES_USER:-postgres}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_EXPIRATION: ${JWT_ACCESS_EXPIRATION:-900000}
+      JWT_REFRESH_EXPIRATION: ${JWT_REFRESH_EXPIRATION:-604800000}
+
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID}
+      R2_ACCESS_KEY: ${R2_ACCESS_KEY}
+      R2_SECRET_KEY: ${R2_SECRET_KEY}
+      R2_BUCKET_NAME: ${R2_BUCKET_NAME}
+      R2_PUBLIC_URL: ${R2_PUBLIC_URL}
+
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
+
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL}
+
+      DOMAIN_URL: ${DOMAIN_URL}
+
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+    ports:
+      - "8080:8080"
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
+
+    networks:
+      - lafam-network
+
+
+  frontend:
+    build:
+      context: ./frontend/lafam-web
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+
+    container_name: lafam_frontend_prod
+    restart: unless-stopped
+
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+
+    ports:
+      - "3000:3000"
+
+    depends_on:
+      backend:
+        condition: service_healthy
+
+    networks:
+      - lafam-network
+
+volumes:
+  pgdata_prod:
+
+networks:
+  lafam-network:
+    driver: bridge
