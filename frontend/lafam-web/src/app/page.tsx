@@ -75,7 +75,7 @@ export default function Home() {
             />
           </div>
           <h1 className="text-lg w-full leading-relaxed text-left pl-6 pr-10 font-bold sm:text-xl md:text-5xl dark:text-gray-300">
-            La’FAM is a family group app for management appointment and receipt to orderly. <br/>Ensure that you don't forget important things.
+            La&apos;FAM is a family group app for management appointment and receipt to orderly. <br/>Ensure that you don't forget important things.
           </h1>
            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-gray-400 sm:aspect-video">
             <Image
