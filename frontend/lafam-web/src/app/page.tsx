@@ -12,7 +12,7 @@ function LandingNavbar() {
         >
           <Image
             src="/icon.svg"
-            alt="La'FAM Logo"
+            alt="La&apos;FAM Logo"
             height={32}
             width={32}
             priority
@@ -67,7 +67,7 @@ export default function Home() {
           <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-gray-400 sm:aspect-video">
             <Image
               src="/openning.webp"
-              alt="La'FAM Preview"
+              alt="La&apos;FAM Preview"
               width={1920}
               height={1080}
               className="object-cover object-top sm:object-contain"
@@ -75,12 +75,12 @@ export default function Home() {
             />
           </div>
           <h1 className="text-lg w-full leading-relaxed text-left pl-6 pr-10 font-bold sm:text-xl md:text-5xl dark:text-gray-300">
-            La&apos;FAM is a family group app for management appointment and receipt to orderly. <br/>Ensure that you don't forget important things.
+            La&apos;FAM is a family group app for management appointment and receipt to orderly. <br/>Ensure that you don&apos;t forget important things.
           </h1>
            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-gray-400 sm:aspect-video">
             <Image
               src="/openning2.webp"
-              alt="La'FAM Preview"
+              alt="La&apos;FAM Preview"
               width={1920}
               height={1080}
               className="object-cover object-top sm:object-contain"
