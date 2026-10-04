@@ -36,12 +36,18 @@ export function CalendarHeader({
   const params = useParams();
   const groupId = params.groupId as string;
   const createMutation = useCreateEvent(groupId);
-  
+
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
+  const getLocalDatetimeStr = (d: Date | number) => {
+    const date = new Date(d);
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return localDate.toISOString().slice(0, 16);
+  };
+
   const now = new Date();
-  const defaultStartDate = now.toISOString().slice(0, 16);
-  const defaultEndDate = new Date(now.getTime() + 60 * 60 * 1000).toISOString().slice(0, 16);
+  const defaultStartDate = getLocalDatetimeStr(now);
+  const defaultEndDate = getLocalDatetimeStr(now.getTime() + 60 * 60 * 1000);
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventSchema),
@@ -102,23 +108,24 @@ export function CalendarHeader({
           </Button>
         </div>
 
-        <Popover open={isPopoverOpen} onOpenChange={(open) => {
-          setIsPopoverOpen(open);
-          if (open) {
-            form.reset({
-              title: '',
-              description: '',
-              startDate: new Date().toISOString().slice(0, 16),
-              endDate: new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16),
-              color: '#3b82f6',
-            });
-          }
-        }}>
+        <Popover
+          open={isPopoverOpen}
+          onOpenChange={(open) => {
+            setIsPopoverOpen(open);
+            if (open) {
+              form.reset({
+                title: '',
+                description: '',
+                startDate: getLocalDatetimeStr(new Date()),
+                endDate: getLocalDatetimeStr(Date.now() + 60 * 60 * 1000),
+                color: '#3b82f6',
+              });
+            }
+          }}
+        >
           <PopoverTrigger
             render={
-              <Button
-                className="flex h-10 items-center gap-2 rounded-lg bg-blue-600 px-3 text-white hover:bg-blue-700 sm:px-4"
-              >
+              <Button className="flex h-10 items-center gap-2 rounded-lg bg-blue-600 px-3 text-white hover:bg-blue-700 sm:px-4">
                 <Plus className="h-4 w-4" />
                 <span className="hidden sm:inline">Add event</span>
                 <span className="sm:hidden">Add</span>
@@ -133,8 +140,11 @@ export function CalendarHeader({
             <PopoverHeader>
               <PopoverTitle>Add Event</PopoverTitle>
             </PopoverHeader>
-            
-            <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-4 text-left">
+
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="mt-4 space-y-4 text-left"
+            >
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
                 <Input
@@ -144,10 +154,12 @@ export function CalendarHeader({
                   {...form.register('title')}
                 />
                 {form.formState.errors.title && (
-                  <p className="text-xs text-red-500">{form.formState.errors.title.message}</p>
+                  <p className="text-xs text-red-500">
+                    {form.formState.errors.title.message}
+                  </p>
                 )}
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
                 <Input
@@ -168,7 +180,9 @@ export function CalendarHeader({
                     {...form.register('startDate')}
                   />
                   {form.formState.errors.startDate && (
-                    <p className="text-xs text-red-500">{form.formState.errors.startDate.message}</p>
+                    <p className="text-xs text-red-500">
+                      {form.formState.errors.startDate.message}
+                    </p>
                   )}
                 </div>
                 <div className="space-y-2">
@@ -180,7 +194,9 @@ export function CalendarHeader({
                     {...form.register('endDate')}
                   />
                   {form.formState.errors.endDate && (
-                    <p className="text-xs text-red-500">{form.formState.errors.endDate.message}</p>
+                    <p className="text-xs text-red-500">
+                      {form.formState.errors.endDate.message}
+                    </p>
                   )}
                 </div>
               </div>
@@ -190,7 +206,7 @@ export function CalendarHeader({
                 <Input
                   id="color"
                   type="color"
-                  className="h-9 w-16 border-none bg-transparent p-1 cursor-pointer"
+                  className="h-9 w-16 cursor-pointer border-none bg-transparent p-1"
                   {...form.register('color')}
                 />
               </div>

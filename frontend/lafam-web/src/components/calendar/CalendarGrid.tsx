@@ -96,10 +96,7 @@ export function CalendarGrid({
             }
           }
 
-          onEventClick(
-            arg.event.extendedProps as EventResponse,
-            targetEl,
-          );
+          onEventClick(arg.event.extendedProps as EventResponse, targetEl);
         }}
 
         datesSet={(arg) => {
