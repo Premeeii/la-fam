@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { ThemeProvider } from 'next-themes';
+import Link from 'next/link';
 
 export default function AuthLayout({
   children,
@@ -24,7 +25,8 @@ export default function AuthLayout({
       <div className="flex w-full flex-col justify-between bg-[#FFFFFF] px-6 py-8 lg:w-1/2 lg:bg-white lg:px-16 lg:py-12 xl:w-[40%]">
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
           {/* Logo */}
-          <div className="mb-15 flex items-center gap-3">
+          
+          <Link href='/' className="mb-15 flex items-center gap-3">
             <Image
               src="/icon.svg"
               alt="La'FAM"
@@ -37,7 +39,7 @@ export default function AuthLayout({
             <span className="text-xl font-semibold tracking-tight text-gray-900">
               La&apos;FAM
             </span>
-          </div>
+          </Link>
 
           {/* Mobile image */}
           <div className="relative mb-6 h-52 w-full overflow-hidden rounded-2xl shadow-sm lg:hidden">

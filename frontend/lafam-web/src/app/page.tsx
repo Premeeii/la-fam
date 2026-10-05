@@ -74,7 +74,7 @@ export default function Home() {
               priority
             />
           </div>
-          <h1 className="text-lg w-full leading-relaxed text-left pl-6 pr-10 font-bold sm:text-xl md:text-5xl dark:text-gray-300">
+          <h1 className="text-lg w-full leading-relaxed text-left text-gray-600 pl-6 pr-10 font-bold sm:text-xl md:text-3xl dark:text-gray-300">
             La&apos;FAM is a family group app for management appointment and receipt to orderly. <br/>Ensure that you don&apos;t forget important things.
           </h1>
            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-gray-400 sm:aspect-video">
@@ -89,6 +89,20 @@ export default function Home() {
           </div>
         </div>
       </main>
+      
+      <footer className="w-full border-t border-gray-100 bg-white py-6 dark:border-gray-800 dark:bg-black">
+        <div className="mx-auto flex w-full max-w-[1600px] flex-col items-center justify-between gap-4 px-4 sm:flex-row md:px-6">
+          <div className="flex items-center gap-2">
+            <Image src="/icon.svg" alt="La'FAM Logo" height={24} width={24} className="object-cover" />
+            <span className="font-bold tracking-tight text-gray-900 dark:text-white">La&apos;FAM</span>
+          </div>
+          <div className="flex items-center gap-6 text-sm font-medium text-gray-500 dark:text-gray-400">
+            <Link href="#" className="transition-colors hover:text-gray-900 dark:hover:text-white">Terms</Link>
+            <Link href="#" className="transition-colors hover:text-gray-900 dark:hover:text-white">Privacy</Link>
+            <Link href="#" className="transition-colors hover:text-gray-900 dark:hover:text-white">Contact</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
