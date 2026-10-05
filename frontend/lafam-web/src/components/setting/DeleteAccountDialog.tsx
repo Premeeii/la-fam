@@ -43,7 +43,7 @@ export function DeleteAccountDialog() {
       }
       useCurrentGroup.getState().setGroupId('');
       queryClient.clear();
-      router.push('/login');
+      window.location.href = '/login';
     },
     onError: (error: Error & { response?: { data?: { message?: string } } }) => {
       const msg = error.response?.data?.message || 'Failed to delete account. Please try again.';
