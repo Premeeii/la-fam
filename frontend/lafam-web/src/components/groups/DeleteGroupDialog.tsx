@@ -35,7 +35,7 @@ export function DeleteGroupDialog({
   const handleDeleteClick = async () => {
     deleteMutation.mutate(groupId, {
         onSuccess: () => {
-            router.push('/groups');
+            window.location.href = '/groups';
         }
     });
   };
