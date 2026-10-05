@@ -74,7 +74,7 @@ export default function Home() {
               priority
             />
           </div>
-          <h1 className="text-lg w-full leading-relaxed text-left pl-6 pr-10 font-bold sm:text-xl md:text-5xl dark:text-gray-300">
+          <h1 className="text-lg w-full leading-relaxed text-left text-gray-600 pl-6 pr-10 font-bold sm:text-xl md:text-3xl dark:text-gray-300">
             La&apos;FAM is a family group app for management appointment and receipt to orderly. <br/>Ensure that you don&apos;t forget important things.
           </h1>
            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-gray-400 sm:aspect-video">
