@@ -89,6 +89,20 @@ export default function Home() {
           </div>
         </div>
       </main>
+      
+      <footer className="w-full border-t border-gray-100 bg-white py-6 dark:border-gray-800 dark:bg-black">
+        <div className="mx-auto flex w-full max-w-[1600px] flex-col items-center justify-between gap-4 px-4 sm:flex-row md:px-6">
+          <div className="flex items-center gap-2">
+            <Image src="/icon.svg" alt="La'FAM Logo" height={24} width={24} className="object-cover" />
+            <span className="font-bold tracking-tight text-gray-900 dark:text-white">La&apos;FAM</span>
+          </div>
+          <div className="flex items-center gap-6 text-sm font-medium text-gray-500 dark:text-gray-400">
+            <Link href="#" className="transition-colors hover:text-gray-900 dark:hover:text-white">Terms</Link>
+            <Link href="#" className="transition-colors hover:text-gray-900 dark:hover:text-white">Privacy</Link>
+            <Link href="#" className="transition-colors hover:text-gray-900 dark:hover:text-white">Contact</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
