@@ -30,7 +30,7 @@ export function LeaveGroupDialog({
   const handleLeaveGroup = async () => {
     leaveGroupMutation.mutate(groupId, {
       onSuccess: () => {
-        router.push('/groups');
+        window.location.href = '/groups';
       },
     });
   };
