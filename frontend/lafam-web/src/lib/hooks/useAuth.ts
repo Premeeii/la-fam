@@ -7,7 +7,6 @@ import type { LoginFormValues, RegisterFormValues } from "../schemas/auth";
 const PENDING_INVITE_KEY = 'pendingInviteToken';
 
 export function useLogin(options?: { onError?: () => void }) {
-    const router = useRouter();
     return useMutation({
         mutationFn: (data: LoginFormValues & { turnstileToken: string }) => login(data),
         onSuccess: async () => {
@@ -18,14 +17,14 @@ export function useLogin(options?: { onError?: () => void }) {
                     sessionStorage.removeItem(PENDING_INVITE_KEY);
                     toast.success('เข้าร่วมกลุ่มสำเร็จ');
                     if (res?.data?.groupId) {
-                        router.push(`/groups/${res.data.groupId}/dashboard`);
+                        window.location.href = `/groups/${res.data.groupId}/dashboard`;
                         return;
                     }
                 } catch {
                     toast.error('Link เชิญไม่ถูกต้องหรือถูกใช้ไปแล้ว');
                 }
             }
-            router.push('/groups');
+            window.location.href = '/groups';
         },
         onError: () => {
             toast.error('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
@@ -35,7 +34,6 @@ export function useLogin(options?: { onError?: () => void }) {
 }
 
 export function useRegister() {
-    const router = useRouter();
     return useMutation({
         mutationFn: (data: RegisterFormValues & { turnstileToken: string }) => register(data),
         onSuccess: async () => {
@@ -46,7 +44,7 @@ export function useRegister() {
                     sessionStorage.removeItem(PENDING_INVITE_KEY);
                     toast.success('Sign up Success!');
                     if (res?.data?.groupId) {
-                        router.push(`/groups/${res.data.groupId}/dashboard`);
+                        window.location.href = `/groups/${res.data.groupId}/dashboard`;
                         return;
                     }
                 } catch {
@@ -55,7 +53,7 @@ export function useRegister() {
             } else {
                 toast.success('Sign up Success!');
             }
-            router.push('/groups');
+            window.location.href = '/groups';
         },
         onError: (error: unknown) => {
             const err = error as { response?: { status?: number } };
