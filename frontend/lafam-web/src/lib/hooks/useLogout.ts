@@ -14,13 +14,13 @@ export function useLogout() {
         onSuccess: () => {
             useCurrentGroup.getState().setGroupId('');
             queryClient.clear();
-            router.push('/login');
+            window.location.href = '/login';
         },
         onError: () => {
             // Even if the backend fails, we should clear the local state to force logout
             useCurrentGroup.getState().setGroupId('');
             queryClient.clear();
-            router.push('/login');
+            window.location.href = '/login';
         }
     });
 }
