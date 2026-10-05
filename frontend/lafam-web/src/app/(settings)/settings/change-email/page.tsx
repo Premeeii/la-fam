@@ -81,7 +81,7 @@ function ChangeEmailContent() {
             Please request a new link from Settings
           </p>
           <Button
-            onClick={() => router.push('/settings')}
+            onClick={() => window.location.href = '/settings'}
             className="mt-6 bg-blue-600 px-6 hover:bg-blue-700 dark:text-gray-100"
           >
             Go to Settings
@@ -106,7 +106,7 @@ function ChangeEmailContent() {
             Your email has been changed successfully!
           </p>
           <Button
-            onClick={() => router.push('/settings')}
+            onClick={() => window.location.href = '/settings'}
             className="mt-6 bg-blue-600 px-6 hover:bg-blue-700 dark:text-gray-100"
           >
             Go to Settings
