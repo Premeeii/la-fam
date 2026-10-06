@@ -49,9 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**",
                                 "/api/health",
                                 "/actuator/health",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
+                                "/actuator/prometheus",
                                 "/error")
                         .permitAll()
                         .anyRequest().authenticated()
