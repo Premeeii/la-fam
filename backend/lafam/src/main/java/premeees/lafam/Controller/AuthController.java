@@ -122,6 +122,9 @@ public class AuthController {
     // return ResponseEntity.ok().build();
     // }
 
+    @Value("${app.auth.cookie-domain:}")
+    private String cookieDomain;
+
     // as responsecontainer to have authresponse and httpOnly cookie together
     private ResponseEntity<AuthResponse> withRefreshCookie(HttpStatus status, AuthResponse response) {
         return ResponseEntity.status(status)
@@ -131,48 +134,63 @@ public class AuthController {
     }
 
     private ResponseCookie refreshCookie(String refreshToken) {
-        return ResponseCookie.from(REFRESH_TOKEN_COOKIE, refreshToken)
+        var builder = ResponseCookie.from(REFRESH_TOKEN_COOKIE, refreshToken)
                 .httpOnly(true)
                 .secure(refreshCookieSecure) // set http through
                 // protect cross-site request forgery(csrf) browser will not sent cookie on
                 // every request
                 .sameSite("Lax")
                 .path("/api/auth")
-                .maxAge(Duration.ofMillis(refreshTokenExpiration)) // expiration equal as in config
-                .build();
+                .maxAge(Duration.ofMillis(refreshTokenExpiration)); // expiration equal as in config
+                
+        if (cookieDomain != null && !cookieDomain.isBlank()) {
+            builder.domain(cookieDomain);
+        }
+        return builder.build();
     }
 
     private ResponseCookie accessCookie(String accessToken) {
-        return ResponseCookie.from(ACCESS_TOKEN_COOKIE, accessToken)
+        var builder = ResponseCookie.from(ACCESS_TOKEN_COOKIE, accessToken)
                 .httpOnly(true)
                 .secure(refreshCookieSecure)
                 .sameSite("Lax")
                 .path("/")
-                .domain("lafamhub.com")
                 // cookie accessToken will same as refresh token because JWT inside will expire
                 // before cookie
-                .maxAge(Duration.ofMillis(refreshTokenExpiration))
-                .build();
+                .maxAge(Duration.ofMillis(refreshTokenExpiration));
+                
+        if (cookieDomain != null && !cookieDomain.isBlank()) {
+            builder.domain(cookieDomain);
+        }
+        return builder.build();
     }
 
     private ResponseCookie clearRefreshCookie() {
-        return ResponseCookie.from(REFRESH_TOKEN_COOKIE, "")
+        var builder = ResponseCookie.from(REFRESH_TOKEN_COOKIE, "")
                 .httpOnly(true)
                 .secure(refreshCookieSecure)
                 .sameSite("Lax")
                 .path("/api/auth")
-                .maxAge(Duration.ZERO)
-                .build();
+                .maxAge(Duration.ZERO);
+                
+        if (cookieDomain != null && !cookieDomain.isBlank()) {
+            builder.domain(cookieDomain);
+        }
+        return builder.build();
     }
 
     private ResponseCookie clearAccessTokenCookie() {
-        return ResponseCookie.from(ACCESS_TOKEN_COOKIE, "")
+        var builder = ResponseCookie.from(ACCESS_TOKEN_COOKIE, "")
                 .httpOnly(true)
                 .secure(refreshCookieSecure)
                 .sameSite("Lax")
                 .path("/")
-                .maxAge(Duration.ZERO)
-                .build();
+                .maxAge(Duration.ZERO);
+                
+        if (cookieDomain != null && !cookieDomain.isBlank()) {
+            builder.domain(cookieDomain);
+        }
+        return builder.build();
     }
 
     private String getClientIp(HttpServletRequest request) {
