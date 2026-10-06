@@ -8,27 +8,53 @@ const PENDING_INVITE_KEY = 'pendingInviteToken';
 
 export function useLogin(options?: { onError?: () => void }) {
     return useMutation({
-        mutationFn: (data: LoginFormValues & { turnstileToken: string }) => login(data),
+        mutationFn: (data: LoginFormValues & { turnstileToken: string }) => {
+            console.log('[LOGIN] mutationFn');
+            return login(data);
+        },
+
         onSuccess: async () => {
+            console.log('[LOGIN] onSuccess START');
+
             const pendingToken = sessionStorage.getItem(PENDING_INVITE_KEY);
+
+            console.log('[LOGIN] pendingToken:', !!pendingToken);
+
             if (pendingToken) {
                 try {
+                    console.log('[LOGIN] joining group...');
+
                     const res = await joinGroup(pendingToken);
+
+                    console.log('[LOGIN] joinGroup success:', res);
+
                     sessionStorage.removeItem(PENDING_INVITE_KEY);
                     toast.success('เข้าร่วมกลุ่มสำเร็จ');
+
                     if (res?.data?.groupId) {
-                        window.location.href = `/groups/${res.data.groupId}/dashboard`;
+                        console.log('[LOGIN] redirect group');
+
+                        window.location.href =
+                            `/groups/${res.data.groupId}/dashboard`;
+
                         return;
                     }
-                } catch {
+                } catch (error) {
+                    console.error('[LOGIN] joinGroup failed:', error);
                     toast.error('Link เชิญไม่ถูกต้องหรือถูกใช้ไปแล้ว');
                 }
             }
+
+            console.log('[LOGIN] redirect /groups');
+
             window.location.href = '/groups';
         },
+
         onError: () => {
+            console.error('[LOGIN] mutation ERROR');
+
             toast.error('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
-            options?.onError?.(); // let component reset turnstile + clear token
+            options?.onError?.();
         }
     });
 }
