@@ -5,13 +5,14 @@ import { forwardRef } from 'react';
 
 interface TurnstileWidgetProps {
   onSuccess: (token: string) => void;
+  onError?: (error?: any) => void;
   onExpire?: () => void;
 }
 
 export const TurnstileWidget = forwardRef<
   TurnstileInstance,
   TurnstileWidgetProps
->(({ onSuccess, onExpire }, ref) => {
+>(({ onSuccess, onError, onExpire }, ref) => {
   return (
     <Turnstile
       siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
@@ -20,7 +21,11 @@ export const TurnstileWidget = forwardRef<
       className="flex w-full justify-center"
       options={{ theme: 'light' }}
       ref={ref}
-      onError={() => onExpire?.()} //clear token if error
+      onError={(error) => {
+        console.error('[Turnstile Error]:', error);
+        if (onError) onError(error);
+        else onExpire?.(); // clear token if error
+      }}
     />
   );
 });
