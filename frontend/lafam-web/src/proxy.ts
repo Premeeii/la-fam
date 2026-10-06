@@ -8,6 +8,11 @@ export function proxy(request: NextRequest) {
     || request.nextUrl.pathname.startsWith('/forgot-password')
     || request.nextUrl.pathname.startsWith('/reset-password');
   const isHomePage = request.nextUrl.pathname === '/';
+  console.log('[PROXY]', {
+    pathname: request.nextUrl.pathname,
+    hasToken: request.cookies.has('access_token'),
+    cookies: request.cookies.getAll().map(c => c.name),
+});
 
   if (!hasToken && !isAuthPage && !isHomePage) {
     return NextResponse.redirect(new URL('/login', request.url));
