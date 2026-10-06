@@ -148,6 +148,7 @@ public class AuthController {
                 .secure(refreshCookieSecure)
                 .sameSite("Lax")
                 .path("/")
+                .domain("lafamhub.com")
                 // cookie accessToken will same as refresh token because JWT inside will expire
                 // before cookie
                 .maxAge(Duration.ofMillis(refreshTokenExpiration))
