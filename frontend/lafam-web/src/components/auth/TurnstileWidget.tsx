@@ -5,7 +5,7 @@ import { forwardRef } from 'react';
 
 interface TurnstileWidgetProps {
   onSuccess: (token: string) => void;
-  onError?: (error?: any) => void;
+  onError?: (error: string) => void;
   onExpire?: () => void;
 }
 
