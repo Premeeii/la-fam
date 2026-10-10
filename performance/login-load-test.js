@@ -10,9 +10,9 @@ const TURNSTILE_BYPASS_TOKEN = __ENV.TURNSTILE_BYPASS_TOKEN;
 export const options = {
   //identify User Login and Credentials (identify from Environment Variables or use default value)
   stages: [
-    { duration: '10s', target: 20 }, // increase user from 0 to 20 in 10 minute
+    { duration: '10s', target: 20 }, // increase user from 0 to 20 in 10 seconds
     { duration: '20s', target: 20 }, // keep at 20 people simultaneously for 20 seconds
-    { duration: '10s', target: 0 },  // decrease user to 0 in 10 minute
+    { duration: '10s', target: 0 },  // decrease user to 0 in 10 seconds
   ],
   thresholds: {
     //95% of Request must respond faster than 800ms
