@@ -16,15 +16,25 @@ public class TurnstileService {
 
     private final RestClient restClient;
     private final String secretKey;
+    private final String bypassToken;
 
     public TurnstileService(
             RestClient restClient,
-            @Value("${cloudflare.turnstile.secret-key}") String secretKey) {
+            @Value("${cloudflare.turnstile.secret-key}") String secretKey,
+            @Value("${cloudflare.turnstile.bypass-token:}") String bypassToken) {
         this.restClient = restClient;
         this.secretKey = secretKey;
+        this.bypassToken = bypassToken;
     }
 
     public boolean verify(String token) {
+
+        // Check bypass token for load testing
+        // Must check if bypassToken is not null first to prevent NullPointerException in production
+        if (bypassToken != null && !bypassToken.isBlank() && bypassToken.equals(token)) {
+            log.info("[Turnstile] Bypassed verification using configured bypass token");
+            return true;
+        }
 
         if (token == null || token.isBlank()) {
             log.warn("[Turnstile] Token is null or blank");
