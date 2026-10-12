@@ -1,0 +1,161 @@
+{
+    "metrics": {
+        "http_req_duration": {
+            "max": 112.738,
+            "p(90)": 15.911,
+            "p(95)": 16.890349999999998,
+            "avg": 12.990065963060676,
+            "min": 4.86,
+            "med": 12.937
+        },
+        "http_req_connecting": {
+            "max": 2.295,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.021176781002638524,
+            "min": 0,
+            "med": 0
+        },
+        "http_req_tls_handshaking": {
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0
+        },
+        "data_sent": {
+            "count": 206155,
+            "rate": 1141.1052233022615
+        },
+        "data_received": {
+            "count": 2191968,
+            "rate": 12132.9394587151
+        },
+        "vus_max": {
+            "value": 5,
+            "min": 5,
+            "max": 5
+        },
+        "http_req_failed": {
+            "fails": 758,
+            "passes": 0,
+            "value": 0
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 5
+        },
+        "http_req_receiving": {
+            "min": 0.061,
+            "med": 0.291,
+            "max": 2.5,
+            "p(90)": 0.38,
+            "p(95)": 0.42214999999999997,
+            "avg": 0.29498548812664904
+        },
+        "http_req_waiting": {
+            "p(90)": 15.552100000000001,
+            "p(95)": 16.51825,
+            "avg": 12.664391820580486,
+            "min": 4.783,
+            "med": 12.608,
+            "max": 112.121
+        },
+        "iteration_duration": {
+            "med": 1014.247292,
+            "max": 1044.395333,
+            "p(90)": 1017.3258079999999,
+            "p(95)": 1018.2857164,
+            "avg": 1014.193749136064,
+            "min": 1005.185625
+        },
+        "http_req_failed{api:groups}": {
+            "passes": 0,
+            "fails": 757,
+            "thresholds": {
+                "rate<0.01": false
+            },
+            "value": 0
+        },
+        "http_reqs": {
+            "count": 758,
+            "rate": 4.195667140079621
+        },
+        "checks": {
+            "passes": 1514,
+            "fails": 0,
+            "value": 1
+        },
+        "http_req_duration{api:groups}": {
+            "min": 4.86,
+            "med": 12.937,
+            "max": 43.214,
+            "p(90)": 15.8972,
+            "p(95)": 16.8604,
+            "avg": 12.85829854689563,
+            "thresholds": {
+                "p(95)<800": false
+            }
+        },
+        "http_req_blocked": {
+            "max": 5.62,
+            "p(90)": 0.013,
+            "p(95)": 0.016,
+            "avg": 0.0428205804749343,
+            "min": 0.002,
+            "med": 0.01
+        },
+        "http_req_sending": {
+            "min": 0.007,
+            "med": 0.03,
+            "max": 0.629,
+            "p(90)": 0.036,
+            "p(95)": 0.042,
+            "avg": 0.03068865435356195
+        },
+        "checks{api:groups}": {
+            "fails": 0,
+            "passes": 1514,
+            "thresholds": {
+                "rate>0.99": false
+            },
+            "value": 1
+        },
+        "iterations": {
+            "count": 757,
+            "rate": 4.190131959156033
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 12.990065963060676,
+            "min": 4.86,
+            "med": 12.937,
+            "max": 112.738,
+            "p(90)": 15.911,
+            "p(95)": 16.890349999999998
+        }
+    },
+    "root_group": {
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+                "GET /api/groups returns 200": {
+                    "path": "::GET /api/groups returns 200",
+                    "id": "1725de94772c6eb6941bdafb925fd9ab",
+                    "passes": 757,
+                    "fails": 0,
+                    "name": "GET /api/groups returns 200"
+                },
+                "response is valid JSON": {
+                    "name": "response is valid JSON",
+                    "path": "::response is valid JSON",
+                    "id": "8b6b928f224c87f832d9e61432879c78",
+                    "passes": 757,
+                    "fails": 0
+                }
+            },
+        "name": "",
+        "path": ""
+    }
+}
