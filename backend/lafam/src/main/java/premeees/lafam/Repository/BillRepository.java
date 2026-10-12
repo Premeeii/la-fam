@@ -15,5 +15,6 @@ public interface BillRepository extends JpaRepository<Bill, UUID> {
     Page<Bill> findAllByGroupId(UUID groupId, Pageable pageable);
     List<Bill> findAllByGroupIdAndCreatedById(UUID groupId, UUID createdById);
     List<Bill> findAllByGroupIdAndBillCategoryId(UUID groupId, UUID categoryId);
+    List<Bill> findAllByCreatedById(UUID userId);
     void deleteAllByCreatedBy(User user);
 }

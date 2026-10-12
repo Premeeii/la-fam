@@ -13,4 +13,5 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     List<Event> findAllByGroupId(UUID groupId);
     List<Event> findAllByGroupIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(UUID groupId, OffsetDateTime from, OffsetDateTime to);
     void deleteAllByOwner(User user);
+    List<Event> findAllByOwnerId(UUID user);
 }
