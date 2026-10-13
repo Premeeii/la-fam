@@ -50,3 +50,21 @@ export async function confirmEmailChange(data: {
 export async function deleteAccount(password: string): Promise<void> {
     await apiClient.delete('/api/users/me', { data: { password } });
 }
+
+export async function exportUserData(): Promise<void> {
+    const response = await apiClient.get('/api/users/me/export', {
+        responseType: 'blob' //IMPORTANT: return blob for download file
+    });
+    
+    const blob = new Blob([response.data], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    
+    const timestamp = new Date().toISOString().split('T')[0];
+    link.setAttribute('download', `lafam-data-export-${timestamp}.json`);
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode?.removeChild(link);
+    window.URL.revokeObjectURL(url);
+}
