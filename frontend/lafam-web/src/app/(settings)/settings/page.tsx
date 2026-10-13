@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { ChangePasswordDialog } from '@/components/setting/ChangePasswordDialog';
 import { ChangeTheme } from '@/components/setting/ChangeTheme';
 import { DeleteAccountDialog } from '@/components/setting/DeleteAccountDialog';
+import { exportUserData } from '@/lib/api/user';
 
 function maskEmail(email: string): string {
   const [local, domain] = email.split('@');
@@ -26,6 +27,7 @@ export default function SettingsPage() {
   const { data: user, isLoading } = useCurrentUser();
   const [showEmail, setShowEmail] = useState(false);
 
+  //request change email
   const requestChangeMutation = useMutation({
     mutationFn: requestEmailChange,
     onSuccess: () => {
@@ -35,6 +37,21 @@ export default function SettingsPage() {
     },
     onError: () => {
       toast.error('Failed to send verification link. Please try again.');
+    },
+  });
+
+  //request export data
+  const exportMutation = useMutation({
+    mutationFn: exportUserData,
+    onSuccess: () => {
+      toast.success('Exported data successfully', {
+        description: 'Your personal data archive has been downloaded.',
+      });
+    },
+    onError: () => {
+      toast.error('Failed to export data. Please try again.', {
+        description: 'Something went wrong while exporting your data.',
+      });
     },
   });
 
@@ -73,27 +90,27 @@ export default function SettingsPage() {
 
         <div className="mt-4 divide-gray-200 rounded-lg dark:divide-gray-800">
           {/* Email Row */}
-          <div className="flex items-center px-4 py-4 md:justify-between flex-col md:flex-row">
-            <span className="text-sm font-medium w-full md:w-auto text-gray-600 dark:text-gray-400">
+          <div className="flex flex-col items-center px-4 py-4 md:flex-row md:justify-between">
+            <span className="w-full text-sm font-medium text-gray-600 md:w-auto dark:text-gray-400">
               Email
             </span>
 
-            <div className="flex items-center gap-3 w-full md:w-auto justify-between">
+            <div className="flex w-full items-center justify-between gap-3 md:w-auto">
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-900 dark:text-gray-100">
-                {showEmail ? email : maskEmail(email)}
-              </span>
+                  {showEmail ? email : maskEmail(email)}
+                </span>
 
-              <button
-                onClick={() => setShowEmail(!showEmail)}
-                className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-              >
-                {showEmail ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </button>
+                <button
+                  onClick={() => setShowEmail(!showEmail)}
+                  className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  {showEmail ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
               </div>
 
               <Button
@@ -106,8 +123,8 @@ export default function SettingsPage() {
               </Button>
             </div>
           </div>
-          
-          <div className="flex items-center w-full md:w-auto justify-between px-4 py-4">
+
+          <div className="flex w-full items-center justify-between px-4 py-4 md:w-auto">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Password
             </span>
@@ -121,24 +138,39 @@ export default function SettingsPage() {
         </h2>
         <ChangeTheme />
       </div>
-      <div className="mt-10">
-  <h2 className="text-lg font-semibold text-red-600">
-    Danger Zone
-  </h2>
-  <div className="mt-4 rounded-lg border border-red-200 dark:border-red-900/50 p-4">
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-          Delete Account
-        </p>
-        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-          Permanently delete your account and all associated data.
-        </p>
+      <div className="mt-6">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          Privacy & Data
+        </h2>
+        <div className="mt-4 flex items-center justify-between px-4 py-4 md:w-auto">
+          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            Export Personal Data
+          </span>
+          <Button
+            size="sm"
+            onClick={() => exportMutation.mutate()}
+            disabled={exportMutation.isPending}
+          >
+            {exportMutation.isPending ? 'Exporting...' : 'Export Data'}
+          </Button>
+        </div>
       </div>
-      <DeleteAccountDialog />
-    </div>
-  </div>
-</div>
+      <div className="mt-6">
+        <h2 className="text-lg font-semibold text-red-600">Danger Zone</h2>
+        <div className="mt-4 rounded-lg border border-red-200 p-4 dark:border-red-900/50">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Delete Account
+              </p>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                Permanently delete your account and all associated data.
+              </p>
+            </div>
+            <DeleteAccountDialog />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
