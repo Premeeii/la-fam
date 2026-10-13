@@ -1,6 +1,3 @@
-# API Design
-LaFAM's API are designed
-
 ## Principle
 ### Postel's Law states:
 
