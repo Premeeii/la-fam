@@ -8,7 +8,7 @@ Database migrations transform the state of La FAM database when we need to add, 
 
 # How to write migration file
 
-## Initial Migration
+### Initial Migration
 
 Migrations should be carefully planned and written as one of the first steps of any new feature or database change. They provide a clear, version-controlled record of schema evolution and enable consistent database state across environments.
 
