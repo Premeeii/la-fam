@@ -20,17 +20,17 @@ la-fam/
 
 ### Overview
 High-level Purpose, scope, features, and domain terminology for the La FAM platform
-- [Application Overview](docs/overview/application-overview.md)
-- [Requirement Scope](docs/overview/requirement-scope.md)
-- [Scope and Feature](docs/overview/scope-and-feature.md)
-- [Glossary](docs/overview/glossary.md)
+- [Application Overview](./overview/application-overview.md)
+- [Requirement Scope](./overview/requirement-scope.md)
+- [Scope and Feature](./overview/scope-and-feature.md)
+- [Glossary](./overview/glossary.md)
 
 ### Codebase
 Structural blueprints, data pipelines, and security mechanisms
 - [System Structure](docs/codebase/system-structure.md)
-- [Authentication Flow](docs/codebase/authentication-flow.md)
-- [API Designed](docs/codebase/api-designed.md)
-- [Data Flow](docs/codebase/data-flow.md)
+- [Authentication Flow](./codebase/authentication-flow.md)
+- [API Design](./codebase/api-designed.md)
+- [Data Flow](./codebase/data-flow.md)
 - [Configuration]()
 
 ### Practices
