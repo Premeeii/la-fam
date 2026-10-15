@@ -31,5 +31,34 @@ services:
       postgres-db:
         condition: service_healthy
 
+  prometheus:
+    image: prom/prometheus
+    container_name: lafam-prometheus-local
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9091:9090"
+    volumes:
+      - ./prometheus-local.yml:/etc/prometheus/prometheus.yml:ro
+      - lafam_prometheus_local_data:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana
+    container_name: lafam-grafana-local
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+    ports:
+      - "127.0.0.1:3002:3000"
+    volumes:
+      - lafam_grafana_local_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
 volumes:
   pgdata:
+  lafam_prometheus_local_data:
+  lafam_grafana_local_data:
+    name: lafam_grafana_local_data
