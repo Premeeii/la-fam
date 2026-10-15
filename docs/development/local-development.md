@@ -52,6 +52,12 @@ pgAdmin available on `http://localhost:5050`
   *Note:* Use the configuration values ​​from `application-example.properties` as a template for your local environment setup
   , and adjust the settings related to the database, JWT, and secrets to match your own local configuration.
 
+  ### Testing
+  ```bash
+  ./mvnw clean test
+  ```
+  for integration and unit test case and provide backend working fine.
+
 ## Frontend(Next.js)
   ```bash
   cd frontend/lafam-web
@@ -59,4 +65,13 @@ pgAdmin available on `http://localhost:5050`
   npm run dev
   ```
   Next.js available on `http://localhost:3000`
+  ### Testing
+  ```bash
+  npm run lint
+  ```
+  Checking code with ESLint for type, syntax or standard.
+  ```bash
+  npm run build
+  ```
+  Checking compile TypeScript and build to provide frontend working fine.
   
