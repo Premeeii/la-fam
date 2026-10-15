@@ -77,3 +77,14 @@ refetchOnMount: 'always'
 ```
 
 This setting instructs TanStack Query to trigger a refetch whenever the query's component mounts, including when the cached data is still considered fresh.
+
+## External Services and APIs
+
+### Cloudflare R2(S3-Compatible Storage)
+  Storage for store Static Assets such as Avatar Image
+  connect through `software.amazon.awssdk:s3:2.28.0` even this is amazon dependency but can use same on Cloudflare.
+### Resend
+  Import Resend for purpose to send forgot, reset password or change email and able to check sending status dashboard when
+  user request, it can be detect for Malicious when they try to DoS Attack.
+### Cloudflare Turnstile
+  Import Cloudflare Turnstile for Protection Bot Verification on Authentication, Should attract turnstile token to check on Cloudflare.
