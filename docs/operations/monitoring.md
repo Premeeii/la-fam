@@ -16,8 +16,22 @@
   </dependency>
   ```
 ## Permission Prometheus
-  access request for fetch actuator prometheus endpoint on `SecurityConfig.java`
+  Access request for fetch actuator prometheus endpoint on `SecurityConfig.java`
   ```java
   .requestMatchers("/actuator/health", "/actuator/prometheus").permitAll()
+  ```
+## Prometheus.yml
+  Promethus image for setting scrape interval and path to send data request from target.
+  ```yml
+    global:
+      scrape_interval: 15s     # ดึงข้อมูลทุก 15 วินาที
+      evaluation_interval: 15s
+
+    scrape_configs:
+      - job_name: 'lafam-backend'
+        metrics_path: '/actuator/prometheus'
+        scrape_interval: 5s     # ปรับเป็น 5s ได้เมื่อรัน Load Test เพื่อดูผลแบบเรียลไทม์
+        static_configs:
+          - targets: ['backend:8080'] # หรือ 127.0.0.1:8080
   ```
   
