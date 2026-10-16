@@ -1,74 +1,81 @@
-<div align="center">
-<h2>La'FAM : Event Group Management Dashboard</h2>
 
-![](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![](https://img.shields.io/badge/axios.js-854195?style=for-the-badge&logo=axios&logoColor=5A29E4) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+<p align="center">
+  <a href="https://lafamhub.com" target="_blank">
+    <img width="200" alt="LaFAM" src="https://github.com/user-attachments/assets/0a1bca0c-f445-42f4-b537-3cbe5db54f6e" />
+  </a>  
+</p>
+<p align="center">
+  <a href="https://www.lafamhub.com/">LaFamhub.com</a> •
+  <a href="https://github.com/Premeeii/la-fam/tree/main/docs">Docs</a> •
+  <a href="https://www.linkedin.com/in/kittapas97/">Owner</a><br></br>
+  <img src="https://github.com/Premeeii/la-fam/actions/workflows/ci.yml/badge.svg?branch=main" alt="Build status" />
+  <img src="https://github.com/Premeeii/la-fam/actions/workflows/codeql.yml/badge.svg?branch=main" alt="Build status" />
+  <img alt="Static Badge" src="https://img.shields.io/badge/SpringBoot-4.0.0-61DAFB?logo=spring-boot&logoColor=green">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Next.js-16.3.4-61DAFB?logo=nextdotjs&logoColor=white"><br></br>
+</p>
+<hr><br/>
 
-<img width="1440" height="900" alt="Dashboard" src="https://github.com/user-attachments/assets/7b29db17-ac6d-43ca-98a4-43b293802070" />
-</div>
-
-## ✨ Features
-- **User Authentication: Secure login system to authenticate users before accessing the application's core features.**
-- **Group Management: Create and manage dedicated groups that serve as a centralized workspace for members.**
-- **Shared Calendar: A unified calendar that aggregates the activities and availability of all group members.**
-- **Bills Management: A transparent system to seamlessly create, update, or delete shared expense records.**
-- **Production Optimization: Built for speed and reliability in production environments.**
-- **Responsive Design:  Access on any device with adaptive design.**
+  Group coordination can become difficult when events and appointments are scattered across different platforms, schedules conflict, or shared bills are poorly organized and difficult to find when needed.
+ 
+ &nbsp; 
   
-Whether your group struggles to find a date to meet up due to conflicting schedules, or frequently loses track of shared expenses, La'FAM is designed to step in and seamlessly solve these everyday coordination challenges.
+  La Fam aims to simplify group management by bringing events, appointments, and shared expenses together in one place. By keeping schedules organized and bill records accessible, La Fam helps groups coordinate their activities more effectively and manage shared expenses with less hassle.
 
-## 💻 Tech Stack
-**Frontend**
-* **Framework:** React / Next.js
-* **Styling:** Tailwind CSS
+ &nbsp;
 
-**Backend**
-* **Framework:** Spring Boot (Java)
-* **Architecture:** RESTful API
-* **Security:** JWT
+# Installation
+If you want or interest to try 'LaFAM' on local, you can clone this repository
+```git
+  git clone https://github.com/Premeeii/la-fam.git
+```
+ &nbsp;
 
-**Backend**
-* **Relational Database:** PostgreSQL16
+then if you clone repository to your device, can read step of setup at  [Local Development](/docs/development/local-development.md)
 
-**DevOps&Tools**
-* **Docker**
-* **Git&Github**
+# Screenshot
 
-## 🚀 Prerequisites
-* **JDK 21**
-* **Maven** (v.3.6.3 or higher)
-* **Node.js** (v.18.x or higher) 
+ &nbsp;
 
-## 🛠️ Installation(Local Development)
-### 1. Clone Repository
-       git clone https://github.com/Premeeii/la-fam
+<p align="center">
+  <img width="900" alt="974DB831-DF0F-471B-976A-ABB75B78B50C_1_201_a" src="https://github.com/user-attachments/assets/cd76e510-9183-4f91-b8df-468ffc1f27b1" />
+</p>
 
-### 2. Database Setup
-       docker compose up -d
+ &nbsp;
 
-### 3. Backend Setup
-      spring:
-        datasource:
-          url: jdbc:postgresql://localhost:5432/{database_name}
-          username: root
-          password: rootpassword
-        security:
-          jwt:
-            secret: <your-256-bit-secret-key-here>
-            access-token-expiration: 900000
-            jwt.refresh-token-expiration: 604800000
+<p align="center">
+<img width="900" alt="AB39FC81-AAB1-4918-889A-5103E869565F_1_201_a" src="https://github.com/user-attachments/assets/2467b9a2-e288-4106-8be8-cac0a9c3064d" />
+</p>
 
-### 4. Run the Spring Boot application
-       mvn spring-boot:run
-**(The backend server will start on http://localhost:8080)**
+&nbsp;
 
-### 5. Frontend Setup
-       npm install
-       npm run dev
-**(The frontend will be available at http://localhost:3000)**
+<p align="center">
+  <img
+    src="https://github.com/user-attachments/assets/25197db0-0e0a-4d5f-9e01-c6a0252f1f4a"
+    alt="La Fam Dashboard"
+    width="900"
+    style="border: 1px solid #d1d5db; border-radius: 12px;"
+  />
+</p>
 
-### 📃 API Documentation
-The API documentation for this application is available at [http://localhost:8080/swagger-ui/index.html#/]. It details all endpoints and their usage.
 
-## 🐛 Issues
+
+
+# Documentation
+  ### Overview
+  - [Application Overview](/docs/overview/application-overview.md)
+  - [Requirement Scope](/docs/overview/requirement-scope.md)
+  ### Codebase
+  - [API Design](/docs/codebase/api-designed.md)
+  - [Authentication Architecture](/docs/codebase/authentication-flow.md)
+  ### Practices
+  - [Coding Convention](/docs/practices/coding-convention.md)
+  - [Error Handling](/docs/practices/error-handling.md)
+  - [API Guidelines](/docs/practices/api-guidelines.md)
+  - [Database Migration](/docs/practices/database-migration.md)
+  
+
+
+
+
 
           
