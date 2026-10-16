@@ -50,7 +50,7 @@ export function BillsContainer({ groupId }: { groupId: string }) {
           latestBills.map((bill) => (
             <div
               key={bill.id}
-              className="flex flex-col rounded-xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 p-4"
+              className="flex flex-col rounded-xl border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-[#2c2c2e] p-4"
             >
               <span className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
                 {bill.categoryName}

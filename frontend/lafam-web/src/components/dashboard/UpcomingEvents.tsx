@@ -71,7 +71,7 @@ export function UpcomingEvents({ groupId }: { groupId: string }) {
         return (
           <div 
             key={event.id} 
-            className="flex flex-col justify-between p-4 bg-white dark:bg-gray-700 rounded-md shadow-sm relative light:border light:border-gray-200"
+            className="flex flex-col justify-between p-4 bg-white dark:bg-[#2c2c2e] rounded-md shadow-sm relative light:border light:border-gray-200"
           >
             <div className="flex justify-between items-start mb-4">
               <div className="flex flex-col">
