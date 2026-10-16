@@ -81,7 +81,7 @@ export function CalendarHeader({
       </h1>
 
       <div className="flex flex-wrap items-center justify-end gap-2 sm:flex-nowrap">
-        <div className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white p-1 dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white p-1 dark:border-gray-700 dark:bg-[#2c2c2e]">
           <Button
             variant="ghost"
             size="icon"
@@ -133,7 +133,7 @@ export function CalendarHeader({
             }
           />
           <PopoverContent
-            className="w-[340px] rounded-2xl border-gray-200 p-5 shadow-xl dark:border-gray-800 dark:bg-gray-900"
+            className="w-[340px] rounded-2xl border-gray-200 p-5 shadow-xl dark:border-gray-800 dark:bg-[#2c2c2e]"
             align="end"
             sideOffset={12}
           >

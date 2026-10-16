@@ -128,7 +128,7 @@ export default function ProfilePage() {
           <div className="relative">
             <Avatar className="dark:border-background h-28 w-28 border-4 border-white shadow-md">
               <AvatarImage src={preview || user?.avatarUrl || undefined} />
-              <AvatarFallback className="bg-gray-300 text-3xl text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+              <AvatarFallback className="bg-gray-300 text-3xl text-gray-600 dark:bg-[#2c2c2e] dark:text-gray-300">
                 {initials}
               </AvatarFallback>
             </Avatar>
@@ -177,7 +177,7 @@ export default function ProfilePage() {
               value={currentDisplayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Your display name"
-              className="h-11 rounded-lg border-gray-200 bg-gray-50 px-4 text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+              className="h-11 rounded-lg border-gray-200 bg-gray-50 px-4 text-gray-900 dark:border-gray-700 dark:bg-[#2c2c2e] dark:text-gray-100"
               required
             />
           </div>
@@ -195,7 +195,7 @@ export default function ProfilePage() {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Tell something about yourself"
               rows={4}
-              className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+              className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-[#2c2c2e] dark:text-gray-100"
             />
           </div>
         </div>

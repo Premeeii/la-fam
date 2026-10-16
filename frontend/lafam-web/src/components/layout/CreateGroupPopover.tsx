@@ -53,7 +53,7 @@ export function CreateGroupPopover() {
         }
       />
       <PopoverContent
-        className="w-[340px] rounded-2xl border-gray-200 p-5 shadow-xl dark:border-gray-800 dark:bg-gray-900"
+        className="w-[340px] rounded-2xl border-gray-200 p-5 shadow-xl dark:border-gray-800 dark:bg-[#2c2c2e]"
         align="end"
         sideOffset={12}
       >

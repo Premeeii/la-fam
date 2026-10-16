@@ -70,6 +70,9 @@ export default function UsersPage({
   const [transferTarget, setTransferTarget] = useState<GroupMemberResponse | null>(
     null,
   );
+  const [kickTarget, setKickTarget] = useState<GroupMemberResponse | null>(
+    null,
+  );
 
   const handleConfirmTransfer = () => {
     if (!transferTarget?.userId) return;
@@ -81,6 +84,21 @@ export default function UsersPage({
       {
         onSuccess: () => {
           setTransferTarget(null);
+        },
+      },
+    );
+  };
+
+  const handleConfirmKick = () => {
+    if (!kickTarget?.userId) return;
+    kickMember(
+      {
+        groupId: resolvedParams.groupId,
+        userId: kickTarget.userId,
+      },
+      {
+        onSuccess: () => {
+          setKickTarget(null);
         },
       },
     );
@@ -155,12 +173,7 @@ export default function UsersPage({
                         {isOwner && member.role !== 'OWNER' && (
                           <DropdownMenuItem
                             className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-700 dark:text-red-500 dark:focus:bg-red-950/50 dark:focus:text-red-400"
-                            onClick={() =>
-                              kickMember({
-                                groupId: resolvedParams.groupId,
-                                userId: member.userId || 'undefined',
-                              })
-                            }
+                            onClick={() => setKickTarget(member)}
                             disabled={isKicking}
                           >
                             <UserMinus className="mr-2 h-4 w-4" />
@@ -223,7 +236,7 @@ export default function UsersPage({
       >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400">
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-[#2c2c2e] dark:text-amber-400">
               <AlertTriangle className="h-6 w-6" />
             </div>
             <DialogTitle className="text-center text-lg font-bold text-gray-900 dark:text-gray-100">
@@ -252,6 +265,47 @@ export default function UsersPage({
               className="bg-amber-600 hover:bg-amber-700 text-white font-medium"
             >
               {isTransferring ? 'Transferring...' : 'Transfer Ownership'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={Boolean(kickTarget)}
+        onOpenChange={(open) => {
+          if (!open) setKickTarget(null);
+        }}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-[#2c2c2e] dark:text-red-400">
+              <UserMinus className="h-6 w-6" />
+            </div>
+            <DialogTitle className="text-center text-lg font-bold text-gray-900 dark:text-gray-100">
+              Kick Member from Group
+            </DialogTitle>
+            <DialogDescription className="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">
+              Are you sure you want to kick{' '}
+              <span className="font-semibold text-gray-900 dark:text-gray-100">
+                {kickTarget?.displayName || 'this member'}
+              </span>{' '}
+              from this group? They will lose access to all group activities, bills, and events.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter className="mt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setKickTarget(null)}
+              disabled={isKicking}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmKick}
+              disabled={isKicking}
+              className="bg-red-600 hover:bg-red-700 text-white font-medium"
+            >
+              {isKicking ? 'Kicking...' : 'Kick Member'}
             </Button>
           </DialogFooter>
         </DialogContent>

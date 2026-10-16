@@ -139,7 +139,7 @@ export default function SettingsPage({
               value={currentGroupName}
               onChange={(e) => setGroupNameInput(e.target.value)}
               placeholder="Your display name"
-              className="h-11 rounded-lg border-gray-200 bg-gray-50 px-4 text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+              className="h-11 rounded-lg border-gray-200 bg-gray-50 px-4 text-gray-900 dark:border-gray-700 dark:bg-[#2c2c2e] dark:text-gray-100"
               required
               disabled={currentGroup?.role !== 'OWNER'}
             />
