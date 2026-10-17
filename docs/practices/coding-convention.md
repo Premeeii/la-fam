@@ -18,6 +18,15 @@ backend/lafam/src/main/java/premeees/lafam/
 └── config/             # CORS, S3/R2 Client, App Configs
 ```
 
+### Unit and Integration Testing
+```bash
+backend/lafam/src/main/test/java/premeees
+├── integration/        # Integration tests
+├── lafam               
+│   ├── Controller      # Unit test
+└── security  
+```
+
 ### Frontend(Next.js)
 
 ```bash
