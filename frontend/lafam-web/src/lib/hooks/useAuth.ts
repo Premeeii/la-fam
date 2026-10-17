@@ -29,7 +29,7 @@ export function useLogin(options?: { onError?: () => void }) {
                     console.log('[LOGIN] joinGroup success:', res);
 
                     sessionStorage.removeItem(PENDING_INVITE_KEY);
-                    toast.success('เข้าร่วมกลุ่มสำเร็จ');
+                    toast.success('Login Success!');
 
                     if (res?.data?.groupId) {
                         console.log('[LOGIN] redirect group');
@@ -41,7 +41,7 @@ export function useLogin(options?: { onError?: () => void }) {
                     }
                 } catch (error) {
                     console.error('[LOGIN] joinGroup failed:', error);
-                    toast.error('Link เชิญไม่ถูกต้องหรือถูกใช้ไปแล้ว');
+                    toast.error('Invite Link is invalid or has been used');
                 }
             }
 
@@ -51,9 +51,7 @@ export function useLogin(options?: { onError?: () => void }) {
         },
 
         onError: () => {
-            console.error('[LOGIN] mutation ERROR');
-
-            toast.error('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+            toast.error('Email or password is incorrect');
             options?.onError?.();
         }
     });

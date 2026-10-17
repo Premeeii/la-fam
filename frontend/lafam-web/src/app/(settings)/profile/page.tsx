@@ -13,6 +13,7 @@ import { apiClient } from '@/lib/api/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { error } from 'console';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -42,10 +43,10 @@ export default function ProfilePage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
-      toast.success('บันทึกข้อมูลโปรไฟล์สำเร็จ');
+      toast.success('Update Profile Success');
     },
     onError: () => {
-      toast.error('บันทึกไม่สำเร็จ กรุณาลองใหม่');
+      toast.error('Update Profile Failed');
     },
   });
   // when file is selected: create preview but not upload yet
