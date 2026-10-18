@@ -9,10 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-@JsonInclude(JsonInclude.Include.NON_NULL) 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
-    
+
     private LocalDateTime timestamp;
     private int status;
     private String message;
@@ -20,4 +19,15 @@ public class ErrorResponse {
     private String path;
     //for validation errors
     private Map<String, String> fieldErrors;
+
+    @Builder
+    public ErrorResponse(LocalDateTime timestamp, int status, String message,
+                         String error, String path, Map<String, String> fieldErrors) {
+        this.timestamp = timestamp;
+        this.status = status;
+        this.message = message;
+        this.error = error;
+        this.path = path;
+        this.fieldErrors = fieldErrors;
+    }
 }
