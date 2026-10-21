@@ -22,12 +22,12 @@ export default function Home() {
         </p>
         <Button
           className="mt-4 h-10 w-45 cursor-pointer"
-          onClick={() => router.push('/auth/login')}
+          onClick={() => router.push('/login')}
         >
           let&apos;s start it
         </Button>
       </section>
-      <div className="relative mx-auto w-3/4 overflow-hidden rounded-xl border border-black md:border-3">
+      <div className="relative mx-auto w-90 overflow-hidden rounded-xl border border-black md:border-3 md:w-3/4">
         <Image
           src="/openning.webp"
           alt="cover"
