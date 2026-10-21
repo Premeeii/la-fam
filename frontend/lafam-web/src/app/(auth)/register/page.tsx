@@ -31,7 +31,7 @@ export default function RegisterPage() {
           <Input 
             id="displayName" 
             className="h-11 mt-1 bg-gray-50 border-gray-200 text-black focus-visible:ring-blue-100 placeholder:text-gray-400" 
-            placeholder="example..Robert Pattinson"
+            placeholder=""
             {...form.register('displayName')} 
           />
           {form.formState.errors.displayName && (
@@ -45,7 +45,7 @@ export default function RegisterPage() {
             id="email" 
             type="email" 
             className="h-11 mt-1 bg-gray-50 border-gray-200 text-black focus-visible:ring-blue-100 placeholder:text-gray-400" 
-            placeholder="example @gmail.com"
+            placeholder=""
             {...form.register('email')} 
           />
           {form.formState.errors.email && (
@@ -60,7 +60,7 @@ export default function RegisterPage() {
               id="password" 
               type={showPassword ? 'text' : 'password'} 
               className="h-11 pr-10 bg-gray-50 border-gray-200 text-black focus-visible:ring-blue-100 placeholder:text-gray-400" 
-              placeholder="Enter password"
+              placeholder=""
               {...form.register('password')} 
             />
             <button 
