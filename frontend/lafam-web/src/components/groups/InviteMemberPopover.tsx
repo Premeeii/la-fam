@@ -39,7 +39,8 @@ export function InviteMemberPopover({ groupId }: { groupId: string }) {
           <div className="flex w-full items-center space-x-2">
             <Input 
               readOnly 
-              value={inviteLink} 
+              value={inviteLink}
+              placeholder=''
               className="flex-1 h-9 text-xs"
             />
             <Button 

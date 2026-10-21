@@ -61,9 +61,6 @@ export function CreateGroupPopover() {
           <h3 className="text-base font-semibold text-gray-900 dark:text-white">
             Create Group
           </h3>
-          <p className="mt-1 text-sm text-gray-500">
-            Set up a group for manage or organize Calendar and Receipt.
-          </p>
         </div>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

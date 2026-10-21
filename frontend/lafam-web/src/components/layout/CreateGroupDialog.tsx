@@ -81,7 +81,7 @@ export function CreateGroupDialog() {
             </Label>
             <Input
               id="name"
-              placeholder="e.g., Aespa, Newjeans"
+              placeholder=""
               className="h-11 border-gray-200 bg-gray-50 text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
               {...register('name')}
             />

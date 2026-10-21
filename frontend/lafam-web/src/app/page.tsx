@@ -15,18 +15,21 @@ export default function Home() {
         <p className="text-md mt-10 md:text-3xl">
           <TypingText />
         </p>{' '}
+        <div className="mt-10">
         <p
           className={` ${alef.className} text-muted-foreground md:text-md mt-4 text-xl`}
         >
           i wish to enhance it
         </p>
         <Button
-          className="mt-4 h-10 w-45 cursor-pointer"
+          className="h-10 w-45 cursor-pointer"
           onClick={() => router.push('/login')}
         >
           let&apos;s start it
         </Button>
+        </div>
       </section>
+      
       <div className="relative mx-auto w-90 overflow-hidden rounded-xl border border-black md:border-3 md:w-3/4">
         <Image
           src="/openning.webp"
@@ -45,12 +48,14 @@ export default function Home() {
             >
               Contact
             </button>
+            <span className="text-muted-foreground">·</span>
             <button
               onClick={() => router.push('/privacy-policy')}
               className={`${alef.className} text-muted-foreground cursor-pointer text-sm hover:underline`}
             >
-              Privacy Policy
+              Privacy policy
             </button>
+            <span className='text-muted-foreground'>·</span>
             <button
               onClick={() => router.push('/terms')}
               className={`${alef.className} text-muted-foreground cursor-pointer text-sm hover:underline`}
@@ -59,7 +64,7 @@ export default function Home() {
             </button>
           </div>
           <p className={` ${alef.className} text-muted-foreground text-sm`}>
-            © 2025 La&apos;FAM All rights reserved @Premeeii
+            © 2026 La&apos;FAM All rights reserved @Premeeii
           </p>
         </div>
       </footer>

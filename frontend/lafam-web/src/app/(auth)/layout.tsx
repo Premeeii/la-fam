@@ -58,13 +58,8 @@ export default function AuthLayout({
 
         {/* Footer */}
         <div className="mx-auto mt-8 flex w-full max-w-md items-center justify-between text-xs text-gray-400">
-          <div className="flex items-center gap-1.5">
-            <div className="flex h-4 w-4 items-center justify-center rounded-full bg-zinc-800 text-[10px] font-bold text-white">
-              L
-            </div>
-          </div>
 
-          <span>© La&apos;FAM 2026</span>
+          <span>© La&apos;FAM 2026 @Premeeii</span>
         </div>
       </div>
     </div>
