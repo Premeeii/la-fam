@@ -15,7 +15,7 @@ export function Providers({ children }: { children: React.ReactNode }) { //child
         staleTime: 30_000 } }, //default cache time 30_000 ms
   }));
 
-  const forcedTheme = pathname === '/' ? 'light' : undefined;
+  const forcedTheme = pathname === '/' || '/contact' || '/privacy-policy' || '/terms' ? 'light' : undefined;
 
   return (
     <QueryClientProvider client={queryClient}>
