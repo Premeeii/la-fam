@@ -14,7 +14,6 @@ type TokenStatus = 'loading' | 'valid' | 'invalid';
 
 function ChangeEmailContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const token = searchParams.get('token') || '';
 
   const [tokenStatus, setTokenStatus] = useState<TokenStatus>('loading');

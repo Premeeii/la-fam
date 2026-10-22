@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { alef } from '@/app/fonts';
 import TypingText from '@/components/introduction/TypingText';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Home() {
   const router = useRouter();
@@ -42,12 +43,12 @@ export default function Home() {
       <footer className="mt-15 w-full">
         <div className="flex flex-col items-center justify-center gap-2">
           <div className="flex flex-row gap-4">
-            <button
-              onClick={() => router.push('/contact')}
+            <Link
+              href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`}
               className={`${alef.className} text-muted-foreground cursor-pointer text-sm hover:underline`}
             >
               Contact
-            </button>
+            </Link>
             <span className="text-muted-foreground">·</span>
             <button
               onClick={() => router.push('/privacy-policy')}
@@ -61,6 +62,13 @@ export default function Home() {
               className={`${alef.className} text-muted-foreground cursor-pointer text-sm hover:underline`}
             >
               Terms of Service
+            </button>
+            <span className='text-muted-foreground'>·</span>
+            <button
+              onClick={() => window.open('https://github.com/Premeeii', '_blank')}
+              className={`${alef.className} text-muted-foreground cursor-pointer text-sm hover:underline`}
+            >
+              GitHub
             </button>
           </div>
           <p className={` ${alef.className} text-muted-foreground text-sm`}>
