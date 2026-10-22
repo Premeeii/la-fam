@@ -122,8 +122,9 @@ export default function TermsPage() {
               <h2 className="text-xl font-bold"> Changes to These Terms</h2>
               <p className="text-md mt-3 opacity-75">
                 We may revise these Terms from time to time. We will update the
-                "Last Updated" date when changes are made and provide notice of
-                material changes where appropriate or required by law.
+                &quot;<strong>Last Updated</strong>&quot; date when changes are
+                made and provide notice of material changes where appropriate or
+                required by law.
               </p>
               <p className="text-md mt-3 opacity-75">
                 Your continued use of the service after revised Terms take
