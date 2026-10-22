@@ -112,15 +112,6 @@ public class AuthController {
                 .build();
     }
 
-    // @GetMapping("/test-email")
-    // public ResponseEntity<Void> testEmail() {
-
-    // emailService.sendPasswordResetEmail(
-    // "peam972547@gmail.com",
-    // "http://localhost:3000/reset-password?token=test");
-
-    // return ResponseEntity.ok().build();
-    // }
 
     @Value("${app.auth.cookie-domain:}")
     private String cookieDomain;
