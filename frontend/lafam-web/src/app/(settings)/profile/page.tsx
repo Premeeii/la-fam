@@ -13,7 +13,6 @@ import { apiClient } from '@/lib/api/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { error } from 'console';
 
 export default function ProfilePage() {
   const router = useRouter();
