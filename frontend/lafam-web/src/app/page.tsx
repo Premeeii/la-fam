@@ -63,6 +63,13 @@ export default function Home() {
             >
               Terms of Service
             </button>
+            <span className='text-muted-foreground'>·</span>
+            <button
+              onClick={() => window.open('https://github.com/Premeeii', '_blank')}
+              className={`${alef.className} text-muted-foreground cursor-pointer text-sm hover:underline`}
+            >
+              GitHub
+            </button>
           </div>
           <p className={` ${alef.className} text-muted-foreground text-sm`}>
             © 2026 La&apos;FAM All rights reserved @Premeeii
