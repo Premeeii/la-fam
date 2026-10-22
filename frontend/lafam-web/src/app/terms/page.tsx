@@ -105,13 +105,13 @@ export default function TermsPage() {
               </p>
               <p className="text-md mt-3 opacity-75">
                 Please review our Privacy Policy at
-                <a
+                <Link
                   href="/privacy-policy"
                   className="cursor-pointer text-blue-500 hover:underline"
                 >
                   {' '}
                   Privacy Policy{' '}
-                </a>
+                </Link>
                 for further information about how we handle personal
                 information.
               </p>
