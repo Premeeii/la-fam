@@ -175,22 +175,14 @@ export default function PrivacyPolicyPage() {
               contact us at{' '}
             </p>
             <Link
-              href="mailto:peam972547@gmail.com"
+              href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`}
               className="cursor-pointer text-sm text-blue-500 hover:underline"
             >
               <ul className="text-md mt-3 list-disc space-y-2 pl-6 opacity-75">
-                <li>peam972547@gmail.com</li>
+                <li>{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</li>
               </ul>
             </Link>
-            <Link
-              href="https://github.com/Premeeii"
-              target="_blank"
-              className="cursor-pointer text-sm text-blue-500 hover:underline"
-            >
-              <ul className="text-md mt-3 list-disc space-y-2 pl-6 opacity-75">
-                <li>GitHub</li>
-              </ul>
-            </Link>
+        
           </section>
         </div>
       </div>
