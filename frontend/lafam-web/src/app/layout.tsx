@@ -25,9 +25,6 @@ export const metadata: Metadata = {
   description:
     'La Fam is a platform for managing appointment and expense bills in groups, and sharing family or your friend group moments together.',
   applicationName: 'LaFam',
-  alternates: {
-    canonical: '/', //main page use for search engine
-  },
 
   authors: [{ name: 'Preme' }],
   icons: {
@@ -35,17 +32,18 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
+    locale: 'en_US',
     url: siteUrl,
-    siteName: 'La Fam',
+    siteName: 'LaFam',
     title: 'LaFam — Connect with Your Group',
     description:
-      'Plan group events, manage shared expenses, and keep your family and friends in sync with La Fam',
+      'Plan group events, manage shared expenses, and keep your family and friends in sync with LaFam',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'La Fam',
+        alt: 'LaFam — i wish to help you to enhance your group',
       },
     ],
   },
@@ -53,7 +51,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'LaFam — Manage Your Group',
     description:
-      'Discover La Fam, a platform for managing appointment and expense bills in groups, and sharing family or your friend group moments together.',
+      'Discover LaFam, a platform for managing appointment and expense bills in groups, and sharing family or your friend group moments together.',
     images: ['/og-image.png'],
     creator: '@Premeeii',
   },
@@ -67,6 +65,29 @@ export const metadata: Metadata = {
   },
 };
 
+const siteJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
+      name: 'LaFam',
+      description:
+        'Platform for managing group appointments and shared expense bills.',
+      inLanguage: 'en',
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      name: 'LaFam',
+      url: siteUrl,
+      logo: `${siteUrl}/icon.svg`,
+      sameAs: ['https://github.com/Premeeii'],
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -74,10 +95,16 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="th"
+      lang="en"
       className={cn('font-sans', inter.variable)}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
+        />
+      </head>
       <body>
         <Providers>{children}</Providers>
         <SpeedInsights />
