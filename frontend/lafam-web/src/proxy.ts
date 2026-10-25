@@ -12,7 +12,9 @@ export function proxy(request: NextRequest) {
   const isInformationPage =
     request.nextUrl.pathname === '/contact' ||
     request.nextUrl.pathname === '/terms' ||
-    request.nextUrl.pathname === '/privacy-policy';
+    request.nextUrl.pathname === '/privacy-policy' ||
+    request.nextUrl.pathname === '/sitemap.xml' ||
+    request.nextUrl.pathname === '/robots.txt';
   console.log('[PROXY]', {
     pathname: request.nextUrl.pathname,
     hasToken: request.cookies.has('access_token'),
