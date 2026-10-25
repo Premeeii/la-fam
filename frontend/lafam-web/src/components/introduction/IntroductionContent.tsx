@@ -12,31 +12,34 @@ export default function IntroductionContent() {
   return (
     <div className="flex min-h-screen flex-col bg-white selection:bg-blue-100 dark:bg-black dark:selection:bg-blue-900">
       <section className="mx-auto flex w-full max-w-[1600px] flex-col items-center px-4 pt-30 pb-20 sm:py-20 md:py-32">
-        <Image src="/icon.svg" alt="icons" width={100} height={100}></Image>
-        <p className="text-md mt-10 md:text-3xl">
+        <Image src="/icon.svg" alt="LaFam Logo" width={100} height={100}></Image>
+        <h1 className="text-md mt-10 md:text-3xl">
+          <span className="sr-only">LaFam — Group Appointments &amp; Shared Expenses Platform. </span>
           <TypingText />
-        </p>{' '}
+        </h1>{' '}
         <div className="mt-10">
         <p
           className={` ${alef.className} text-muted-foreground md:text-md mt-4 text-xl`}
         >
           i wish to enhance it
         </p>
+        <Link href='/login'>
         <Button
           className="h-10 w-45 cursor-pointer"
-          onClick={() => router.push('/login')}
         >
           let&apos;s start it
         </Button>
+        </Link>
         </div>
       </section>
       
       <div className="relative mx-auto w-90 overflow-hidden rounded-xl border border-black md:border-3 md:w-3/4">
         <Image
           src="/openning.webp"
-          alt="cover"
+          alt="LaFam Application Dashboard Preview"
           width={1920}
           height={1080}
+          priority
           className="object-cover"
         ></Image>
       </div>
@@ -67,6 +70,7 @@ export default function IntroductionContent() {
             <Link
               href="https://github.com/Premeeii"
               target="_blank"
+              rel="noopener noreferrer"
               className={`${alef.className} text-muted-foreground cursor-pointer text-sm hover:underline`}
             >
               GitHub
