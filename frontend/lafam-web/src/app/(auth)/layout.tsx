@@ -29,7 +29,7 @@ export default function AuthLayout({
           <Link href='/' className="mb-15 flex items-center gap-3">
             <Image
               src="/icon.svg"
-              alt="La'FAM"
+              alt="La'FAM Logo"
               height={30}
               width={30}
               priority
