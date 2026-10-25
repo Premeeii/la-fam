@@ -5,8 +5,6 @@ export default function DashboardPage({
 }: {
   params: Promise<{ groupId: string }>;
 }) {
-  
-
   return (
     <DashboardContent params={params} />
   );

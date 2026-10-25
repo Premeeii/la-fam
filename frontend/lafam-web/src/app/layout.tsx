@@ -19,7 +19,7 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.lafamhub.com';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'LaFam: Appointment Management & Expense Bill Platform',
+    default: 'LaFam | Enhance your group',
     template: '%s | LaFam',
   },
   description:
