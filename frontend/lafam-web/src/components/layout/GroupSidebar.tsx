@@ -8,6 +8,7 @@ import {
   Users,
   Calendar,
   ReceiptText,
+  FileText
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGroup } from '@/lib/hooks/useGroup';
@@ -40,11 +41,11 @@ export function GroupSidebar() {
       href: currentGroupId ? `/groups/${currentGroupId}/bills` : '#',
       icon: ReceiptText,
     },
-    /*{
+    {
       name: 'Notes',
       href: currentGroupId ? `/groups/${currentGroupId}/notes` : '#',
       icon: FileText,
-    },*/
+    },
     {
       name: 'Setting',
       href: currentGroupId ? `/groups/${currentGroupId}/settings` : '#',
