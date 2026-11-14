@@ -39,11 +39,10 @@ export function GroupNav() {
       name: 'Bills',
       href: currentGroupId ? `/groups/${currentGroupId}/bills` : '#',
     },
-    /*{
+    {
       name: 'Notes',
       href: currentGroupId ? `/groups/${currentGroupId}/notes` : '#',
-    
-    },*/
+    },
     {
       name: 'Setting',
       href: currentGroupId ? `/groups/${currentGroupId}/settings` : '#',
