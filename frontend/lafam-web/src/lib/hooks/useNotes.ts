@@ -39,8 +39,8 @@ export function useCreateNote(groupId: string) {
       queryClient.invalidateQueries({ queryKey: ['notes', groupId] });
       toast.success('Note created successfully');
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || 'Failed to create note';
+    onError: (error: Error) => {
+      const message = error.message || 'Failed to create note';
       toast.error(message);
     },
   });
@@ -57,8 +57,8 @@ export function useUpdateNote(groupId: string) {
       queryClient.invalidateQueries({ queryKey: ['note', groupId, variables.noteId] });
       toast.success('Note updated successfully');
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || 'Failed to update note';
+    onError: (error: Error) => {
+      const message = error.message || 'Failed to update note';
       toast.error(message);
     },
   });
@@ -73,8 +73,8 @@ export function useDeleteNote(groupId: string) {
       queryClient.invalidateQueries({ queryKey: ['notes', groupId] });
       toast.success('Note deleted successfully');
     },
-    onError: (error: any) => {
-      const message = error.response?.data?.message || 'Failed to delete note';
+    onError: (error: Error) => {
+      const message = error.message || 'Failed to delete note';
       toast.error(message);
     },
   });
